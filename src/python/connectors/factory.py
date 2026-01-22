@@ -2,6 +2,7 @@ import logging
 from typing import Any
 
 from .rdbms import RDBMSConnector
+from .elasticsearch import ElasticsearchConnector
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,8 @@ class ConnectorFactory:
         
         if connector_type == "rdbms":
             return RDBMSConnector(config=config)
+        elif connector_type == "elasticsearch":
+            return ElasticsearchConnector(config=config)
         else:
             error_msg = f"Unsupported connector type: {connector_type}"
             logger.error(error_msg)
