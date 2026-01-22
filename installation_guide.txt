@@ -1,0 +1,54 @@
+Developer Setup: Lightweight CPU Installation
+============================================
+
+Follow these steps to set up the environment and link the txtai submodule correctly.
+------------------------------------------------------------------------------------
+
+1. Clone the Project
+
+    When cloning, you must tell Git to also pull the submodule code:
+
+    # Clone the repository
+    -> git clone https://github.com/one-look/water-bottle.git
+    -> cd water-bottle
+
+    # Initialize and pull the txtai submodule code
+    -> git submodule update --init --recursive
+
+2. Create and Activate Virtual Environment
+------------------------------------------
+
+    It is best practice to keep dependencies isolated:
+
+    # Create the venv (adjust path as needed)
+    -> python3 -m venv venv
+
+    # Activate it
+    -> source venv/bin/activate
+
+3. Install CPU-Only PyTorch
+--------------------------
+
+    To avoid downloading 5GB+ of GPU/CUDA drivers, install the CPU version of Torch first.
+    
+    -> pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+4. Link the txtai Submodule
+--------------------------
+
+    Now, install txtai from the local src/txtai folder in editable mode. This links your environment to the source code so any local changes are active immediately.
+
+    # Move to the src directory where the submodule lives
+    -> cd src/
+
+    # Install with [all] extras to get all features (LLM, pipelines, etc.)
+    -> pip install -e "./txtai"
+
+Why we do this:
+===============
+
+    git submodule update: Ensures the txtai folder actually contains the source code.
+
+    --index-url .../cpu: Keeps the project small enough to run on standard laptops without dedicated GPUs.
+
+    pip install -e: Allows you to modify or debug the txtai source code directly inside your project if needed.

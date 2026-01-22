@@ -1,0 +1,17 @@
+~~~ சுவடு ~~~
+
+Day 8 || 22/01/2026 || Thursday
+------------------------------
+
+What Planned:
+============
+1. Nothing.
+
+What Done:
+==========
+1. elasticsearch connector added and tested successfully.
+
+Issues:
+=======
+1. None
+
