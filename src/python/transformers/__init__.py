@@ -8,11 +8,9 @@ Purpose:
 
 from .factory import TransformerFactory
 from .base import BaseTransformer
-from .schemas import JsonTransformerConfig, StructuredRecord
+from .schemas import *
 
 __all__ = [
     "TransformerFactory",
     "BaseTransformer",
-    "JsonTransformerConfig",
-    "StructuredRecord",
 ]

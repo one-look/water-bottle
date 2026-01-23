@@ -1,3 +1,7 @@
+"""
+Provides a universal entry point for creating specific transformer instances.
+"""
+
 import logging
 from typing import Any, Dict
 
@@ -5,24 +9,15 @@ from .json_transformer import JsonTransformer
 
 logger = logging.getLogger(__name__)
 
-"""
-factory.py
-====================================
-Purpose:
-    Provides a universal entry point for creating specific transformer instances.
-"""
-
-
 class TransformerFactory:
     """
-    Purpose:
-        Factory class to route data to the correct Transformer implementation.
+    Factory class to route data to the correct transformer implementation.
     """
 
     @staticmethod
     def get_transformer(transformer_type: str, data: Any, config: Dict[str, Any]):
         """
-        Purpose: Instantiates the requested transformer based on type.
+        Instantiates the requested transformer based on type.
 
         Args:
             transformer_type (str): Type of transformation ('json').

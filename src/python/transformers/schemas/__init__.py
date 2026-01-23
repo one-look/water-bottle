@@ -1,3 +1,3 @@
-from .json_transformer import JsonTransformerConfig, StructuredRecord
+from .json_transformer import UserRecord, OrderRecord, ProductRecord
 
-__all__ = ["JsonTransformerConfig", "StructuredRecord"]
+__all__ = ["UserRecord", "OrderRecord", "ProductRecord"]
