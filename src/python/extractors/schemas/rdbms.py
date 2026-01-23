@@ -1,9 +1,8 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 from typing import List, Optional
 
 class RDBMSTableConfig(BaseModel):
     """Schema for a single table entry in RDBMS"""
-    model_config = ConfigDict(extra="allow")
 
     table_name: str
     schema_name: str
