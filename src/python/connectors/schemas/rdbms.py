@@ -1,14 +1,14 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class RDBMSConfig(BaseModel):
     """
-    Purpose:
-        Configuration schema for RDBMS connections.
+    Configuration schema for RDBMS connections.
     """
 
-    db_type: str
+    type: str
     host: str
     port: int
-    username: str
-    password: str
+    login: str
+    password: Optional[str]
     database: str

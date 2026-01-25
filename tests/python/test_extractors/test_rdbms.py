@@ -17,7 +17,7 @@ class TestRDBMSExtractor(unittest.TestCase):
             "tables": [
                 {
                     "table_name": "users",
-                    "schema_name": "public",
+                    "schema": "public",
                     "columns": ["id", "name", "email"]
                 }
             ]

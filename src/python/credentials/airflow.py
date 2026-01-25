@@ -1,3 +1,8 @@
+"""
+Provides a mechanism to extract credentials from Airflow's internal 
+Metadata Database using Connection IDs.
+"""
+
 import logging
 from airflow.hooks.base import BaseHook
 from .base import CredentialProvider
@@ -5,26 +10,16 @@ from .schemas import AirflowConnectionSchema
 
 logger = logging.getLogger(__name__)
 
-"""
-airflow.py
-====================================
-Purpose:
-    Provides a mechanism to extract credentials from Airflow's internal 
-    Metadata Database using Connection IDs.
-"""
-
 class AirflowCredentials(CredentialProvider):
     """
-    Purpose:
-        Generic Airflow Credential Provider.
-        It maps Airflow Connection objects into a flat dictionary format 
-        compatible with our connectors.
+    Generic Airflow Credential Provider.
+    It maps Airflow Connection objects into a flat dictionary format 
+    compatible with our connectors.
     """
 
     def __init__(self, conn_id: str):
         """
-        Purpose:
-            Initializes the provider with a specific Airflow connection ID.
+        Initializes the provider with a specific Airflow connection ID.
 
         Args:
             conn_id (str): The unique identifier for the connection in Airflow.
@@ -34,9 +29,8 @@ class AirflowCredentials(CredentialProvider):
 
     def get_credentials(self) -> dict:
         """
-        Purpose:
-            Fetches the connection object from Airflow and unpacks it.
-            Merges core fields (host, login) with JSON extras.
+        Fetches the connection object from Airflow and unpacks it.
+        Merges core fields (host, login) with JSON extras.
 
         Returns:
             dict: Unified dictionary of connection parameters.

@@ -1,3 +1,8 @@
+"""
+Implementation of the Factory pattern to route requests to specific 
+connector classes based on a string identifier.
+"""
+
 import logging
 from typing import Any
 
@@ -6,26 +11,16 @@ from .elasticsearch import ElasticsearchConnector
 
 logger = logging.getLogger(__name__)
 
-"""
-connector_factory.py
-====================================
-Purpose:
-    Implementation of the Factory pattern to route requests to specific 
-    connector classes based on a string identifier.
-"""
-
 class ConnectorFactory:
     """
-    Purpose:
-        The Orchestrator class that selects the appropriate connector 
-        class based on user input.
+    The Orchestrator class that selects the appropriate connector 
+    class based on user input.
     """
 
     @classmethod
     def get_connector(cls, connector_type: str, config: Any):
         """
-        Purpose:
-            Instantiates the requested connector class using the provided config.
+        Instantiates the requested connector class using the provided config.
 
         Args:
             connector_type (str): The type identifier ('rdbms').

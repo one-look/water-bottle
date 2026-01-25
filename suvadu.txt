@@ -15,3 +15,20 @@ Issues:
 =======
 1. None
 
+
+Day 1 || 25/01/2026 || Sunday
+-----------------------------
+
+What Planned:
+============
+1. Nothing.
+
+What Done:
+==========
+1. Data validation improved.
+
+Issues:
+=======
+1. loaders are not working as expected.
+
+

@@ -52,7 +52,7 @@ class RDBMSExtractor(BaseExtractor):
 
         for table in tables:
             name = table.table_name
-            schema = table.schema_name
+            schema = table.schema
             cols = table.columns
 
             column_query = "*" if not cols else ", ".join(cols)

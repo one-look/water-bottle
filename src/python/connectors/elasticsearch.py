@@ -1,3 +1,11 @@
+"""
+This file defines the ESConnector class, which simplifies the process 
+of establishing a connection to an Elasticsearch cluster.
+
+It handles URL construction, SSL verification settings, and connection 
+verification via ping.
+"""
+
 import logging
 from elasticsearch import Elasticsearch
 from .schemas import ElasticsearchConfig
@@ -5,29 +13,16 @@ from .schemas import ElasticsearchConfig
 # --- Logger Setup ---
 logger = logging.getLogger(__name__)
 
-"""
-es_connector.py
-====================================
-Purpose:
-    This file defines the ESConnector class, which simplifies the process 
-    of establishing a connection to an Elasticsearch cluster.
-    
-    It handles URL construction, SSL verification settings, and connection 
-    verification via ping.
-"""
-
 class ElasticsearchConnector:
     """
-    Purpose:
-        The ESConnector class acts as a wrapper around the official Elasticsearch client.
-        It manages configuration parsing and lazy initialization of the client connection.
+    The ESConnector class acts as a wrapper around the official Elasticsearch client.
+    It manages configuration parsing and lazy initialization of the client connection.
     """
 
     def __init__(self, config: dict):
         """
-        Purpose:
-            Initializes the ESConnector with a configuration dictionary.
-            Note: The actual connection is not established until connect() or the object is called.
+        Initializes the ESConnector with a configuration dictionary.
+        Note: The actual connection is not established until connect() or the object is called.
 
         Args:
             config (dict): A dictionary containing connection parameters.
@@ -40,9 +35,8 @@ class ElasticsearchConnector:
 
     def __call__(self) -> Elasticsearch:
         """
-        Purpose:
-            Allows the class instance to be called like a function to retrieve the client.
-            It ensures the connection is established before returning the client.
+        Allows the class instance to be called like a function to retrieve the client.
+        It ensures the connection is established before returning the client.
 
         Returns:
             Elasticsearch: An active Elasticsearch client instance.
@@ -53,9 +47,8 @@ class ElasticsearchConnector:
 
     def connect(self) -> None:
         """
-        Purpose:
-            Constructs the connection URL, initializes the Elasticsearch client,
-            and verifies the connection by pinging the server.
+        Constructs the connection URL, initializes the Elasticsearch client,
+        and verifies the connection by pinging the server.
 
         Args:
             None

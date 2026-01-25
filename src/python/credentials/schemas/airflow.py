@@ -8,6 +8,8 @@ class AirflowConnectionSchema(BaseModel):
 
     host: Optional[str] = None
     port: Optional[int] = None
-    user: Optional[str] = None
+    login: Optional[str] = None
     password: Optional[str] = None
     database: Optional[str] = None
+    type: Optional[str] = None
+    verify_certs: Optional[bool] = None

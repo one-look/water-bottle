@@ -1,28 +1,23 @@
+"""
+Implements a Factory to decide which credential storage backend to use.
+Supports switching between cloud/orchestrator (Airflow).
+"""
+
 import logging
 from .airflow import AirflowCredentials
 
 logger = logging.getLogger(__name__)
 
-"""
-factory.py
-====================================
-Purpose:
-    Implements a Factory to decide which credential storage backend to use.
-    Supports switching between cloud/orchestrator (Airflow).
-"""
-
 class CredentialFactory:
     """
-    Purpose:
-        Orchestrator for credential providers. It selects the appropriate 
-        class based on the execution 'mode'.
+    Orchestrator for credential providers. It selects the appropriate 
+    class based on the execution 'mode'.
     """
 
     @staticmethod
     def get_provider(mode: str, conn_id: str):
         """
-        Purpose:
-            Returns an instance of a CredentialProvider based on the mode.
+        Returns an instance of a CredentialProvider based on the mode.
 
         Args:
             mode (str): The source of credentials ('airflow').

@@ -5,7 +5,7 @@ class RDBMSTableConfig(BaseModel):
     """Schema for a single table entry in RDBMS"""
 
     table_name: str
-    schema_name: str
+    schema: str
     columns: Optional[List[str]]
 
 class RDBMSExtractorConfig(BaseModel):

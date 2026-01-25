@@ -1,12 +1,8 @@
+"""
+A unified interface for connecting to various data sources.
+"""
+
 import logging
-
-"""
-Connectors Package
-==================
-Purpose:
-    A unified interface for connecting to various data sources.
-
-"""
 
 # Import the Factory and Connectors for easy external access
 from .factory import ConnectorFactory

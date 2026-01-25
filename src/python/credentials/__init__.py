@@ -1,11 +1,8 @@
-import logging
+"""
+Handles abstraction of credential retrieval from various sources.
+"""
 
-"""
-Credentials Package
-===================
-Purpose:
-    Handles abstraction of credential retrieval from various sources.
-"""
+import logging
 
 from .factory import CredentialFactory
 from .base import CredentialProvider
