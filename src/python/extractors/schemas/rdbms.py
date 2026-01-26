@@ -1,10 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
 
 class RDBMSTableConfig(BaseModel):
     """Schema for a single table entry in RDBMS"""
 
-    table_name: str
+    model_config = ConfigDict(protected_namespaces=())
+    table_name: str 
     schema: str
     columns: Optional[List[str]]
 

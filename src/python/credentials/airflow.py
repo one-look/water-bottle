@@ -46,9 +46,9 @@ class AirflowCredentials(CredentialProvider):
             creds = {
                 "host": conn.host,
                 "port": conn.port,
-                "user": conn.login,
+                "login": conn.login,
                 "password": conn.password,
-                "database": conn.schema, 
+                "schema": conn.schema, 
                 **conn.extra_dejson  # Merges extras (like verify_certs, schema, etc.)
             }
             
@@ -57,7 +57,7 @@ class AirflowCredentials(CredentialProvider):
             logger.debug(f"Successfully unpacked credentials for {self.conn_id}")
             
             # Converts a validated Pydantic object back into a standard Python dictionary.
-            return validated_conn.model_dump()
+            return validated_conn.model_dump(exclude_none=True)
 
         except Exception as e:
             logger.exception(f"Failed to retrieve Airflow connection: {self.conn_id}")

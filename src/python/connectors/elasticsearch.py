@@ -59,7 +59,7 @@ class ElasticsearchConnector:
         Raises:
             ConnectionError: If the client fails to ping the Elasticsearch host.
         """
-        protocol = self.config.schema_type
+        protocol = self.config.schema
         host = self.config.host
         port = self.config.port
 
@@ -70,7 +70,7 @@ class ElasticsearchConnector:
 
         try:
             self._client = Elasticsearch(
-                [es_host],
+                hosts=[es_host],
                 verify_certs=verify_certs
             )
             

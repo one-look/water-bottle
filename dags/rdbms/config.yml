@@ -1,0 +1,37 @@
+#Note: Test the transformation - applying cleaning
+
+postgres:
+  extraction:
+    source_name: "college_db"
+    tables:
+      - table_name: "teachers"
+        schema: "public"
+        columns: ["teacher_id", "name", "mobile_number"]
+        extraction_mode: "incremental"
+        incremental_column: "updated_at"
+        batch_size: 10
+  
+  # transformation:
+  #   # Reserved for specific RDBMS to JSON mapping rules if needed
+  #   apply_cleaning: true
+
+elasticsearch:
+  load:
+    index_name: "college_data"
+    settings:
+      index:
+        number_of_shards: 1
+        number_of_replicas: 0
+      analysis:
+        analyzer:
+          college_analyzer:
+            type: custom
+            tokenizer: standard
+            filter: ["lowercase", "stop", "snowball"]
+    mappings:
+      dynamic: true
+      properties:
+        teacher_id: {type: keyword}
+        name: {type: text, analyzer: college_analyzer}
+        mobile_number: {type: keyword}
+        updated_at: {type: date}
