@@ -32,3 +32,17 @@ Issues:
 1. loaders are not working as expected.
 
 
+Day 2 || 26/01/2026 || Monday
+-----------------------------
+
+What Planned:
+============
+1. complete the RAG pipeline.
+
+What Done:
+==========
+1. rdbms dag completed with it's schema.
+
+Issues:
+=======
+1. None
