@@ -46,3 +46,8 @@ What Done:
 Issues:
 =======
 1. None
+
+Day 3 || 27/01/2026 || Tuesday
+------------------------------
+
+elasticsearch search functionality tried.
