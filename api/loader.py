@@ -1,6 +1,12 @@
-from typing import Dict, Any
+from embedder.factory import EmbedderFactory
+from retriever.search.factory import RetrieverFactory
+from memory.factory import MemoryFactory
+from prompt.behavior import PromptManager
+from generators.factory import GeneratorFactory
+from services.chatbot.workflow import RAGWorkflow
 from elasticsearch import Elasticsearch
 
+from typing import Dict, Any
 
 class AppLoader:
     """Application loader for initializing and managing global services."""
@@ -31,7 +37,6 @@ class AppLoader:
         
         # Initialize embedder
         if self.config.get("embedder"):
-            from embedder.factory import EmbedderFactory
             self._services["embedder"] = EmbedderFactory.create(
                 self.config["embedder"], 
                 self._services
@@ -39,7 +44,6 @@ class AppLoader:
         
         # Initialize retriever
         if self.config.get("retriever"):
-            from retriever.search.factory import RetrieverFactory
             self._services["retriever"] = RetrieverFactory.create(
                 self.config["retriever"], 
                 self._services
@@ -47,7 +51,6 @@ class AppLoader:
         
         # Initialize memory
         if self.config.get("memory"):
-            from memory.factory import MemoryFactory
             self._services["memory"] = MemoryFactory.create(
                 self.config["memory"], 
                 self._services
@@ -55,14 +58,12 @@ class AppLoader:
         
         # Initialize prompt manager
         if self.config.get("prompt"):
-            from prompt.behavior import PromptManager
             self._services["prompt_manager"] = PromptManager(
                 self.config["prompt"]
             )
         
         # Initialize generator
         if self.config.get("generator"):
-            from generators.factory import GeneratorFactory
             self._services["generator"] = GeneratorFactory.create(
                 self.config["generator"], 
                 self._services
@@ -77,8 +78,6 @@ class AppLoader:
             Initialized RAGWorkflow instance
         """
         if self._workflow is None:
-            from services.chatbot.workflow import RAGWorkflow
-            
             # Ensure services are loaded
             if not self._services:
                 self.load_services()
