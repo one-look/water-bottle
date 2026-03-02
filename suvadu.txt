@@ -142,3 +142,84 @@ Day 01 || 14/02/2026 || Saturday
 --------------------------------
 
 application and workflow refactored
+
+Day 02 || 15/02/2026 || Sunday
+------------------------------
+
+embedder and retriever refactored
+
+Day 03 || 16/02/2026 || Monday
+------------------------------
+
+application startup failed
+
+Day 04 || 17/02/2026 || Tuesday
+-------------------------------
+
+application and services refactored
+
+Day 05 || 18/02/2026 || Wednesday
+---------------------------------
+
+application started successfullly with the proper services
+
+Day 06 || 19/02/2026 || Thursday
+--------------------------------
+
+Planned to integrate the telegram bot with the application.
+
+
+Day 07 || 20/02/2026 || Friday
+-----------------------------
+
+telegram service refactoring
+
+Day 08 || 21/02/2026 || Saturday
+-------------------------------
+
+Nothing
+
+Day 09 || 22/02/2026 || Sunday
+-------------------------------
+
+Nothing
+
+Day 10 || 23/02/2026 || Monday
+-------------------------------
+
+telegram services udpated
+
+Day 11 || 24/02/2026 || Tuesday
+-------------------------------
+
+Telegram bot tested successfullly
+
+Day 12 || 25/02/2026 || Wednesday
+--------------------------------
+
+Pinecone connector added
+
+Day 13 || 26/02/2026 || Thursday
+-------------------------------
+
+pinecone loader added
+
+Day 14 || 27/02/2026 || Friday
+-----------------------------
+
+Nothing
+
+Day 15 || 28/02/2026 || Saturday
+-------------------------------
+
+Nothing
+
+Day 16 || 01/03/2026 || Sunday
+-------------------------------
+
+data ingested in pinecone
+
+Day 17 || 02/03/2026 || Monday
+-------------------------------
+
+Requirements and readme updated
