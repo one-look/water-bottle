@@ -1,9 +1,11 @@
+import os
 from embedder.factory import EmbedderFactory
 from retriever.search.factory import RetrieverFactory
 from memory.factory import MemoryFactory
 from prompt.behavior import PromptManager
 from generators.factory import GeneratorFactory
-from services.chatbot.workflow import RAGWorkflow
+from services.rag.workflow import RAGWorkflow
+from services.telegram.workflow import TelegramWorkflow
 from elasticsearch import Elasticsearch
 
 from typing import Dict, Any
@@ -20,6 +22,7 @@ class AppLoader:
         self.config = config
         self._services = {}
         self._workflow = None
+        self._telegram_workflow = None
     
     def load_services(self) -> Dict[str, Any]:
         """Load and initialize all required services.
@@ -28,12 +31,44 @@ class AppLoader:
             Dictionary of initialized services
         """
         # Initialize Elasticsearch connection if configured
+        # Inside `AppLoader.load_services`
         if self.config.get("elasticsearch"):
-            es_config = self.config["elasticsearch"]
-            self._services["elasticsearch"] = Elasticsearch(
-                hosts=es_config.get("hosts", ["localhost:9200"]),
-                **es_config.get("options", {})
-            )
+            try:
+                es_config = self.config["elasticsearch"]
+                
+                # Get hosts from environment or config
+                hosts = os.getenv("ELASTICSEARCH_URL") or es_config.get("hosts", ["https://localhost:9200"])
+                if isinstance(hosts, str):
+                    hosts = [hosts]
+                
+                # Get auth from environment or config
+                es_user = os.getenv("ELASTIC_USER") or es_config.get("options", {}).get("basic_auth", [None])[0]
+                es_password = os.getenv("ELASTIC_PASSWORD") or es_config.get("options", {}).get("basic_auth", [None, None])[1]
+                
+                # Get verify_certs from environment or config
+                verify_certs = os.getenv("ELASTIC_VERIFY_CERTS")
+                if verify_certs is None:
+                    verify_certs = es_config.get("options", {}).get("verify_certs", False)
+                else:
+                    verify_certs = verify_certs.lower() == "true"
+                
+                # Build connection options
+                es_options = {}
+                if es_user and es_password:
+                    es_options["basic_auth"] = [es_user, es_password]
+                es_options["verify_certs"] = verify_certs
+                
+                self._services["elasticsearch"] = Elasticsearch(
+                    hosts=hosts,
+                    **es_options
+                )
+                # Verify connection immediately
+                if self._services["elasticsearch"].ping():
+                    print("Elasticsearch connected successfully")
+                else:
+                    print("Warning: Elasticsearch ping failed. Check credentials.")
+            except Exception as e:
+                print(f"Warning: Failed to connect to Elasticsearch: {e}")
         
         # Initialize embedder
         if self.config.get("embedder"):
@@ -93,6 +128,22 @@ class AppLoader:
         
         return self._workflow
     
+    def load_telegram_workflow(self) -> 'TelegramWorkflow':
+        """Load and initialize the Telegram workflow.
+        
+        Returns:
+            Initialized TelegramWorkflow instance
+        """
+        if self._telegram_workflow is None:
+            # Ensure RAG workflow is loaded first
+            if self._workflow is None:
+                self.load_workflow()
+            
+            # Create Telegram workflow instance
+            self._telegram_workflow = TelegramWorkflow(self._workflow, self.config)
+        
+        return self._telegram_workflow
+    
     def get_services(self) -> Dict[str, Any]:
         """Get loaded services.
         
@@ -108,3 +159,11 @@ class AppLoader:
             RAGWorkflow instance
         """
         return self._workflow
+    
+    def get_telegram_workflow(self) -> 'TelegramWorkflow':
+        """Get loaded Telegram workflow.
+        
+        Returns:
+            TelegramWorkflow instance
+        """
+        return self._telegram_workflow

@@ -1,85 +1,63 @@
-# Used to manage application startup and shutdown lifecycle.
+import os, yaml
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from .routers.chat import router
-from typing import Dict, Any
-import yaml
-import os
-
 from .loader import AppLoader
+from dotenv import load_dotenv
 
-def get():
-    """ 
-    returns a global INSTANCE
-    """
-    return INSTANCE
+# Load environment variables from .env file
+load_dotenv()
+
+INSTANCE = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifespan manager."""
-    # Startup
-    print("Starting Water Bottle RAG application...")
-
     global INSTANCE
     
-    # Load configuration
-    config_path = os.getenv("CONFIG_PATH", "config.yaml")
-    try:
-        with open(config_path, 'r') as f:
-            config = yaml.safe_load(f)
-    except FileNotFoundError:
-        print(f"Config file not found at {config_path}")
+    # 1. Check for Environment Variable
+    config_path = os.getenv("CONFIG")
+    if not config_path:
+        raise RuntimeError("Environment variable 'CONFIG' is not set.")
     
-    # Initialize application loader
-    app_loader = AppLoader(config)
+    # 2. Check if file exists
+    if not os.path.exists(config_path):
+        raise FileNotFoundError(f"Config file not found at: {config_path}")
+
+    print(f"Loading configuration from: {config_path}")
     
-    # Load services and workflow
-    services = app_loader.load_services()
-    workflow = app_loader.load_workflow()
+    with open(config_path, 'r') as f:
+        config = yaml.safe_load(f)
     
-    # Store in global instance
+    loader = AppLoader(config)
+    services = loader.load_services()
+    
     INSTANCE.update({
         "config": config,
         "services": services,
-        "workflow": workflow,
-        "loader": app_loader
+        "workflow": loader.load_workflow(),
+        "telegram_workflow": loader.load_telegram_workflow()
     })
-    
-    print("Application startup complete!")
     
     yield
     
-    # Shutdown
-    print("Shutting down Water Bottle RAG application...")
-    
-    # Cleanup Elasticsearch connection if exists
-    if "elasticsearch" in services:
-        services["elasticsearch"].close()
-    
-    print("Application shutdown complete!")
+    # Shutdown logic
+    if "elasticsearch" in INSTANCE.get("services", {}):
+        INSTANCE["services"]["elasticsearch"].close()
 
 def create() -> FastAPI:
-    """Create and configure FastAPI application.
+    app = FastAPI(title="Water Bottle RAG", lifespan=lifespan)
     
-    Returns:
-        Configured FastAPI application
-    """
-    app = FastAPI(
-        title="Water Bottle - RAG Application",
-        description="Modular RAG application with Dependency Injection",
-        version="1.0.0",
-        lifespan=lifespan
-    )
-    
+    from .routers.chat import router
     app.include_router(router, prefix="/api/v1")
     
-    @app.get("/health")
-    async def health_check():
-        """Health check endpoint."""
-        return {"status": "healthy", "message": "Water Bottle RAG application is running"}
+    from .routers.telegram import router as telegram_router
+    app.include_router(telegram_router, prefix="/api/v1")
+    
+    from .routers.health import router as health_router
+    app.include_router(health_router)
     
     return app
 
+app = create()
 
-# Create application instance
-app, INSTANCE = create(), None
+def get():
+    return INSTANCE
