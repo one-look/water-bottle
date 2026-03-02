@@ -70,6 +70,20 @@ class AppLoader:
             except Exception as e:
                 print(f"Warning: Failed to connect to Elasticsearch: {e}")
         
+        # Initialize Pinecone connection if configured
+        if self.config.get("pinecone"):
+            try:
+                from src.etl.connectors import ConnectorFactory
+                from src.etl.credentials import CredentialFactory
+                
+                # Create Pinecone connection
+                pinecone_creds = CredentialFactory.create("local", "pinecone")
+                pinecone_connector = ConnectorFactory.create("pinecone", pinecone_creds)
+                self._services["pinecone"] = pinecone_connector()
+                print("Pinecone connected successfully")
+            except Exception as e:
+                print(f"Warning: Failed to connect to Pinecone: {e}")
+        
         # Initialize embedder
         if self.config.get("embedder"):
             self._services["embedder"] = EmbedderFactory.create(
