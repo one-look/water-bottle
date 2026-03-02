@@ -1,0 +1,35 @@
+embedder:
+  type: huggingface
+  model_name: "all-MiniLM-L6-v2"
+  device: "cpu"
+
+retriever:
+  type: elasticsearch
+  index_name: "sales_data"
+  vector_field: "row_vector"
+  content_field: "text"
+
+memory:
+  type: session
+  max_messages: 50
+
+prompt:
+  system_prompt: "You are a helpful AI assistant. Use the provided context to answer questions accurately."
+
+generator:
+  type: litellm
+  model_name: "gemini/gemini-2.5-flash"
+  api_key: ""  # Loaded from GEMINI_API_KEY environment variable
+  temperature: 0.7
+  max_tokens: 1000
+
+elasticsearch:
+  hosts: [""]  # Loaded from ELASTICSEARCH_URL environment variable
+  options:
+    basic_auth: ["", ""]  # Loaded from ELASTIC_USER and ELASTIC_PASSWORD environment variables
+    verify_certs: false  # Loaded from ELASTIC_VERIFY_CERTS environment variable
+
+telegram:
+  bot_token: ""  # Loaded from TELEGRAM_BOT_TOKEN environment variable
+  webhook_url: ""  # Loaded from TELEGRAM_WEBHOOK_URL environment variable
+  bot_username: "One_Look_bot"
