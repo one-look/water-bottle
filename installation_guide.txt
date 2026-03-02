@@ -33,16 +33,56 @@ Follow these steps to set up the environment and link the txtai submodule correc
     
     -> pip install torch --index-url https://download.pytorch.org/whl/cpu
 
-4. Link the txtai Submodule
---------------------------
+4. Install Dependencies
+----------------------
 
-    Now, install txtai from the local src/txtai folder in editable mode. This links your environment to the source code so any local changes are active immediately.
+    Install all required packages from requirements.txt:
+
+    -> pip install -r requirements.txt
+
+5. Set Up Environment Variables
+------------------------------
+
+    Copy the example environment file and configure your credentials:
+
+    -> cp .env.example .env
+    # Edit .env with your actual API keys and configuration
+
+    Required environment variables:
+    - GEMINI_API_KEY: Your Google Gemini API key
+    - TELEGRAM_BOT_TOKEN: Your Telegram bot token
+    - PINECONE_API_KEY: Your Pinecone API key
+    - ELASTICSEARCH_URL: Your Elasticsearch URL
+    - CONFIG: Path to config file (default: config.yaml)
+
+6. Link the txtai Submodule (Optional)
+-------------------------------------
+
+    If you need to modify txtai source code, install it from the local submodule:
 
     # Move to the src directory where the submodule lives
     -> cd src/
 
     # Install with [all] extras to get all features (LLM, pipelines, etc.)
     -> pip install -e "./txtai"
+
+7. Run the Application
+---------------------
+
+    Start the FastAPI server:
+
+    -> uvicorn api.application:app --reload
+
+    The server will be available at http://localhost:8000
+
+8. Test the Setup
+-----------------
+
+    Test Pinecone integration:
+
+    -> python3 -m examples.pinecone
+
+    Test Telegram bot by sending a message to your configured bot.
 
 Why we do this:
 ===============
@@ -52,3 +92,17 @@ Why we do this:
     --index-url .../cpu: Keeps the project small enough to run on standard laptops without dedicated GPUs.
 
     pip install -e: Allows you to modify or debug the txtai source code directly inside your project if needed.
+
+    Environment variables: Keeps sensitive credentials out of code and enables cloud deployment.
+
+Cloud Deployment
+================
+
+For cloud deployment (Railway, AWS, Google Cloud):
+
+1. Set environment variables in your cloud platform
+2. Use the provided Dockerfile
+3. Update ELASTICSEARCH_URL to your cloud database
+4. Set TELEGRAM_WEBHOOK_URL to your cloud domain
+
+The application is fully containerized and cloud-ready!
