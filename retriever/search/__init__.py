@@ -1,9 +1,12 @@
-from .base import RetrieverBase
-from .elasticsearch import ElasticsearchRetriever
 from .factory import RetrieverFactory
+from .base import RetrieverBase, SearchResult
+from .elasticsearch import ElasticsearchRetriever
+from .pinecone import PineconeRetriever
 
 __all__ = [
-    "RetrieverBase",
-    "ElasticsearchRetriever",
     "RetrieverFactory",
+    "RetrieverBase", 
+    "SearchResult",
+    "ElasticsearchRetriever",
+    "PineconeRetriever"
 ]

@@ -1,6 +1,7 @@
 from typing import Dict, Any
 from .base import RetrieverBase
 from .elasticsearch import ElasticsearchRetriever
+from .pinecone import PineconeRetriever
 
 
 class RetrieverFactory:
@@ -27,5 +28,10 @@ class RetrieverFactory:
             if not es_connection:
                 raise ValueError("Elasticsearch connection required for Elasticsearch retriever")
             return ElasticsearchRetriever(config, es_connection)
+        elif retriever_type == "pinecone":
+            pinecone_connection = services.get("pinecone")
+            if not pinecone_connection:
+                raise ValueError("Pinecone connection required for Pinecone retriever")
+            return PineconeRetriever(config, pinecone_connection)
         else:
             raise ValueError(f"Unsupported retriever type: {retriever_type}")
