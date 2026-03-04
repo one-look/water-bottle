@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from .base import EmbedderBase
-from .huggingface import HuggingFaceEmbedder
+# from .huggingface import HuggingFaceEmbedder
 from .gemini import GeminiEmbedder
 
 
@@ -21,11 +21,12 @@ class EmbedderFactory:
         Raises:
             ValueError: If embedder type is not supported
         """
-        embedder_type = config.get("type", "huggingface")
+        embedder_type = config.get("type", "gemini")
         
-        if embedder_type == "huggingface":
-            return HuggingFaceEmbedder(config)
-        elif embedder_type == "gemini":
+        # if embedder_type == "huggingface":
+        #     return HuggingFaceEmbedder(config)
+        # elif embedder_type == "gemini":
+        if embedder_type == "gemini":
             return GeminiEmbedder(config)
         else:
             raise ValueError(f"Unsupported embedder type: {embedder_type}")
