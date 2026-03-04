@@ -38,9 +38,9 @@ class RAGWorkflow:
             history = self.memory.get_history(session_id)
             
             # Step 2: Retrieval
-            logger.info("Generating embeddings and searching Elasticsearch...")
+            logger.info("Generating embeddings and searching Pinecone...")
             query_vector = self.embedder.embed(query)
-            search_results = self.retriever.search(query_vector, limit=5)
+            search_results = self.retriever.search(query_vector, top_k=5)
             context = [result.content for result in search_results]
             
             # Step 3: Prompt & Generation
