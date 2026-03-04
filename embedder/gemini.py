@@ -1,6 +1,6 @@
 import logging
 from typing import List, Dict, Any
-import google.genai as genai
+from google import genai
 import os
 from .base import EmbedderBase
 
@@ -16,24 +16,17 @@ class GeminiEmbedder(EmbedderBase):
         Args:
             config: Configuration dictionary with model_name and other settings
         """
-        self.model_name = config.get("model_name", "text-embedding-004")
+        self.model_name = config.get("model_name", "gemini-embedding-001")
         self.task_type = config.get("task_type", "retrieval_query")
-        self._model = None
         
         # Configure API key
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
             raise ValueError("GEMINI_API_KEY environment variable is required")
         
-        genai.configure(api_key=api_key)
+        # Create client with API key
+        self.client = genai.Client(api_key=api_key)
         logger.info(f"Initialized GeminiEmbedder with model: {self.model_name}")
-    
-    @property
-    def model(self):
-        """Lazy initialization of Gemini model."""
-        if self._model is None:
-            self._model = genai.GenerativeModel(self.model_name)
-        return self._model
     
     def embed_batch(self, texts: List[str]) -> List[List[float]]:
         """Generate embeddings for a list of texts.
@@ -45,14 +38,16 @@ class GeminiEmbedder(EmbedderBase):
             List of embedding vectors
         """
         try:
+            response = self.client.models.embed_content(
+                model=self.model_name,
+                contents=texts
+            )
+            
+            # Extract embeddings from response
             embeddings = []
-            for text in texts:
-                result = genai.embed_content(
-                    model=self.model_name,
-                    content=text,
-                    task_type=self.task_type
-                )
-                embeddings.append(result['embedding'])
+            if hasattr(response, 'embeddings'):
+                for embedding in response.embeddings:
+                    embeddings.append(embedding.values)
             
             logger.info(f"Generated embeddings for {len(texts)} texts using Gemini")
             return embeddings
@@ -71,14 +66,18 @@ class GeminiEmbedder(EmbedderBase):
             Embedding vector
         """
         try:
-            result = genai.embed_content(
+            response = self.client.models.embed_content(
                 model=self.model_name,
-                content=text,
-                task_type=self.task_type
+                contents=text
             )
             
-            logger.debug(f"Generated embedding for text using Gemini")
-            return result['embedding']
+            # Extract embedding from response
+            if hasattr(response, 'embeddings') and len(response.embeddings) > 0:
+                embedding = response.embeddings[0].values
+                logger.debug(f"Generated embedding for text using Gemini")
+                return embedding
+            else:
+                raise ValueError("No embedding returned from Gemini API")
             
         except Exception as e:
             logger.error(f"Gemini embedding failed: {e}")
