@@ -4,9 +4,12 @@ about.md
 installation_guide.txt
 suvadu.txt
 
-# Development directories
+# ETL Pipeline (not needed for RAG deployment)
+src/etl/
 dags/
 examples/
+
+# Development directories
 tests/
 
 # Git and cache files

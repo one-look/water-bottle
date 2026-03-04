@@ -1,6 +1,7 @@
 from typing import Dict, Any
 from .base import EmbedderBase
 from .huggingface import HuggingFaceEmbedder
+from .gemini import GeminiEmbedder
 
 
 class EmbedderFactory:
@@ -24,5 +25,7 @@ class EmbedderFactory:
         
         if embedder_type == "huggingface":
             return HuggingFaceEmbedder(config)
+        elif embedder_type == "gemini":
+            return GeminiEmbedder(config)
         else:
             raise ValueError(f"Unsupported embedder type: {embedder_type}")
