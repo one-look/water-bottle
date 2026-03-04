@@ -31,7 +31,7 @@ class RetrieverFactory:
         elif retriever_type == "pinecone":
             pinecone_connection = services.get("pinecone")
             if not pinecone_connection:
-                raise ValueError("Pinecone connection required for Pinecone retriever")
+                raise ValueError("Pinecone connection required for Pinecone retriever. Please set PINECONE_API_KEY environment variable.")
             return PineconeRetriever(config, pinecone_connection)
         else:
             raise ValueError(f"Unsupported retriever type: {retriever_type}")

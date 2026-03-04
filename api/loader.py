@@ -73,16 +73,23 @@ class AppLoader:
         # Initialize Pinecone connection if configured
         if self.config.get("pinecone"):
             try:
-                from src.etl.connectors import ConnectorFactory
-                from src.etl.credentials import CredentialFactory
+                from pinecone import Pinecone
+                import os
                 
-                # Create Pinecone connection
-                pinecone_creds = CredentialFactory.create("local", "pinecone")
-                pinecone_connector = ConnectorFactory.create("pinecone", pinecone_creds)
-                self._services["pinecone"] = pinecone_connector()
-                print("Pinecone connected successfully")
+                # Get API key from environment
+                api_key = os.getenv("PINECONE_API_KEY")
+                if not api_key:
+                    print("Warning: PINECONE_API_KEY environment variable not found")
+                    # Create a dummy connection to prevent startup failure
+                    self._services["pinecone"] = None
+                else:
+                    # Create Pinecone client
+                    self._services["pinecone"] = Pinecone(api_key=api_key)
+                    print("Pinecone connected successfully")
             except Exception as e:
                 print(f"Warning: Failed to connect to Pinecone: {e}")
+                # Create a dummy connection to prevent startup failure
+                self._services["pinecone"] = None
         
         # Initialize embedder
         if self.config.get("embedder"):
