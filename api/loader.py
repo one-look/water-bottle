@@ -6,7 +6,7 @@ from prompt.behavior import PromptManager
 from generators.factory import GeneratorFactory
 from services.rag.workflow import RAGWorkflow
 from services.telegram.workflow import TelegramWorkflow
-from elasticsearch import Elasticsearch
+# from elasticsearch import Elasticsearch
 
 from typing import Dict, Any
 
@@ -32,43 +32,43 @@ class AppLoader:
         """
         # Initialize Elasticsearch connection if configured
         # Inside `AppLoader.load_services`
-        if self.config.get("elasticsearch"):
-            try:
-                es_config = self.config["elasticsearch"]
-                
-                # Get hosts from environment or config
-                hosts = os.getenv("ELASTICSEARCH_URL") or es_config.get("hosts", ["https://localhost:9200"])
-                if isinstance(hosts, str):
-                    hosts = [hosts]
-                
-                # Get auth from environment or config
-                es_user = os.getenv("ELASTIC_USER") or es_config.get("options", {}).get("basic_auth", [None])[0]
-                es_password = os.getenv("ELASTIC_PASSWORD") or es_config.get("options", {}).get("basic_auth", [None, None])[1]
-                
-                # Get verify_certs from environment or config
-                verify_certs = os.getenv("ELASTIC_VERIFY_CERTS")
-                if verify_certs is None:
-                    verify_certs = es_config.get("options", {}).get("verify_certs", False)
-                else:
-                    verify_certs = verify_certs.lower() == "true"
-                
-                # Build connection options
-                es_options = {}
-                if es_user and es_password:
-                    es_options["basic_auth"] = [es_user, es_password]
-                es_options["verify_certs"] = verify_certs
-                
-                self._services["elasticsearch"] = Elasticsearch(
-                    hosts=hosts,
-                    **es_options
-                )
-                # Verify connection immediately
-                if self._services["elasticsearch"].ping():
-                    print("Elasticsearch connected successfully")
-                else:
-                    print("Warning: Elasticsearch ping failed. Check credentials.")
-            except Exception as e:
-                print(f"Warning: Failed to connect to Elasticsearch: {e}")
+        # if self.config.get("elasticsearch"):
+        #     try:
+        #         es_config = self.config["elasticsearch"]
+        #         
+        #         # Get hosts from environment or config
+        #         hosts = os.getenv("ELASTICSEARCH_URL") or es_config.get("hosts", ["https://localhost:9200"])
+        #         if isinstance(hosts, str):
+        #             hosts = [hosts]
+        #         
+        #         # Get auth from environment or config
+        #         es_user = os.getenv("ELASTIC_USER") or es_config.get("options", {}).get("basic_auth", [None])[0]
+        #         es_password = os.getenv("ELASTIC_PASSWORD") or es_config.get("options", {}).get("basic_auth", [None, None])[1]
+        #         
+        #         # Get verify_certs from environment or config
+        #         verify_certs = os.getenv("ELASTIC_VERIFY_CERTS")
+        #         if verify_certs is None:
+        #             verify_certs = es_config.get("options", {}).get("verify_certs", False)
+        #         else:
+        #             verify_certs = verify_certs.lower() == "true"
+        #         
+        #         # Build connection options
+        #         es_options = {}
+        #         if es_user and es_password:
+        #             es_options["basic_auth"] = [es_user, es_password]
+        #         es_options["verify_certs"] = verify_certs
+        #         
+        #         self._services["elasticsearch"] = Elasticsearch(
+        #             hosts=hosts,
+        #             **es_options
+        #         )
+        #         # Verify connection immediately
+        #         if self._services["elasticsearch"].ping():
+        #             print("Elasticsearch connected successfully")
+        #         else:
+        #             print("Warning: Elasticsearch ping failed. Check credentials.")
+        #     except Exception as e:
+        #         print(f"Warning: Failed to connect to Elasticsearch: {e}")
         
         # Initialize Pinecone connection if configured
         if self.config.get("pinecone"):

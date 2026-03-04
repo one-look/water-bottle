@@ -1,6 +1,6 @@
 embedder:
   type: gemini
-  model_name: "models/text-embedding-004"
+  model_name: "text-embedding-004"
   task_type: "retrieval_query"
 
 retriever:

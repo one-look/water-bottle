@@ -1,6 +1,6 @@
 import logging
 from typing import List, Dict, Any
-import google.generativeai as genai
+import google.genai as genai
 import os
 from .base import EmbedderBase
 
@@ -16,7 +16,7 @@ class GeminiEmbedder(EmbedderBase):
         Args:
             config: Configuration dictionary with model_name and other settings
         """
-        self.model_name = config.get("model_name", "models/text-embedding-004")
+        self.model_name = config.get("model_name", "text-embedding-004")
         self.task_type = config.get("task_type", "retrieval_query")
         self._model = None
         
