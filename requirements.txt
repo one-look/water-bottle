@@ -19,7 +19,7 @@ pydantic>=2.5.0
 # AI/ML
 litellm>=1.25.0
 # sentence-transformers>=2.2.0
-transformers>=4.36.0
+# transformers>=4.36.0
 
 # Vector Database
 pinecone-client>=3.0.0
