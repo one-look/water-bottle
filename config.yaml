@@ -9,6 +9,9 @@ retriever:
   vector_field: "values"
   content_field: "metadata"
 
+pinecone:
+  api_key: ""  # Loaded from PINECONE_API_KEY environment variable
+
 memory:
   type: session
   max_messages: 50
