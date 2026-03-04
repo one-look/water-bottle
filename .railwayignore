@@ -1,0 +1,26 @@
+# Documentation files (not needed for deployment)
+README.md
+about.md
+installation_guide.txt
+suvadu.txt
+
+# Development directories
+dags/
+examples/
+tests/
+
+# Git and cache files
+.git/
+.gitignore
+.gitmodules
+.pytest_cache/
+__pycache__/
+
+# Configuration files that should be overridden by environment variables
+.env
+
+# Development scripts
+main.py
+
+# License (not needed in container)
+LICENSE
