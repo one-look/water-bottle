@@ -1,6 +1,6 @@
 import logging
 from typing import List, Dict, Any
-import google.generativeai as genai
+from google import genai
 import os
 from .base import EmbedderBase
 
