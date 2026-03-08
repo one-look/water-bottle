@@ -1,8 +1,7 @@
 from typing import Dict, Any
 from .base import EmbedderBase
 # from .huggingface import HuggingFaceEmbedder
-from .gemini import GeminiEmbedder
-from .txtai import TxtaiEmbedder
+# Lazy import to avoid import errors when google-generativeai is not installed
 
 
 class EmbedderFactory:
@@ -25,11 +24,17 @@ class EmbedderFactory:
         embedder_type = config.get("type", "gemini")
         
         if embedder_type == "txtai":
+            from .txtai import TxtaiEmbedder
             return TxtaiEmbedder(config)
         elif embedder_type == "huggingface":
             # return HuggingFaceEmbedder(config)
             raise ValueError(f"HuggingFace embedder not yet implemented")
         elif embedder_type == "gemini":
-            return GeminiEmbedder(config)
+            # Lazy import to avoid import errors when google-generativeai is not installed
+            try:
+                from .gemini import GeminiEmbedder
+                return GeminiEmbedder(config)
+            except ImportError as e:
+                raise ValueError(f"Gemini embedder requires google-generativeai package: {e}")
         else:
             raise ValueError(f"Unsupported embedder type: {embedder_type}")
