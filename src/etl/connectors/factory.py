@@ -9,6 +9,7 @@ from typing import Any
 from .database import DatabaseConnector
 from .elasticsearch import ElasticsearchConnector
 from .pinecone import PineconeConnector
+from .web import WebConnector
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +47,8 @@ class ConnectorFactory:
             return ElasticsearchConnector(config=config)
         elif connector_type == "pinecone":
             return PineconeConnector(config=config)
+        elif connector_type == "web":
+            return WebConnector(config=config)
         else:
             error_msg = f"Unsupported connector type: {connector_type}"
             logger.error(error_msg)

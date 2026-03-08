@@ -4,7 +4,7 @@ Factory class to generate the appropriate ingestor.
 
 import logging
 from .elasticsearch import ElasticsearchBulkIngestor
-from .pinecone import PineconeBulkIngestor
+from .pinecone import PineconeIngestor
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ class LoaderFactory:
         if load_type == "elasticsearch":
             return ElasticsearchBulkIngestor(connection=connection, config=config)
         elif load_type == "pinecone":
-            return PineconeBulkIngestor(connection=connection, config=config)
+            return PineconeIngestor(connection=connection, config=config)
         else:
             error_msg = f"Loader type '{load_type}' is not supported."
             logger.error(error_msg)

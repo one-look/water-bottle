@@ -22,5 +22,8 @@ CONNECTIONS = {
     },
     "pinecone": {
         "api_key": os.getenv("PINECONE_API_KEY") or ""
+    },
+    "nmc": {
+        "url": "https://nmc.ac.in/"
     }
 }

@@ -6,6 +6,7 @@ import logging
 from typing import Any, Dict
 
 from .json_transformer import JsonTransformer
+from .web_transformer import WebTransformer
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +36,8 @@ class TransformerFactory:
 
         if transformer_type == "json":
             return JsonTransformer(data, config)
+        elif transformer_type == "web":
+            return WebTransformer(config)
              
         else:
             error_msg = f"Unknown transformer type: {transformer_type}"

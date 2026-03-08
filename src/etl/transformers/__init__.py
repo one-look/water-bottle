@@ -9,8 +9,12 @@ Purpose:
 from .factory import TransformerFactory
 from .base import BaseTransformer
 from .schemas import *
+from .json_transformer import JsonTransformer
+from .web_transformer import WebTransformer
 
 __all__ = [
     "TransformerFactory",
     "BaseTransformer",
+    "JsonTransformer",
+    "WebTransformer",
 ]

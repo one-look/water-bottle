@@ -6,9 +6,11 @@ Purpose:
 """
 
 from .database import DatabaseExtractor
+from .web import WebExtractor
 from .factory import ExtractorFactory
 
 __all__ = [
     "DatabaseExtractor",
+    "WebExtractor",
     "ExtractorFactory",
 ]

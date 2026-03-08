@@ -8,12 +8,14 @@ import logging
 from .factory import ConnectorFactory
 from .database import DatabaseConnector
 from .gmail import GmailConnector
+from .web import WebConnector
 
 # Define the public API for the package
 __all__ = [
     "ConnectorFactory",
     "DatabaseConnector",
     "GmailConnector",
+    "WebConnector",
 ]
 
 # Set a default logger for the package to prevent "No handler found" warnings

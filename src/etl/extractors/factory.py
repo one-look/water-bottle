@@ -1,6 +1,7 @@
 import logging
 from typing import Any, Dict
 from .database import DatabaseExtractor
+from .web import WebExtractor
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +41,8 @@ class ExtractorFactory:
 
         if extractor_type == "database":
             return DatabaseExtractor(connection=connection, config=config)
+        elif extractor_type == "web":
+            return WebExtractor(connection=connection, config=config)
         else:
             error_msg = f"Unknown extractor type: {extractor_type}"
             logger.error(error_msg)
