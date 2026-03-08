@@ -2,6 +2,7 @@ from typing import Dict, Any
 from .base import EmbedderBase
 # from .huggingface import HuggingFaceEmbedder
 from .gemini import GeminiEmbedder
+from .txtai import TxtaiEmbedder
 
 
 class EmbedderFactory:
@@ -23,10 +24,12 @@ class EmbedderFactory:
         """
         embedder_type = config.get("type", "gemini")
         
-        # if embedder_type == "huggingface":
-        #     return HuggingFaceEmbedder(config)
-        # elif embedder_type == "gemini":
-        if embedder_type == "gemini":
+        if embedder_type == "txtai":
+            return TxtaiEmbedder(config)
+        elif embedder_type == "huggingface":
+            # return HuggingFaceEmbedder(config)
+            raise ValueError(f"HuggingFace embedder not yet implemented")
+        elif embedder_type == "gemini":
             return GeminiEmbedder(config)
         else:
             raise ValueError(f"Unsupported embedder type: {embedder_type}")
