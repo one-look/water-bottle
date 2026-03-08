@@ -1,0 +1,75 @@
+# ==========================================================
+# NMC Web Scraping and Ingestion Pipeline Configuration
+# ==========================================================
+
+# 1. Web Connector: Handles the low-level HTTP connection
+connector:
+  url: "https://nmc.ac.in"
+  timeout: 30
+  verify_ssl: true
+
+# 2. Web Extractor: The Crawler that fetches raw HTML/Content
+extractor:
+  url: "https://nmc.ac.in" 
+  max_pages: 10
+  delay: 1.5
+  metadata:
+    source: "nmc_website"
+    crawl_date: "2026-03-08"
+
+# 3. Web Transformer: Handles Cleaning and Chunking
+transformer:
+  index_name: "nmc"
+  extraction_rules:
+    tags: 
+      - "h1"
+      - "h2"
+      - "h3"
+      - "p"
+    min_text_length: 50
+
+  clean_rules:
+    - "content"
+  chunking:
+    target_field: "content"
+    chunk_size: 500
+    overlap: 50
+  # Driven by WebTransformer to create (id, text, metadata)
+  index_script:
+    id_format: "nmc_chunk_{i}"
+    metadata_fields:
+      source: "nmc_website"
+      chunk_id: "{i}"
+      total_chunks: "{len}"
+      category: "college_info"
+
+# 4. Embedder: Generates vectors via txtai
+embedder:
+  path: "sentence-transformers/all-MiniLM-L6-v2"
+  content: true
+  backend: "txtai"
+
+# 5. Pinecone Loader: Final Ingestion
+loader:
+  index_name: "nmc-index"
+  settings:
+    dimension: 384  # Matches all-MiniLM-L6-v2
+    metric: "cosine"
+    # Pinecone specific infrastructure
+    spec:
+      cloud: "aws"
+      region: "us-east-1"
+  
+  # MAPPINGS: Tells the loader how to read the Embedder output
+  # This avoids hardcoding keys in your Python files
+  mappings:
+    id_key: "id"
+    vector_key: "vector"
+    text_key: "text"      # Where the actual words are stored
+    metadata_key: "metadata"
+
+# 6. Pipeline: Orchestration metadata
+pipeline:
+  source: "web"
+  target: "pinecone"
+  project: "NMC_Knowledge_Base"
