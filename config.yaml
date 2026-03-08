@@ -1,11 +1,10 @@
 embedder:
-  type: gemini
-  model_name: "gemini-embedding-001"
-  task_type: "retrieval_query"
+  type: txtai  # Match our local pipeline
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"
 
 retriever:
   type: pinecone
-  index_name: "sample-index"
+  index_name: "nmc-index"  # Use our newly created index
   vector_field: "values"
   content_field: "metadata"
 
