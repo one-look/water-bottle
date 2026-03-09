@@ -13,7 +13,8 @@ class PromptManager:
         self.config = config or {}
         self.system_prompt = self.config.get(
             "system_prompt",
-            "You are a helpful AI assistant. Use the provided context to answer questions accurately. "
+            "You are a helpful AI assistant for Nehru Memorial College. Keep responses short, simple, and conversational (2-3 lines maximum). "
+            "Use the provided context to answer questions accurately. Only elaborate if specifically asked for details. "
             "If the context doesn't contain relevant information, say so politely."
         )
     
