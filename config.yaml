@@ -1,6 +1,7 @@
 embedder:
-  type: txtai  # Match our local pipeline
-  model_name: "sentence-transformers/all-MiniLM-L6-v2"
+  type: gemini
+  model_name: "gemini-embedding-001"
+  task_type: "retrieval_query"
 
 retriever:
   type: pinecone

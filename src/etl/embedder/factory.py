@@ -6,6 +6,7 @@ embedder classes based on a string identifier.
 import logging
 from typing import Any
 
+from .gemini import GeminiEmbeddings
 from .txtai import TxtaiEmbeddings
 
 logger = logging.getLogger(__name__)
@@ -38,6 +39,8 @@ class EmbedderFactory:
         
         if embedder_type == "txtai":
             return TxtaiEmbeddings(data=data, config=config)
+        elif embedder_type == "gemini":
+            return GeminiEmbeddings(data=data, config=config)
         else:
             error_msg = f"Unsupported embedder type: {embedder_type}"
             logger.error(error_msg)

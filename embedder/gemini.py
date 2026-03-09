@@ -1,6 +1,6 @@
 import logging
 from typing import List, Dict, Any
-from google import genai
+import google.generativeai as genai 
 import os
 from .base import EmbedderBase
 
@@ -24,8 +24,8 @@ class GeminiEmbedder(EmbedderBase):
         if not api_key:
             raise ValueError("GEMINI_API_KEY environment variable is required")
         
-        # Create client with API key
-        self.client = genai.Client(api_key=api_key)
+        # Configure the API
+        genai.configure(api_key=api_key)
         logger.info(f"Initialized GeminiEmbedder with model: {self.model_name}")
     
     def embed_batch(self, texts: List[str]) -> List[List[float]]:
@@ -38,16 +38,14 @@ class GeminiEmbedder(EmbedderBase):
             List of embedding vectors
         """
         try:
-            response = self.client.models.embed_content(
-                model=self.model_name,
-                contents=texts
-            )
-            
-            # Extract embeddings from response
             embeddings = []
-            if hasattr(response, 'embeddings'):
-                for embedding in response.embeddings:
-                    embeddings.append(embedding.values)
+            for text in texts:
+                response = genai.embed_content(
+                    model=self.model_name,
+                    content=text,
+                    task_type=self.task_type
+                )
+                embeddings.append(response['embedding'])
             
             logger.info(f"Generated embeddings for {len(texts)} texts using Gemini")
             return embeddings
@@ -66,18 +64,15 @@ class GeminiEmbedder(EmbedderBase):
             Embedding vector
         """
         try:
-            response = self.client.models.embed_content(
+            response = genai.embed_content(
                 model=self.model_name,
-                contents=text
+                content=text,
+                task_type=self.task_type
             )
             
-            # Extract embedding from response
-            if hasattr(response, 'embeddings') and len(response.embeddings) > 0:
-                embedding = response.embeddings[0].values
-                logger.debug(f"Generated embedding for text using Gemini")
-                return embedding
-            else:
-                raise ValueError("No embedding returned from Gemini API")
+            embedding = response['embedding']
+            logger.debug(f"Generated embedding for text using Gemini")
+            return embedding
             
         except Exception as e:
             logger.error(f"Gemini embedding failed: {e}")

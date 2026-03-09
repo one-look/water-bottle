@@ -1,6 +1,4 @@
-# ==========================================================
 # NMC Web Scraping and Ingestion Pipeline Configuration
-# ==========================================================
 
 # 1. Web Connector: Handles the low-level HTTP connection
 connector:
@@ -11,7 +9,7 @@ connector:
 # 2. Web Extractor: The Crawler that fetches raw HTML/Content
 extractor:
   url: "https://nmc.ac.in" 
-  max_pages: 10
+  max_pages: 2
   delay: 1.5
   metadata:
     source: "nmc_website"
@@ -43,17 +41,17 @@ transformer:
       total_chunks: "{len}"
       category: "college_info"
 
-# 4. Embedder: Generates vectors via txtai
+# 4. Embedder: Generates vectors via Gemini
 embedder:
-  path: "sentence-transformers/all-MiniLM-L6-v2"
-  content: true
-  backend: "txtai"
+  model_name: "gemini-embedding-001"
+  task_type: "retrieval_query"
+  backend: "gemini"
 
 # 5. Pinecone Loader: Final Ingestion
 loader:
   index_name: "nmc-index"
   settings:
-    dimension: 384  # Matches all-MiniLM-L6-v2
+    dimension: 3072  # Matches gemini-embedding-001
     metric: "cosine"
     # Pinecone specific infrastructure
     spec:

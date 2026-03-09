@@ -55,7 +55,7 @@ def main():
         
         # 5. Embedding
         logger.info(f"Generating vectors using {config.get('embedder', {}).get('backend')}...")
-        embedder = EmbedderFactory.get_embedder("txtai", embedder_data, config.get("embedder", {}))
+        embedder = EmbedderFactory.get_embedder("gemini", embedder_data, config.get("embedder", {}))
         embedded_data = list(embedder.embed())
         
         # Debug: Check first record format
