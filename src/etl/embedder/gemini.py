@@ -2,8 +2,8 @@ import logging
 from typing import Dict, List, Any, Iterator
 import os
 
-# Use the old google-generativeai package that's actually installed
-import google.generativeai as genai
+# Use the new google-genai package
+from google import genai
 
 logger = logging.getLogger(__name__)
 
@@ -30,8 +30,8 @@ class GeminiEmbeddings:
         if not api_key:
             raise ValueError("GEMINI_API_KEY environment variable is required")
         
-        # Configure API with old google-generativeai format
-        genai.configure(api_key=api_key)
+        # Create client with new SDK
+        self.client = genai.Client(api_key=api_key)
         logger.info(f"Initialized standalone Gemini ETL embedder with model: {self.model_name}")
     
     def embed(self) -> Iterator[Dict[str, Any]]:
@@ -55,21 +55,21 @@ class GeminiEmbeddings:
             
             if text:
                 logger.debug(f"Generating embedding for record ID: {record_id}")
-                # Use Google GenAI SDK directly
-                response = genai.embed_content(
+                # Use new Google GenAI SDK
+                response = self.client.models.embed_content(
                     model=self.model_name,
-                    content=text,
-                    task_type=self.task_type
+                    contents=text,
+                    config={"task_type": self.task_type}
                 )
                 
                 # Extract embedding from response - new API format
-                if 'embedding' in response:
-                    vector = response['embedding']
+                if hasattr(response, 'embeddings') and response.embeddings:
+                    vector = response.embeddings[0].values
                     source_data["vector"] = vector
                     logger.debug(f"Generated vector of length: {len(vector)}")
                 else:
                     logger.error(f"No embedding returned from Gemini API for record ID: {record_id}")
-                    logger.error(f"Response keys: {list(response.keys()) if isinstance(response, dict) else 'Not a dict'}")
+                    logger.error(f"Response type: {type(response)}")
                     source_data["vector"] = []
             else:
                 logger.warning(f"Empty text for record ID: {record_id}")

@@ -2,6 +2,10 @@ import logging
 import sys
 import time
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 from src.etl.credentials import CredentialFactory
 from src.etl.connectors import ConnectorFactory

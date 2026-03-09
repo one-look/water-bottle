@@ -1,6 +1,6 @@
 import logging
 from typing import List, Dict, Any
-import google.generativeai as genai 
+from google import genai
 import os
 from .base import EmbedderBase
 
@@ -24,8 +24,8 @@ class GeminiEmbedder(EmbedderBase):
         if not api_key:
             raise ValueError("GEMINI_API_KEY environment variable is required")
         
-        # Configure the API
-        genai.configure(api_key=api_key)
+        # Create client with API key
+        self.client = genai.Client(api_key=api_key)
         logger.info(f"Initialized GeminiEmbedder with model: {self.model_name}")
     
     def embed_batch(self, texts: List[str]) -> List[List[float]]:
@@ -40,12 +40,12 @@ class GeminiEmbedder(EmbedderBase):
         try:
             embeddings = []
             for text in texts:
-                response = genai.embed_content(
+                response = self.client.models.embed_content(
                     model=self.model_name,
-                    content=text,
-                    task_type=self.task_type
+                    contents=text,
+                    config={"task_type": self.task_type}
                 )
-                embeddings.append(response['embedding'])
+                embeddings.append(response.embeddings[0].values)
             
             logger.info(f"Generated embeddings for {len(texts)} texts using Gemini")
             return embeddings
@@ -64,13 +64,13 @@ class GeminiEmbedder(EmbedderBase):
             Embedding vector
         """
         try:
-            response = genai.embed_content(
+            response = self.client.models.embed_content(
                 model=self.model_name,
-                content=text,
-                task_type=self.task_type
+                contents=text,
+                config={"task_type": self.task_type}
             )
             
-            embedding = response['embedding']
+            embedding = response.embeddings[0].values
             logger.debug(f"Generated embedding for text using Gemini")
             return embedding
             
