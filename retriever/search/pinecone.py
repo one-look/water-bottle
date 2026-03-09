@@ -47,7 +47,7 @@ class PineconeRetriever(RetrieverBase):
             results = []
             for match in response.get("matches", []):
                 metadata = match.get("metadata", {})
-                content = metadata.get("content", "")
+                content = metadata.get("text", "")  # Changed from "content" to "text"
                 
                 result = SearchResult(
                     content=content,
