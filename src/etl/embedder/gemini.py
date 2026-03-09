@@ -1,6 +1,7 @@
 import logging
 from typing import Dict, List, Any, Iterator
 import os
+import time
 
 # Use the new google-genai package
 from google import genai
@@ -55,6 +56,9 @@ class GeminiEmbeddings:
             
             if text:
                 logger.debug(f"Generating embedding for record ID: {record_id}")
+                # Rate limiting: wait 0.5 seconds between requests to avoid quota limits
+                time.sleep(0.5)
+                
                 # Use new Google GenAI SDK
                 response = self.client.models.embed_content(
                     model=self.model_name,

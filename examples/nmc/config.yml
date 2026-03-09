@@ -9,7 +9,7 @@ connector:
 # 2. Web Extractor: The Crawler that fetches raw HTML/Content
 extractor:
   url: "https://nmc.ac.in" 
-  max_pages: 2
+  max_pages: 50
   delay: 1.5
   metadata:
     source: "nmc_website"
