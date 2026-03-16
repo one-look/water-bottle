@@ -1,5 +1,6 @@
 import logging
 from typing import Dict, Any, List
+import asyncio
 from .base import RetrieverBase, SearchResult
 
 logger = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ class PineconeRetriever(RetrieverBase):
         
         logger.info(f"Initialized PineconeRetriever for index: {self.index_name}")
     
-    def search(self, query_vector: List[float], top_k: int = 5) -> List[SearchResult]:
+    async def search(self, query_vector: List[float], top_k: int = 5) -> List[SearchResult]:
         """Search for similar documents in Pinecone.
         
         Args:
@@ -36,8 +37,9 @@ class PineconeRetriever(RetrieverBase):
             List of search results with scores and content
         """
         try:
-            # Query Pinecone index
-            response = self.index.query(
+            # Query Pinecone index asynchronously
+            response = await asyncio.to_thread(
+                self.index.query,
                 vector=[query_vector],
                 top_k=top_k,
                 include_metadata=True
@@ -63,7 +65,7 @@ class PineconeRetriever(RetrieverBase):
             logger.error(f"Pinecone search failed: {e}")
             return []
     
-    def add_document(self, doc_id: str, content: str, vector: List[float], metadata: Dict[str, Any] = None) -> None:
+    async def add_document(self, doc_id: str, content: str, vector: List[float], metadata: Dict[str, Any] = None) -> None:
         """Add a document to Pinecone index.
         
         Args:
@@ -79,8 +81,9 @@ class PineconeRetriever(RetrieverBase):
             # Add content to metadata for retrieval
             metadata["content"] = content
             
-            # Upsert to Pinecone
-            self.index.upsert(
+            # Upsert to Pinecone asynchronously
+            await asyncio.to_thread(
+                self.index.upsert,
                 vectors=[{
                     "id": doc_id,
                     "values": vector,
@@ -93,14 +96,14 @@ class PineconeRetriever(RetrieverBase):
         except Exception as e:
             logger.error(f"Failed to add document to Pinecone: {e}")
     
-    def delete_document(self, doc_id: str) -> None:
+    async def delete_document(self, doc_id: str) -> None:
         """Delete a document from Pinecone index.
         
         Args:
             doc_id: Document ID to delete
         """
         try:
-            self.index.delete(ids=[doc_id])
+            await asyncio.to_thread(self.index.delete, ids=[doc_id])
             logger.info(f"Deleted document {doc_id} from Pinecone")
             
         except Exception as e:

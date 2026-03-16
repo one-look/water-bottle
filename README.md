@@ -10,15 +10,15 @@ Water Bottle is a RAG (Retrieval-Augmented Generation) system with multiple inte
 - Environment-based configuration management
 
 **RAG Pipeline**
-- **Embedder**: Sentence-transformers for vector embeddings
-- **Retriever**: Elasticsearch for document search
+- **Embedder**: Google Gemini for vector embeddings
+- **Retriever**: Pinecone for document search
 - **Generator**: Google Gemini via LiteLLM for responses
 - **Memory**: Session-based conversation history
 
 **Integrations**
 - **Telegram Bot**: Webhook-based Q&A bot
 - **ETL Pipeline**: Data ingestion from multiple sources
-- **Vector Databases**: Pinecone and Elasticsearch support
+- **Vector Database**: Pinecone support
 
 ### Architecture Flow
 

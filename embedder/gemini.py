@@ -2,6 +2,7 @@ import logging
 from typing import List, Dict, Any
 from google import genai
 import os
+import asyncio
 from .base import EmbedderBase
 
 logger = logging.getLogger(__name__)
@@ -28,7 +29,7 @@ class GeminiEmbedder(EmbedderBase):
         self.client = genai.Client(api_key=api_key)
         logger.info(f"Initialized GeminiEmbedder with model: {self.model_name}")
     
-    def embed_batch(self, texts: List[str]) -> List[List[float]]:
+    async def embed_batch(self, texts: List[str]) -> List[List[float]]:
         """Generate embeddings for a list of texts.
         
         Args:
@@ -40,7 +41,8 @@ class GeminiEmbedder(EmbedderBase):
         try:
             embeddings = []
             for text in texts:
-                response = self.client.models.embed_content(
+                response = await asyncio.to_thread(
+                    self.client.models.embed_content,
                     model=self.model_name,
                     contents=text,
                     config={"task_type": self.task_type}
@@ -54,7 +56,7 @@ class GeminiEmbedder(EmbedderBase):
             logger.error(f"Gemini embedding failed: {e}")
             raise
     
-    def embed(self, text: str) -> List[float]:
+    async def embed(self, text: str) -> List[float]:
         """Generate embedding for a single text.
         
         Args:
@@ -64,7 +66,8 @@ class GeminiEmbedder(EmbedderBase):
             Embedding vector
         """
         try:
-            response = self.client.models.embed_content(
+            response = await asyncio.to_thread(
+                self.client.models.embed_content,
                 model=self.model_name,
                 contents=text,
                 config={"task_type": self.task_type}

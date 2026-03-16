@@ -6,7 +6,7 @@ class GeneratorBase(ABC):
     """Abstract base class for text generation services."""
     
     @abstractmethod
-    def generate(self, prompt: str, **kwargs) -> str:
+    async def generate(self, prompt: str, **kwargs) -> str:
         """Generate text response based on prompt.
         
         Args:

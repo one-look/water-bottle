@@ -6,7 +6,7 @@ class EmbedderBase(ABC):
     """Abstract base class for text embedding services."""
     
     @abstractmethod
-    def embed(self, text: str) -> List[float]:
+    async def embed(self, text: str) -> List[float]:
         """Convert text to vector embedding.
         
         Args:

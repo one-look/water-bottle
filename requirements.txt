@@ -22,8 +22,15 @@ pinecone>=3.0.0
 # Google Services
 google-genai>=1.0.0
 
+# Testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+
 # Utilities
 numpy>=1.24.0
 
 # Optional: Airflow (only if using Airflow credentials)
 # apache-airflow>=2.7.0
+
+# Optional: Sentence Transformers (only if using HuggingFace embedder)
+# sentence-transformers>=2.0.0

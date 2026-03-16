@@ -1,19 +1,13 @@
 Developer Setup: Lightweight CPU Installation
 ============================================
 
-Follow these steps to set up the environment and link the txtai submodule correctly.
-------------------------------------------------------------------------------------
+Follow these steps to set up the environment.
 
 1. Clone the Project
-
-    When cloning, you must tell Git to also pull the submodule code:
 
     # Clone the repository
     -> git clone https://github.com/one-look/water-bottle.git
     -> cd water-bottle
-
-    # Initialize and pull the txtai submodule code
-    -> git submodule update --init --recursive
 
 2. Create and Activate Virtual Environment
 ------------------------------------------
@@ -52,19 +46,7 @@ Follow these steps to set up the environment and link the txtai submodule correc
     - GEMINI_API_KEY: Your Google Gemini API key
     - TELEGRAM_BOT_TOKEN: Your Telegram bot token
     - PINECONE_API_KEY: Your Pinecone API key
-    - ELASTICSEARCH_URL: Your Elasticsearch URL
     - CONFIG: Path to config file (default: config.yaml)
-
-6. Link the txtai Submodule (Optional)
--------------------------------------
-
-    If you need to modify txtai source code, install it from the local submodule:
-
-    # Move to the src directory where the submodule lives
-    -> cd src/
-
-    # Install with [all] extras to get all features (LLM, pipelines, etc.)
-    -> pip install -e "./txtai"
 
 7. Run the Application
 ---------------------
@@ -87,12 +69,6 @@ Follow these steps to set up the environment and link the txtai submodule correc
 Why we do this:
 ===============
 
-    git submodule update: Ensures the txtai folder actually contains the source code.
-
-    --index-url .../cpu: Keeps the project small enough to run on standard laptops without dedicated GPUs.
-
-    pip install -e: Allows you to modify or debug the txtai source code directly inside your project if needed.
-
     Environment variables: Keeps sensitive credentials out of code and enables cloud deployment.
 
 Cloud Deployment
@@ -102,7 +78,6 @@ For cloud deployment (Railway, AWS, Google Cloud):
 
 1. Set environment variables in your cloud platform
 2. Use the provided Dockerfile
-3. Update ELASTICSEARCH_URL to your cloud database
-4. Set TELEGRAM_WEBHOOK_URL to your cloud domain
+3. Set TELEGRAM_WEBHOOK_URL to your cloud domain
 
 The application is fully containerized and cloud-ready!

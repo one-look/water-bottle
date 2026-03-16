@@ -1,3 +1,3 @@
-from .txtai import EmbeddingsConfig
+from .embeddings import EmbeddingsConfig
 
 __all__ = ["EmbeddingsConfig"]

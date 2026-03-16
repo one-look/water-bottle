@@ -1,5 +1,6 @@
 from typing import Dict, Any
 import litellm
+import asyncio
 from .base import GeneratorBase
 
 
@@ -24,7 +25,7 @@ class LiteLLMGenerator(GeneratorBase):
         if self.api_key:
             litellm.api_key = self.api_key
     
-    def generate(self, prompt: str, **kwargs) -> str:
+    async def generate(self, prompt: str, **kwargs) -> str:
         """Generate text response based on prompt.
         
         Args:
@@ -50,7 +51,7 @@ class LiteLLMGenerator(GeneratorBase):
                 params[key] = value
         
         try:
-            response = litellm.completion(**params)
+            response = await asyncio.to_thread(litellm.completion, **params)
             return response.choices[0].message.content
         except Exception as e:
             raise RuntimeError(f"LiteLLM generation failed: {str(e)}")

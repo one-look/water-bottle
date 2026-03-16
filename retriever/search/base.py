@@ -15,7 +15,7 @@ class RetrieverBase(ABC):
     """Abstract base class for document retrieval services."""
     
     @abstractmethod
-    def search(self, query_vector: List[float], limit: int = 5) -> List[SearchResult]:
+    async def search(self, query_vector: List[float], limit: int = 5) -> List[SearchResult]:
         """Search for similar documents using vector similarity.
         
         Args:

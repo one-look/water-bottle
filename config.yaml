@@ -13,11 +13,17 @@ pinecone:
   api_key: ""  # Loaded from PINECONE_API_KEY environment variable
 
 memory:
-  type: session
-  max_messages: 50
+  type: window
+  window_size: 10
 
 prompt:
-  system_prompt: "You are a helpful AI assistant for Nehru Memorial College. Keep responses short, simple. Use the provided context to answer questions accurately. Only elaborate if specifically asked for details. If the context doesn't contain relevant information, say so politely."
+  system_prompt: "You are a helpful AI assistant for Nehru Memorial College. 
+    Keep responses short, simple. Use the provided context to answer questions accurately. 
+    Only elaborate if specifically asked for details. 
+    If the context doesn't contain relevant information, say so politely.
+    If user ask any contact details provide the contact details with list format.
+    
+    When user asks about departments or courses try to cover everything in a structured way."
 
 generator:
   type: litellm
@@ -25,12 +31,6 @@ generator:
   api_key: ""  # Loaded from GEMINI_API_KEY environment variable
   temperature: 0.7
   max_tokens: 1200
-
-elasticsearch:
-  hosts: [""]  # Loaded from ELASTICSEARCH_URL environment variable
-  options:
-    basic_auth: ["", ""]  # Loaded from ELASTIC_USER and ELASTIC_PASSWORD environment variables
-    verify_certs: false  # Loaded from ELASTIC_VERIFY_CERTS environment variable
 
 telegram:
   bot_token: ""  # Loaded from TELEGRAM_BOT_TOKEN environment variable

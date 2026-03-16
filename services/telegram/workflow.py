@@ -42,9 +42,9 @@ class TelegramWorkflow:
             if parsed_data["status"] == "skip":
                 return {"status": "ok"}
             
-            # Step 2: Process through RAG workflow
+            # Step 2: Process through RAG workflow (async)
             logger.info(f"Processing Telegram message from chat {parsed_data['chat_id']}: {parsed_data['query'][:50]}...")
-            response = self.workflow.run(parsed_data["query"], session_id=parsed_data["session_id"])
+            response = await self.workflow.run(parsed_data["query"], session_id=parsed_data["session_id"])
             
             # Step 3: Send response back to Telegram
             await self.output_handler.send(parsed_data["chat_id"], response)

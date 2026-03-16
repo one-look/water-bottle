@@ -15,7 +15,7 @@ class SessionMemory(MemoryBase):
         self.max_messages = max_messages
         self._sessions: Dict[str, deque] = defaultdict(lambda: deque(maxlen=max_messages))
     
-    def get_history(self, session_id: str) -> List[Dict[str, Any]]:
+    async def get_history(self, session_id: str) -> List[Dict[str, Any]]:
         """Retrieve conversation history for a session.
         
         Args:
@@ -26,7 +26,7 @@ class SessionMemory(MemoryBase):
         """
         return list(self._sessions[session_id])
     
-    def add_message(self, session_id: str, role: str, content: str) -> None:
+    async def add_message(self, session_id: str, role: str, content: str) -> None:
         """Add a message to the conversation history.
         
         Args:
@@ -40,7 +40,7 @@ class SessionMemory(MemoryBase):
         }
         self._sessions[session_id].append(message)
     
-    def clear_session(self, session_id: str) -> None:
+    async def clear_session(self, session_id: str) -> None:
         """Clear conversation history for a session.
         
         Args:

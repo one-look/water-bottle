@@ -1,13 +1,11 @@
 import logging
 
 from .factory import EmbedderFactory
-from .txtai import TxtaiEmbeddings
 from .schemas import EmbeddingsConfig
 
 # Define the public API for the package
 __all__ = [
     "EmbedderFactory",
-    "TxtaiEmbeddings",
     "EmbeddingsConfig",
 ]
 

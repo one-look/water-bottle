@@ -1,4 +1,5 @@
 from typing import List, Dict, Any
+import asyncio
 from sentence_transformers import SentenceTransformer
 from .base import EmbedderBase
 
@@ -23,7 +24,7 @@ class HuggingFaceEmbedder(EmbedderBase):
             self._model = SentenceTransformer(self.model_name, device=self.device)
         return self._model
     
-    def embed(self, text: str) -> List[float]:
+    async def embed(self, text: str) -> List[float]:
         """Convert text to vector embedding.
         
         Args:
@@ -32,5 +33,5 @@ class HuggingFaceEmbedder(EmbedderBase):
         Returns:
             List of float values representing the embedding vector
         """
-        embedding = self.model.encode(text, convert_to_numpy=True)
+        embedding = await asyncio.to_thread(self.model.encode, text, convert_to_numpy=True)
         return embedding.tolist()

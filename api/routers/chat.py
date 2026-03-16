@@ -15,5 +15,5 @@ async def chat(request: ChatRequest):
     if not workflow:
         raise HTTPException(status_code=503, detail="Workflow not ready")
     
-    response = workflow.run(request.query, session_id="global_chat")
+    response = await workflow.run(request.query, session_id="global_chat")
     return {"response": response}

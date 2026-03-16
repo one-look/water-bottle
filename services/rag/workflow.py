@@ -1,4 +1,5 @@
 import logging
+import asyncio
 
 logger = logging.getLogger("water-bottle.workflow")
 
@@ -21,7 +22,7 @@ class RAGWorkflow:
         self.prompt_manager = prompt_manager
         self.generator = generator
     
-    def run(self, query: str, session_id: str = "internal_session") -> str:
+    async def run(self, query: str, session_id: str = "internal_session") -> str:
         """Process a user query through the complete RAG pipeline.
         
         Args:
@@ -34,23 +35,25 @@ class RAGWorkflow:
         try:
             logger.info(f"Processing query for session: {session_id}")
             
-            # Step 1: History
-            history = self.memory.get_history(session_id)
+            # Step 1: History (async)
+            history = await self.memory.get_history(session_id)
             
-            # Step 2: Retrieval
+            # Step 2: Retrieval (async)
             logger.info("Generating embeddings and searching Pinecone...")
-            query_vector = self.embedder.embed(query)
-            search_results = self.retriever.search(query_vector, top_k=5)
+            query_vector = await self.embedder.embed(query)
+            search_results = await self.retriever.search(query_vector, top_k=5)
             context = [result.content for result in search_results]
             
-            # Step 3: Prompt & Generation
+            # Step 3: Prompt & Generation (async)
             logger.info(f"Retrieved {len(context)} documents. Calling LLM...")
             prompt = self.prompt_manager.build_prompt(query, context, history)
-            response = self.generator.generate(prompt)
+            response = await self.generator.generate(prompt)
             
-            # Step 4: Memory
-            self.memory.add_message(session_id, "user", query)
-            self.memory.add_message(session_id, "assistant", response)
+            # Step 4: Memory (async)
+            await asyncio.gather(
+                self.memory.add_message(session_id, "user", query),
+                self.memory.add_message(session_id, "assistant", response)
+            )
             
             return response
         except Exception as e:
