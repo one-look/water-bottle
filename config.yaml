@@ -35,4 +35,4 @@ generator:
 telegram:
   bot_token: ""  # Loaded from TELEGRAM_BOT_TOKEN environment variable
   webhook_url: ""  # Loaded from TELEGRAM_WEBHOOK_URL environment variable
-  bot_username: "One_Look_bot"
+  bot_username: "One_Look_bot" 
