@@ -30,11 +30,11 @@ RUN useradd --create-home --shell /bin/bash app && \
 USER app
 
 # Expose port
-EXPOSE 8080
+EXPOSE $PORT
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD python3 -c "import requests; requests.get('http://localhost:8080/health')" || exit 1
+    CMD python3 -c "import requests; requests.get('http://localhost:$PORT/health')" || exit 1
 
 # Run the application
-CMD ["uvicorn", "api.application:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "api.application:app", "--host", "0.0.0.0", "--port", "$PORT"]
