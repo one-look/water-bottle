@@ -160,6 +160,5 @@ htmlcov/
 
 # Credentials and config
 .env*
-config.yaml
 *.pem
 *.key
