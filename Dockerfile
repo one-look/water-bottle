@@ -24,6 +24,10 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy application code
 COPY . .
 
+# Copy start script
+COPY start.sh .
+RUN chmod +x start.sh
+
 # Create non-root user for security
 RUN useradd --create-home --shell /bin/bash app && \
     chown -R app:app /app
@@ -34,7 +38,7 @@ EXPOSE $PORT
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD sh -c "python3 -c \"import requests; requests.get('http://localhost:$PORT/health')\"" || exit 1
+    CMD sh -c "python3 -c \"import requests; requests.get('http://localhost:${PORT:-8080}/health')\"" || exit 1
 
-# Run the application with shell script to expand $PORT
-CMD ["sh", "-c", "uvicorn api.application:app --host 0.0.0.0 --port $PORT"]
+# Run the start script
+CMD ["./start.sh"]
