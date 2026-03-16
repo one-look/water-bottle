@@ -13,6 +13,6 @@ echo "Working directory: $(pwd)"
 echo "Files in directory:"
 ls -la
 
-# Use exec to make uvicorn the main process (better for Docker)
-# Remove the quotes from $R_PORT to ensure it is passed as a literal number
-exec uvicorn api.application:app --host 0.0.0.0 --port $R_PORT
+# Use exec to make uvicorn main process (better for Docker)
+
+exec uvicorn api.application:app --host 0.0.0.0 --port $R_PORT --workers 4
