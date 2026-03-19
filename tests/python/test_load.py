@@ -11,22 +11,9 @@ class User(HttpUser):
 
     @task(3) # This task is 3x more likely to happen
     def ask_bot(self):
-        # Simulates a user asking the Telegram bot a question
+        # Simulates a user asking the bot a question - now using test endpoint
         payload = {
-            "update_id": 123456,
-            "message": {
-                "message_id": 789,
-                "from": {
-                    "id": 987654321,
-                    "is_bot": False,
-                    "first_name": "Test User"
-                },
-                "chat": {
-                    "id": 987654321,
-                    "type": "private"
-                },
-                "date": 1672531200,
-                "text": "Where is the admin office?"
-            }
+            "query": "Where is the admin office?",
+            "session_id": f"test_session_{self.user_id}"
         }
-        self.client.post("/api/v1/telegram/webhook", json=payload)
+        self.client.post("/api/v1/chat/test", json=payload)

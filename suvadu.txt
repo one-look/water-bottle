@@ -288,3 +288,18 @@ Day 30 || 15/03/2026 || Sunday
 ------------------------------
 
 Nothing
+
+Day 31 || 16/03/2026 || Monday
+-----------------------------
+
+docker image created
+
+Day 32 || 17/03/2026 || Tuesday
+-------------------------------
+
+Nothing
+
+Day 33 || 18/03/2026 || Wednesday
+---------------------------------
+
+testing the bot for beta version
