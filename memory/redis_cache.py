@@ -2,7 +2,13 @@ import logging
 import time
 import os
 import hashlib
-import redis.asyncio as redis
+try:
+    import redis.asyncio as redis
+    REDIS_AVAILABLE = True
+except ImportError:
+    REDIS_AVAILABLE = False
+    redis = None
+
 from .base import MemoryBase
 
 logger = logging.getLogger("water-bottle.memory.redis_cache")
@@ -24,6 +30,10 @@ class RedisCacheMemory(MemoryBase):
         self.ttl = ttl
         self.redis_client = None
         
+        if not REDIS_AVAILABLE:
+            logger.warning("action=redis_unavailable memory=redis_cache reason=module_not_found")
+            return
+            
         if redis_url:
             try:
                 self.redis_client = redis.from_url(redis_url, decode_responses=True)
@@ -60,7 +70,7 @@ class RedisCacheMemory(MemoryBase):
     
     async def get_cached_response(self, query: str) -> str:
         """Get cached response for query."""
-        if not self.redis_client:
+        if not REDIS_AVAILABLE or not self.redis_client:
             return None
         
         try:
@@ -76,7 +86,7 @@ class RedisCacheMemory(MemoryBase):
     
     async def cache_response(self, query: str, response: str) -> None:
         """Cache response for query."""
-        if not self.redis_client:
+        if not REDIS_AVAILABLE or not self.redis_client:
             return
         
         try:
