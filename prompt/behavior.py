@@ -1,4 +1,8 @@
+import logging
+import time
 from typing import List, Dict, Any
+
+logger = logging.getLogger("water-bottle.prompt.behavior")
 
 
 class PromptManager:
@@ -17,6 +21,7 @@ class PromptManager:
             "Use the provided context to answer questions accurately. Only elaborate if specifically asked for details. "
             "If the context doesn't contain relevant information, say so politely."
         )
+        logger.info("action=initialize prompt=manager system_prompt_length=%d", len(self.system_prompt))
     
     def build_prompt(self, query: str, context: List[str], history: List[Dict[str, Any]]) -> str:
         """Build a complete prompt including system message, context, history, and query.
@@ -29,6 +34,9 @@ class PromptManager:
         Returns:
             Complete prompt string
         """
+        start_time = time.time()
+        logger.debug("action=build_prompt prompt=manager query_length=%d context_count=%d history_count=%d", len(query), len(context), len(history))
+        
         prompt_parts = [f"System: {self.system_prompt}"]
         
         # Add conversation history
@@ -38,18 +46,23 @@ class PromptManager:
                 role = msg.get("role", "unknown").capitalize()
                 content = msg.get("content", "")
                 prompt_parts.append(f"{role}: {content}")
+            logger.debug("action=add_history prompt=manager history_messages=%d", min(len(history), 10))
         
         # Add context
         if context:
             prompt_parts.append("\nContext:")
             for i, ctx in enumerate(context, 1):
                 prompt_parts.append(f"Context {i}: {ctx}")
+            logger.debug("action=add_context prompt=manager context_documents=%d", len(context))
         
         # Add current query
         prompt_parts.append(f"\nUser: {query}")
         prompt_parts.append("\nAssistant:")
         
-        return "\n".join(prompt_parts)
+        final_prompt = "\n".join(prompt_parts)
+        duration = time.time() - start_time
+        logger.info("action=build_prompt_complete prompt=manager prompt_length=%d duration=%.3fs context_count=%d history_count=%d", len(final_prompt), duration, len(context), len(history))
+        return final_prompt
     
     def get_system_prompt(self) -> str:
         """Get the system prompt.
@@ -57,6 +70,7 @@ class PromptManager:
         Returns:
             System prompt string
         """
+        logger.debug("action=get_system_prompt prompt=manager prompt_length=%d", len(self.system_prompt))
         return self.system_prompt
     
     def update_system_prompt(self, prompt: str) -> None:
@@ -65,4 +79,6 @@ class PromptManager:
         Args:
             prompt: New system prompt
         """
+        old_length = len(self.system_prompt)
         self.system_prompt = prompt
+        logger.info("action=update_system_prompt prompt=manager old_length=%d new_length=%d", old_length, len(prompt))

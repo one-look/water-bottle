@@ -4,7 +4,7 @@ from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 from .base import BaseExtractor
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("water-bottle.etl.extractors.web")
 
 class WebExtractor(BaseExtractor):
     def __init__(self, connection, config):
@@ -13,6 +13,7 @@ class WebExtractor(BaseExtractor):
         self.base_url = self.config.get("url")
         self.max_pages = self.config.get("max_pages", 1)
         self.delay = self.config.get("delay", 1.0)
+        logger.info("action=initialize etl=web_extractor base_url=%s max_pages=%d delay=%.1fs", self.base_url, self.max_pages, self.delay)
         
     def __call__(self):
         """Entry point for the Factory/nmc.py"""
@@ -31,11 +32,12 @@ class WebExtractor(BaseExtractor):
         Recursively crawls internal links up to max_pages.
         Returns: List of dicts containing URL and raw HTML content.
         """
+        start_time = time.time()
         to_visit = [self.base_url]
         visited = set()
         knowledge_base = []
 
-        logger.info(f"Starting crawl of {self.base_url} (Limit: {self.max_pages} pages)")
+        logger.info("action=crawl_start etl=web_extractor base_url=%s max_pages=%d", self.base_url, self.max_pages)
 
         while to_visit and len(visited) < self.max_pages:
             url = to_visit.pop(0)
@@ -45,7 +47,7 @@ class WebExtractor(BaseExtractor):
                 continue
 
             try:
-                logger.info(f"Crawling: {url} [{len(visited)+1}/{self.max_pages}]")
+                logger.debug("action=crawl_page etl=web_extractor url=%s pages_progress=%d/%d", url, len(visited)+1, self.max_pages)
                 
                 # The 'connection' here is your requests session from ConnectorFactory
                 response = self.connection.get(url, timeout=10)
@@ -53,27 +55,35 @@ class WebExtractor(BaseExtractor):
 
                 if response.status_code == 200:
                     html_content = response.text
+                    content_length = len(html_content)
                     
                     # Store raw data for the Transformer
                     knowledge_base.append({
                         "url": url,
                         "content": html_content
                     })
+                    
+                    logger.debug("action=page_extracted etl=web_extractor url=%s content_length=%d", url, content_length)
 
                     # DISCOVERY: Find new links to add to queue
                     soup = BeautifulSoup(html_content, 'html.parser')
+                    new_links = 0
                     for a in soup.find_all('a', href=True):
                         # Clean the link (remove fragments like #contact)
                         link = urljoin(self.base_url, a['href']).split('#')[0].rstrip('/')
                         
-                        if self._is_internal(link) and link not in visited:
+                        if self._is_internal(link) and link not in visited and link not in to_visit:
                             to_visit.append(link)
+                            new_links += 1
+                    
+                    logger.debug("action=links_discovered etl=web_extractor url=%s new_links=%d queue_size=%d", url, new_links, len(to_visit))
 
                 # Respectful crawling delay
                 time.sleep(self.delay)
 
             except Exception as e:
-                logger.error(f"Failed to extract {url}: {e}")
+                logger.error("action=crawl_failed etl=web_extractor url=%s error=%s", url, str(e))
 
-        logger.info(f"Crawl complete. Collected {len(knowledge_base)} pages.")
+        duration = time.time() - start_time
+        logger.info("action=crawl_complete etl=web_extractor base_url=%s pages_collected=%d duration=%.3fs pages_visited=%d", self.base_url, len(knowledge_base), duration, len(visited))
         return knowledge_base

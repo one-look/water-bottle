@@ -1,9 +1,10 @@
 import logging
+import time
 from typing import Dict, Any, List
 import asyncio
 from .base import RetrieverBase, SearchResult
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("water-bottle.retriever.pinecone")
 
 class PineconeRetriever(RetrieverBase):
     """Pinecone-based document retriever."""
@@ -24,7 +25,7 @@ class PineconeRetriever(RetrieverBase):
         # Get index handle
         self.index = connection.Index(self.index_name)
         
-        logger.info(f"Initialized PineconeRetriever for index: {self.index_name}")
+        logger.info("action=initialize retriever=pinecone index=%s vector_field=%s content_field=%s", self.index_name, self.vector_field, self.content_field)
     
     async def search(self, query_vector: List[float], top_k: int = 5) -> List[SearchResult]:
         """Search for similar documents in Pinecone.
@@ -36,6 +37,9 @@ class PineconeRetriever(RetrieverBase):
         Returns:
             List of search results with scores and content
         """
+        start_time = time.time()
+        logger.info("action=search retriever=pinecone index=%s top_k=%d vector_dim=%d", self.index_name, top_k, len(query_vector))
+        
         try:
             # Query Pinecone index asynchronously
             response = await asyncio.to_thread(
@@ -47,22 +51,27 @@ class PineconeRetriever(RetrieverBase):
             
             # Convert to SearchResult format
             results = []
-            for match in response.get("matches", []):
+            for i, match in enumerate(response.get("matches", [])):
                 metadata = match.get("metadata", {})
                 content = metadata.get("text", "")  # Changed from "content" to "text"
+                score = match.get("score", 0.0)
+                
+                logger.debug("action=process_match retriever=pinecone match_index=%d score=%.3f content_length=%d", i, score, len(content))
                 
                 result = SearchResult(
                     content=content,
-                    score=match.get("score", 0.0),
+                    score=score,
                     metadata=metadata
                 )
                 results.append(result)
             
-            logger.info(f"Found {len(results)} results from Pinecone")
+            duration = time.time() - start_time
+            logger.info("action=search_complete retriever=pinecone index=%s results_count=%d duration=%.3fs top_k=%d", self.index_name, len(results), duration, top_k)
             return results
             
         except Exception as e:
-            logger.error(f"Pinecone search failed: {e}")
+            duration = time.time() - start_time
+            logger.error("action=search_failed retriever=pinecone index=%s duration=%.3fs error=%s", self.index_name, duration, str(e))
             return []
     
     async def add_document(self, doc_id: str, content: str, vector: List[float], metadata: Dict[str, Any] = None) -> None:
@@ -74,6 +83,9 @@ class PineconeRetriever(RetrieverBase):
             vector: Document embedding vector
             metadata: Additional metadata
         """
+        start_time = time.time()
+        logger.info("action=add_document retriever=pinecone index=%s doc_id=%s content_length=%d vector_dim=%d", self.index_name, doc_id, len(content), len(vector))
+        
         try:
             if metadata is None:
                 metadata = {}
@@ -91,10 +103,12 @@ class PineconeRetriever(RetrieverBase):
                 }]
             )
             
-            logger.info(f"Added document {doc_id} to Pinecone")
+            duration = time.time() - start_time
+            logger.info("action=add_document_complete retriever=pinecone index=%s doc_id=%s duration=%.3fs", self.index_name, doc_id, duration)
             
         except Exception as e:
-            logger.error(f"Failed to add document to Pinecone: {e}")
+            duration = time.time() - start_time
+            logger.error("action=add_document_failed retriever=pinecone index=%s doc_id=%s duration=%.3fs error=%s", self.index_name, doc_id, duration, str(e))
     
     async def delete_document(self, doc_id: str) -> None:
         """Delete a document from Pinecone index.
@@ -102,9 +116,14 @@ class PineconeRetriever(RetrieverBase):
         Args:
             doc_id: Document ID to delete
         """
+        start_time = time.time()
+        logger.info("action=delete_document retriever=pinecone index=%s doc_id=%s", self.index_name, doc_id)
+        
         try:
             await asyncio.to_thread(self.index.delete, ids=[doc_id])
-            logger.info(f"Deleted document {doc_id} from Pinecone")
+            duration = time.time() - start_time
+            logger.info("action=delete_document_complete retriever=pinecone index=%s doc_id=%s duration=%.3fs", self.index_name, doc_id, duration)
             
         except Exception as e:
-            logger.error(f"Failed to delete document from Pinecone: {e}")
+            duration = time.time() - start_time
+            logger.error("action=delete_document_failed retriever=pinecone index=%s doc_id=%s duration=%.3fs error=%s", self.index_name, doc_id, duration, str(e))

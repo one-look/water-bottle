@@ -1,11 +1,12 @@
 import logging
+import time
 from typing import List, Dict, Any
 from google import genai
 import os
 import asyncio
 from .base import EmbedderBase
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("water-bottle.embedder.gemini")
 
 
 class GeminiEmbedder(EmbedderBase):
@@ -27,7 +28,7 @@ class GeminiEmbedder(EmbedderBase):
         
         # Create client with API key
         self.client = genai.Client(api_key=api_key)
-        logger.info(f"Initialized GeminiEmbedder with model: {self.model_name}")
+        logger.info("action=initialize embedder=gemini model=%s task_type=%s", self.model_name, self.task_type)
     
     async def embed_batch(self, texts: List[str]) -> List[List[float]]:
         """Generate embeddings for a list of texts.
@@ -38,9 +39,14 @@ class GeminiEmbedder(EmbedderBase):
         Returns:
             List of embedding vectors
         """
+        start_time = time.time()
+        logger.info("action=embed_batch embedder=gemini texts_count=%d model=%s", len(texts), self.model_name)
+        
         try:
             embeddings = []
-            for text in texts:
+            for i, text in enumerate(texts):
+                logger.debug("action=embed_single embedder=gemini text_index=%d text_length=%d", i, len(text))
+                
                 response = await asyncio.to_thread(
                     self.client.models.embed_content,
                     model=self.model_name,
@@ -48,12 +54,15 @@ class GeminiEmbedder(EmbedderBase):
                     config={"task_type": self.task_type}
                 )
                 embeddings.append(response.embeddings[0].values)
+                logger.debug("action=embed_complete embedder=gemini text_index=%d embedding_dim=%d", i, len(embeddings[-1]))
             
-            logger.info(f"Generated embeddings for {len(texts)} texts using Gemini")
+            duration = time.time() - start_time
+            logger.info("action=embed_batch_complete embedder=gemini texts_count=%d duration=%.3fs model=%s", len(texts), duration, self.model_name)
             return embeddings
             
         except Exception as e:
-            logger.error(f"Gemini embedding failed: {e}")
+            duration = time.time() - start_time
+            logger.error("action=embed_batch_failed embedder=gemini texts_count=%d duration=%.3fs error=%s", len(texts), duration, str(e))
             raise
     
     async def embed(self, text: str) -> List[float]:
@@ -65,6 +74,9 @@ class GeminiEmbedder(EmbedderBase):
         Returns:
             Embedding vector
         """
+        start_time = time.time()
+        logger.info("action=embed embedder=gemini text_length=%d model=%s", len(text), self.model_name)
+        
         try:
             response = await asyncio.to_thread(
                 self.client.models.embed_content,
@@ -74,9 +86,11 @@ class GeminiEmbedder(EmbedderBase):
             )
             
             embedding = response.embeddings[0].values
-            logger.debug(f"Generated embedding for text using Gemini")
+            duration = time.time() - start_time
+            logger.info("action=embed_complete embedder=gemini text_length=%d embedding_dim=%d duration=%.3fs model=%s", len(text), len(embedding), duration, self.model_name)
             return embedding
             
         except Exception as e:
-            logger.error(f"Gemini embedding failed: {e}")
+            duration = time.time() - start_time
+            logger.error("action=embed_failed embedder=gemini text_length=%d duration=%.3fs error=%s", len(text), duration, str(e))
             raise

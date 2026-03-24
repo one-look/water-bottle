@@ -303,3 +303,29 @@ Day 33 || 18/03/2026 || Wednesday
 ---------------------------------
 
 testing the bot for beta version
+
+Day 34 || 19/03/2026 || Thursday
+--------------------------------
+
+testing the bot using locust
+
+Day 35 || 20/03/2026 || Friday
+------------------------------
+
+Nothing
+
+Day 36 || 21/03/2026 || Saturday
+--------------------------------
+
+testing using postman
+
+Day 37 || 22/03/2026 || Sunday
+------------------------------
+
+Nothing
+
+Day 38 || 23/03/2026 || Monday
+------------------------------
+
+Testing with 100 virtual users at the same time was done successfully using postman. Hurray!
+
