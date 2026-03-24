@@ -66,8 +66,19 @@ class AppLoader:
         
         # Initialize memory
         if self.config.get("memory"):
+            # Pass REDIS_URL to memory config for Redis cache
+            memory_config = self.config["memory"].copy()
+            if memory_config.get("redis_cache", False):
+                redis_url = os.getenv("REDIS_URL")
+                if redis_url:
+                    memory_config["redis_url"] = redis_url
+                    logger.info("action=memory_config memory_factory redis_url_provided=true")
+                else:
+                    logger.warning("action=memory_config memory_factory redis_url_missing redis_cache_disabled")
+                    memory_config["redis_cache"] = False
+            
             self._services["memory"] = MemoryFactory.create(
-                self.config["memory"], 
+                memory_config, 
                 self._services
             )
         

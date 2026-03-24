@@ -2,6 +2,7 @@ from typing import Dict, Any
 from .base import MemoryBase
 from .history import SessionMemory
 from .window_memory import WindowMemory
+from .redis_cache import RedisCacheMemory
 
 
 class MemoryFactory:
@@ -23,11 +24,20 @@ class MemoryFactory:
         """
         memory_type = config.get("type", "window")
         
+        # Create base memory
         if memory_type == "session":
             max_messages = config.get("max_messages", 50)
-            return SessionMemory(max_messages=max_messages)
+            base_memory = SessionMemory(max_messages=max_messages)
         elif memory_type == "window":
             window_size = config.get("window_size", 10)
-            return WindowMemory(window_size=window_size)
+            base_memory = WindowMemory(window_size=window_size)
         else:
             raise ValueError(f"Unsupported memory type: {memory_type}")
+        
+        # Wrap with Redis cache if enabled
+        if config.get("redis_cache", False):
+            redis_url = config.get("redis_url")
+            ttl = config.get("cache_ttl", 7200)
+            return RedisCacheMemory(base_memory, redis_url, ttl)
+        
+        return base_memory

@@ -37,6 +37,14 @@ class RAGWorkflow:
         logger.info("action=workflow_start workflow=rag session_id=%s query_length=%d", session_id, len(query))
         
         try:
+            # Check Redis cache first
+            if hasattr(self.memory, 'get_cached_response'):
+                cached_response = await self.memory.get_cached_response(query)
+                if cached_response:
+                    duration = time.time() - start_time
+                    logger.info("action=workflow_cache_hit workflow=rag session_id=%s duration=%.3fs", session_id, duration)
+                    return cached_response
+            
             # Step 1: History (async)
             history_start = time.time()
             history = await self.memory.get_history(session_id)
@@ -60,7 +68,11 @@ class RAGWorkflow:
             generation_duration = time.time() - generation_start
             logger.info("action=generation_complete workflow=rag session_id=%s response_length=%d duration=%.3fs", session_id, len(response), generation_duration)
             
-            # Step 4: Memory (async)
+            # Step 4: Save to Redis cache
+            if hasattr(self.memory, 'cache_response'):
+                await self.memory.cache_response(query, response)
+            
+            # Step 5: Memory (async)
             memory_start = time.time()
             await asyncio.gather(
                 self.memory.add_message(session_id, "user", query),
