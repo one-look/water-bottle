@@ -1,4 +1,5 @@
 import os
+import logging
 from embedder.factory import EmbedderFactory
 from retriever.search.factory import RetrieverFactory
 from memory.factory import MemoryFactory
@@ -8,6 +9,8 @@ from services.rag.workflow import RAGWorkflow
 from services.telegram.workflow import TelegramWorkflow
 
 from typing import Dict, Any
+
+logger = logging.getLogger(__name__)
 
 class AppLoader:
     """Application loader for initializing and managing global services."""
