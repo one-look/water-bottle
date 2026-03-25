@@ -1,0 +1,64 @@
+# NMC JSON Data Processing and Ingestion Pipeline Configuration
+
+# Input data source (existing JSON file)
+input:
+  file_path: "nmc_structured_data.json"
+  encoding: "utf-8"
+
+# 1. Data Transformer: Simple 4-field format for Pinecone
+transformer:
+  # Input data structure from JSON file
+  input_structure:
+    url_field: "url"
+    title_field: "title"
+    sections_field: "sections"
+    heading_field: "heading"
+    content_field: "content"
+  
+  # Simple chunking - only content goes into text field
+  chunking:
+    chunk_size: 500
+    overlap: 50
+  
+  # Generate IDs and metadata for each chunk
+  index_script:
+    id_format: "nmc_chunk_{i}"
+    # Metadata structure: url, title, heading
+    metadata_fields:
+      url: "{url}"
+      title: "{title}"
+      heading: "{heading}"
+
+# 2. Embedder: Generates vectors via Gemini
+embedder:
+  model_name: "text-embedding-004"
+  task_type: "retrieval_query"
+  backend: "gemini"
+  batch_size: 20
+  request_delay: 1
+  batch_delay: 5
+
+# 3. Pinecone Loader: Final Ingestion
+loader:
+  index_name: "nmc-final-data"
+  settings:
+    dimension: 768  # Matches gemini-embedding-001
+    metric: "cosine"
+    # Pinecone specific infrastructure
+    spec:
+      cloud: "aws"
+      region: "us-east-1"
+  
+  # MAPPINGS: Tells the loader how to read the Embedder output
+  # This avoids hardcoding keys in your Python files
+  mappings:
+    id_key: "id"
+    vector_key: "vector"
+    text_key: "text"      # Where the actual words are stored
+    metadata_key: "metadata"
+
+# 4. Pipeline: Orchestration metadata
+pipeline:
+  source: "json_file"
+  target: "pinecone"
+  project: "NMC_Knowledge_Base"
