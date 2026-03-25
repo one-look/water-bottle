@@ -329,3 +329,13 @@ Day 38 || 23/03/2026 || Monday
 
 Testing with 100 virtual users at the same time was done successfully using postman. Hurray!
 
+Day 39 || 24/03/2026 || Tuesday
+-------------------------------
+
+redis integration was done and tested in postman. our application can handle 1338 users within 40 seconds with 0% error rate.
+
+Day 40 || 25/03/2026 || Wednesday
+---------------------------------
+
+improving data quality, adding crawler
+
