@@ -7,7 +7,6 @@ import logging
 from typing import Any
 
 from .database import DatabaseConnector
-from .elasticsearch import ElasticsearchConnector
 from .pinecone import PineconeConnector
 from .web import WebConnector
 
@@ -43,8 +42,6 @@ class ConnectorFactory:
         
         if connector_type == "database":
             return DatabaseConnector(config=config)
-        elif connector_type == "elasticsearch":
-            return ElasticsearchConnector(config=config)
         elif connector_type == "pinecone":
             return PineconeConnector(config=config)
         elif connector_type == "web":
