@@ -27,7 +27,6 @@ class FileJson(BaseTransformer):
             sections = page.get("sections", [])
 
             for section in sections:
-                heading = section.get("heading")
                 content = section.get("content")
 
                 if not content:
@@ -39,8 +38,7 @@ class FileJson(BaseTransformer):
                     "text": content,
                     "metadata": {
                         "url": url,
-                        "title": title,
-                        "heading": heading
+                        "title": title
                     }
                 }
                 

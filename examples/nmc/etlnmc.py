@@ -32,12 +32,12 @@ def main():
     
     try:
         # 1. Load Configuration
-        logger.info("Reading configuration from examples/nmc/etlnmc.yml...")
+        logger.info("Reading configuration...")
         config = load_yml('examples/nmc/etlnmc.yml')
         
         # 2. Load existing JSON data
-        logger.info("Loading existing structured data from nmc_structured_data.json...")
-        with open('nmc_structured_data.json', 'r', encoding='utf-8') as f:
+        logger.info("Loading structured data from {}...".format(config.get("input", {}).get("file_path")))
+        with open(config.get("input", {}).get("file_path"), 'r', encoding='utf-8') as f:
             raw_data = json.load(f)
         
         logger.info(f"Loaded {len(raw_data)} records from JSON file")
@@ -57,17 +57,14 @@ def main():
         
         # Debug: Check first record format
         if embedded_data:
-            print(f"DEBUG: First embedded record: {embedded_data[0]}")
-            print(f"DEBUG: First embedded record keys: {list(embedded_data[0].keys())}")
-            if '_source' in embedded_data[0]:
-                print(f"DEBUG: First _source keys: {list(embedded_data[0]['_source'].keys())}")
-                print(f"DEBUG: Vector field present: {'vector' in embedded_data[0]['_source']}")
-                if 'vector' in embedded_data[0]['_source']:
-                    vector = embedded_data[0]['_source']['vector']
-                    print(f"DEBUG: Vector type: {type(vector)}, length: {len(vector) if vector else 'None'}")
-                    print(f"DEBUG: First 5 vector values: {vector[:5] if vector else 'None'}")
+            logger.debug(f"First embedded record keys: {list(embedded_data[0].keys())}")
+            logger.debug(f"Vector field present: {'vector' in embedded_data[0]}")
+            if 'vector' in embedded_data[0]:
+                vector = embedded_data[0]['vector']
+                logger.debug(f"Vector type: {type(vector)}, length: {len(vector) if vector else 'None'}")
+                logger.debug(f"First 3 vector values: {vector[:3] if vector else 'None'}")
             else:
-                print("DEBUG: No _source field found!")
+                logger.debug("No vector field found!")
         
         # 5. Loading to Pinecone
         logger.info("Initializing Pinecone connection...")

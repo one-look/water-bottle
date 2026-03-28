@@ -339,3 +339,12 @@ Day 40 || 25/03/2026 || Wednesday
 
 improving data quality, adding crawler
 
+Day 41 || 26/03/2026 || Thursday
+--------------------------------
+
+Nothing
+
+Day 42 || 27/03/2026 || Friday
+------------------------------
+
+solving embedding issue in dimension mismatch

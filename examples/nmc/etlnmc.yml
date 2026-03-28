@@ -23,26 +23,25 @@ transformer:
   # Generate IDs and metadata for each chunk
   index_script:
     id_format: "nmc_chunk_{i}"
-    # Metadata structure: url, title, heading
+    # Metadata structure: url, title (removed heading to avoid 40KB limit)
     metadata_fields:
       url: "{url}"
       title: "{title}"
-      heading: "{heading}"
 
 # 2. Embedder: Generates vectors via Gemini
 embedder:
-  model_name: "text-embedding-004"
+  model_name: "models/gemini-embedding-2-preview"
   task_type: "retrieval_query"
   backend: "gemini"
-  batch_size: 20
-  request_delay: 1
-  batch_delay: 5
+  batch_size: 20  # Reduced batch size to avoid rate limits
+  request_delay: 2  # Increased delay
+  batch_delay: 10  # Increased batch delay
 
 # 3. Pinecone Loader: Final Ingestion
 loader:
   index_name: "nmc-final-data"
   settings:
-    dimension: 768  # Matches gemini-embedding-001
+    dimension: 3072  # Matches gemini-embedding-2-preview
     metric: "cosine"
     # Pinecone specific infrastructure
     spec:

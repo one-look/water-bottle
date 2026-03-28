@@ -5,7 +5,7 @@ embedder:
 
 retriever:
   type: pinecone
-  index_name: "nmc-index"  # Use our newly created index
+  index_name: "nmc-final-data"
   vector_field: "values"
   content_field: "metadata"
 

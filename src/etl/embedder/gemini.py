@@ -44,7 +44,7 @@ class GeminiEmbeddings:
 
             # 2. Retry Logic (Exponential Backoff)
             attempts = 0
-            max_retries = 5
+            max_retries = 6
             success = False
 
             while attempts < max_retries and not success:
