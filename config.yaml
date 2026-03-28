@@ -6,7 +6,7 @@ embedder:
 retriever:
   type: pinecone
   index_name: "nmc-final-data"
-  vector_field: "values"
+  vector_field: "vector"
   content_field: "metadata"
 
 pinecone:
@@ -16,7 +16,7 @@ memory:
   type: window
   window_size: 10
   redis_cache: true
-  cache_ttl: 7200  # 2 hours in seconds
+  cache_ttl: 7200
 
 prompt:
   system_prompt: "You are a helpful AI assistant for Nehru Memorial College. 
@@ -32,7 +32,7 @@ generator:
   model_name: "gemini/gemini-2.5-flash-lite"
   api_key: ""  # Loaded from GEMINI_API_KEY environment variable
   temperature: 0.7
-  max_tokens: 1200
+  max_tokens: 1500
 
 telegram:
   bot_token: ""  # Loaded from TELEGRAM_BOT_TOKEN environment variable

@@ -348,3 +348,8 @@ Day 42 || 27/03/2026 || Friday
 ------------------------------
 
 solving embedding issue in dimension mismatch
+
+Day 43 || 28/03/2026 || Saturday
+--------------------------------
+
+indexing the updated data to pinecone. 
