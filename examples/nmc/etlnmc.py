@@ -68,8 +68,8 @@ def main():
         
         # 5. Loading to Pinecone
         logger.info("Initializing Pinecone connection...")
-        pinecone_credential_provider = CredentialFactory.create("local", "pinecone")
-        pinecone_connector = ConnectorFactory.create("pinecone", pinecone_credential_provider)
+        pinecone_config = CredentialFactory.create("local", "pinecone").get_credentials()
+        pinecone_connector = ConnectorFactory.create("pinecone", pinecone_config)
         pinecone_connection = pinecone_connector()
         
         loader = LoaderFactory.create("pinecone", pinecone_connection, config.get("loader", {}))

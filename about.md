@@ -1,5 +1,5 @@
 # water-bottle
-Love - Search - Learn - Build
+Search - Learn - Build
 
 Water Bottle was born from love and a promise.
 Please do not misuse the name for money, politics, or hurtful words.

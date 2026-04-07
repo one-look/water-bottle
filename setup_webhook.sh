@@ -1,13 +1,10 @@
-#!/bin/bash
-
 # Setup Telegram webhook for Railway deployment
-# Usage: ./setup_webhook.sh
 
 # Get Telegram bot token from environment variable
-if [ -z "$TELEGRAM_BOT_TOKEN" ]; then
+if [ -z "$TELEGRAM_BOT_TOKEN" ]; then     # -z test operator, means empty/null
     echo "Error: TELEGRAM_BOT_TOKEN environment variable is not set"
     echo "Please set it in Railway dashboard or export it locally"
-    exit 1
+    exit 1    #exit code 1 means non-zero
 fi
 
 RAILWAY_URL="https://water-bottle-production.up.railway.app"

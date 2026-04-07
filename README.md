@@ -1,4 +1,4 @@
-## Architecture Overview
+Architecture Overview
 
 Water Bottle is a RAG (Retrieval-Augmented Generation) system with multiple integrations:
 
@@ -68,3 +68,8 @@ water-bottle/
 3. Send messages to your Telegram bot or use the web API
 
 For detailed setup instructions, see [installation_guide.txt](installation_guide.txt).
+
+
+## Future Enhancements
+
+See [future.md](future.md) for planned improvements.

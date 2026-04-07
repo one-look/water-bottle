@@ -2,11 +2,11 @@ from src.etl.credentials import CredentialFactory
 from src.etl.connectors import ConnectorFactory
 from src.etl.loaders import LoaderFactory
 
-# Create credential provider
-credential_factory = CredentialFactory.create("local", "pinecone")
+# Get credentials
+pinecone_config = CredentialFactory.create("local", "pinecone").get_credentials()
 
 # Create connector
-connector = ConnectorFactory.create("pinecone", credential_factory)
+connector = ConnectorFactory.create("pinecone", pinecone_config)
 
 # Create loader with connection and config
 config = {

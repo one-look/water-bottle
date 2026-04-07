@@ -353,3 +353,48 @@ Day 43 || 28/03/2026 || Saturday
 --------------------------------
 
 indexing the updated data to pinecone. 
+
+Day 44 || 29/03/2026 || Sunday
+------------------------------
+
+Beta version is ready to share with real users.
+
+Day 45 || 30/03/2026 || Monday
+-----------------------------
+
+project reviewing...
+
+Day 46 || 31/03/2026 || Tuesday
+-------------------------------
+
+project reviewing...
+
+Day 47 || 01/04/2026 || Wednesday
+--------------------------------
+
+project reviewing...
+
+Day 48 || 02/04/2026 || Thursday
+-------------------------------
+
+Nothing
+
+Day 49 || 03/04/2026 || Friday
+-----------------------------
+
+project reviewing & docker file documentation
+
+Day 50 || 04/04/2026 || Saturday
+-------------------------------
+
+project reviewing
+
+Day 51 || 05/04/2026 || Sunday
+-----------------------------
+
+Nothing
+
+Day 52 || 06/04/2026 || Monday
+-----------------------------
+
+Nothing

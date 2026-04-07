@@ -42,7 +42,8 @@ def main():
         
         # 3. Connection & Extraction
         logger.info("Establishing connection to web source...")
-        connector = ConnectorFactory.create("web", credential_provider)
+        web_config = credential_provider.get_credentials()
+        connector = ConnectorFactory.create("web", web_config)
         connection = connector()
         
         extractor = ExtractorFactory.get_extractor("web", connection, config.get("extractor", {}))
@@ -78,8 +79,8 @@ def main():
         
         # 6. Loading to Pinecone
         logger.info("Initializing Pinecone connection...")
-        pinecone_credential_provider = CredentialFactory.create("local", "pinecone")
-        pinecone_connector = ConnectorFactory.create("pinecone", pinecone_credential_provider)
+        pinecone_config = CredentialFactory.create("local", "pinecone").get_credentials()
+        pinecone_connector = ConnectorFactory.create("pinecone", pinecone_config)
         pinecone_connection = pinecone_connector()
         
         loader = LoaderFactory.create("pinecone", pinecone_connection, config.get("loader", {}))
