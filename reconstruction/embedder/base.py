@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 
-class EmbedderBase(ABC):
+class BaseEmbedder(ABC):
     """Abstract base class for text embedding services."""
     
     @abstractmethod
