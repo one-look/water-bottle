@@ -1,23 +1,10 @@
 version: "1.0"
 environment: "production"
 
-# Centralized Feature Switchboard
 services:
   embedder:
     enabled: true
     provider: "vertex"
     model_name: "text-multilingual-embedding-002"
-    project_id: "project-water-bottle"
+    project_id: "gen-lang-client-0391985596"
     location: "us-central1"
-
-  rag:
-    enabled: false
-    vecotr_db: ""
-    index_name: ""
-    llm_provider: ""
-
-  attendance:
-    enabled: true
-    
-  etl:
-    enabled: false
