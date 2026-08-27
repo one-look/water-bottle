@@ -1,10 +1,8 @@
 version: "1.0"
-environment: "production"
+environment: "devlopment"
 
-services:
-  embedder:
-    enabled: true
-    provider: "vertex"
-    model_name: "text-multilingual-embedding-002"
-    project_id: "gen-lang-client-0391985596"
-    location: "us-central1"
+home:
+  message: water bottle is starting...
+
+routers:
+  home: true

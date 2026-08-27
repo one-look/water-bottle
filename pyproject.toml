@@ -11,7 +11,9 @@ dependencies = [
     "uvicorn>=0.49.0",
     "vertexai>=1.71.1",
 ]
-[tool.pytest.ini_options]
-pythonpath = ["src"]
-testpaths = ["tests"]
-norecursedirs = ["reconstruction"]
+
+[tool.pyright]
+# tell pyright to explicitly look at the repo root
+extraPaths = ["."]
+# disable the automatic rule that skips the src folder
+autoSearchPaths = false

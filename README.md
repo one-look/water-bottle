@@ -244,3 +244,22 @@ Do you like these suggestions?
     print(chunk.text, end="")
 
 generate()
+
+
+
+okay forgot about the airflow and pipeline/orchestrator, embedder and elasticsearch loader. we will go through this later. 
+
+
+
+just give me a updated version of connector, extractor, transformer, qdrant loader not with api key but actual own server. because we are going to run our qdrant in cloud. 
+
+
+
+make sure you're implementing the multi tenant architecture, and other characteristics we discussed. and try-except, error handling....
+
+
+
+and the most important thing i forget to told you is everything is yaml based configuration implementation. okay?
+
+
+
