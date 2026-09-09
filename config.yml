@@ -4,5 +4,11 @@ environment: "devlopment"
 home:
   message: water bottle is starting...
 
+etl:
+
+rag:
+
 routers:
   home: true
+  etl: true
+  rag: true

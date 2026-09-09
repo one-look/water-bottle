@@ -1,0 +1,4 @@
+aws:
+  s3_bucket: "tenants-915946341618-ap-south-2-an"
+  region_name: "ap-south-2"
+  tenant_id: "nmc"

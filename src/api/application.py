@@ -3,6 +3,7 @@ from fastapi import FastAPI, APIRouter
 from contextlib import asynccontextmanager
 from src.api import routers
 from src.app import Application
+from src.core import TenantMiddleware
 
 
 INSTANCE = None
@@ -63,6 +64,13 @@ async def lifespan(app: FastAPI):
     yield
 
 def create() -> FastAPI:
-    return FastAPI(title="water bottle", lifespan=lifespan)
+    '''
+    Create fastapi application.
+    '''
+    app = FastAPI(title="water bottle", lifespan=lifespan)
+
+    # add tenant middleware to global application instance
+    # app.add_middleware(TenantMiddleware)
+    return app
 
 app = create()

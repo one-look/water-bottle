@@ -1,5 +1,5 @@
 {
-    "editor.inlineSuggest.enabled": false,
+    "editor.inlineSuggest.enabled": true,
     "editor.inlineSuggest.edits.renderSideBySide": "never",
     "editor.suggest.selectionMode": "always",
     "editor.inlineSuggest.edits.showLongDistanceHint": false,
@@ -11,6 +11,8 @@
     "editor.inlineSuggest.syntaxHighlightingEnabled": false,
     "editor.inlineSuggest.edits.allowCodeShifting": "never",
     "editor.quickSuggestions": {
-        "other": "off"
-    }
+        "other": "on"
+    },
+    "emmet.useInlineCompletions": true,
+    "editor.suggest.snippetsPreventQuickSuggestions": true
 }
