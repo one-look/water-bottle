@@ -2,3 +2,12 @@ aws:
   s3_bucket: "tenants-915946341618-ap-south-2-an"
   region_name: "ap-south-2"
   tenant_id: "nmc"
+
+transformer:
+  chunk_size: 512
+  chunk_overlap: 50
+
+embedder:
+  model_name: "gemini-embedding-001"
+  batch_size: 16
+  max_retries: 5

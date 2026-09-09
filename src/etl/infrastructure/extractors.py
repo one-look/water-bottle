@@ -18,7 +18,6 @@ class S3DocumentExtractor(BaseExtractor):
         self.s3_client = boto3.client("s3", region_name=config.region_name)
 
     def extract(self, source_key: str, tenant_id: str) -> Document:
-        # Enforce tenant isolation in S3 prefix path
         expected_prefix = f"tenants/{tenant_id}/"
         scoped_key = (
             source_key
@@ -36,7 +35,6 @@ class S3DocumentExtractor(BaseExtractor):
             )
             raw_bytes = response["Body"].read()
 
-            # Handle PDF vs Plain Text extraction
             if scoped_key.lower().endswith(".pdf"):
                 pdf_file = io.BytesIO(raw_bytes)
                 reader = PdfReader(pdf_file)
