@@ -22,3 +22,9 @@ class BaseEmbedder(ABC):
     def embed_chunks(self, chunks: Iterator[Chunk]) -> Iterator[List[Chunk]]:
         """Batch and embed a stream of chunks, yielding embedded batches."""
         pass
+
+class BaseLoader(ABC):
+    @abstractmethod
+    def load_batch(self, chunks: List[Chunk]) -> int:
+        """Upsert a batch of embedded chunks into the vector store. Returns count of loaded items."""
+        pass

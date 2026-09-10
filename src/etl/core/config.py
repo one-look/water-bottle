@@ -20,10 +20,22 @@ class EmbedderConfig(BaseModel):
     max_retries: int = Field(default=5, ge=1)
 
 
+class QdrantConfig(BaseModel):
+    host: str = "localhost"
+    port: int = 6333
+    grpc_port: int = 6334
+    prefer_grpc: bool = True
+    collection_name: str = "about_college"
+    vector_size: int = 3072
+    distance: str = "Cosine"
+    tenant_payload_key: str = "tenant_id"
+
+
 class AppConfig(BaseModel):
     aws: AWSConfig
     transformer: TransformerConfig = Field(default_factory=TransformerConfig)
     embedder: EmbedderConfig = Field(default_factory=EmbedderConfig)
+    qdrant: QdrantConfig = Field(default_factory=QdrantConfig)
 
     @classmethod
     def load_from_yaml(cls, config_path: str = "etl_config.yml") -> "AppConfig":

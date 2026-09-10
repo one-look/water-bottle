@@ -10,4 +10,14 @@ transformer:
 embedder:
   model_name: "gemini-embedding-001"
   batch_size: 16
-  max_retries: 5
+  max_retries: 10
+
+qdrant:
+  host: "localhost"
+  port: 6333
+  grpc_port: 6334
+  prefer_grpc: true
+  collection_name: "about_college"
+  vector_size: 3072
+  distance: "Cosine"
+  tenant_payload_key: "tenant_id"

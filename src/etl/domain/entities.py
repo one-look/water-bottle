@@ -9,6 +9,7 @@ class Document(BaseModel):
 
 class Chunk(BaseModel):
     chunk_id: str
+    tenant_id: str
     text: str
     embedding: Optional[List[float]] = None
     metadata: Dict[str, Any] = Field(default_factory=dict)
