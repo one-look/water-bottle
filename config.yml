@@ -4,11 +4,12 @@ environment: "devlopment"
 home:
   message: water bottle is starting...
 
-etl:
-
-rag:
+llm:
+  provider: "gemini"
+  model: "gemini-3.6-flash"
+  temperature: 0.2
+  max_tokens: 1024
 
 routers:
   home: true
-  etl: true
   rag: true
