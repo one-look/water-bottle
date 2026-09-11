@@ -1,10 +1,11 @@
 """FastAPI router endpoint for directly querying the LLM service."""
-
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 
 from src.api import application
 from src.core.logging import setup_logger
+from src.llm.factory import LLMFactory
+from src.core.context import tenant_context
 
 logger = setup_logger(__name__)
 
@@ -45,22 +46,27 @@ async def generate(request: QueryRequest) -> QueryResponse:
         HTTPException: HTTP 503 if LLM service is uninitialized.
         HTTPException: HTTP 500 if an internal generation error occurs.
     """
-    logger.info(f"Received generation request for tenant '{request.tenant_id}'")
+    # set context token for downstream loggers (LLMFactory, GeminiProvider, etc.)
+    token = tenant_context.set(request.tenant_id)
 
+    logger.info("Received generation request")
     try:
         app_instance = application.get()
 
-        if not app_instance or not hasattr(app_instance, "llm") or not app_instance.llm:
-            logger.error("LLM instance is missing or uninitialized on Application state.")
+        if not app_instance or not hasattr(app_instance, "config"):
+            logger.error("LLM instance is missing or uninitialized on Application state.", extra=extra)
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                 detail="LLM service is not initialized.",
             )
 
-        # Generate response from underlying LLM provider
-        generated_text = app_instance.llm.generate(request.prompt)
+        # Instantiate the llm provider dynamically from app_instance.config using LLMFactory
+        llm_provider = LLMFactory.create(app_instance.config)
 
-        logger.info(f"Successfully generated response for tenant '{request.tenant_id}'")
+        # Generate response from underlying LLM provider
+        generated_text = llm_provider.generate(request.prompt)
+
+        logger.info(f"Successfully generated response")
         return QueryResponse(tenant_id=request.tenant_id, response=generated_text)
 
     except HTTPException:
@@ -68,7 +74,7 @@ async def generate(request: QueryRequest) -> QueryResponse:
         raise
 
     except Exception as e:
-        logger.error(f"Unexpected error during generation for tenant '{request.tenant_id}': {str(e)}", exc_info=True)
+        logger.error(f"Unexpected error during generation: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"An error occurred while generating text: {str(e)}",

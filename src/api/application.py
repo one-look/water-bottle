@@ -1,10 +1,13 @@
 import inspect
 from fastapi import FastAPI, APIRouter
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
+
 from src.api import routers
 from src.app import Application
 from src.core import TenantMiddleware
 
+load_dotenv()
 
 INSTANCE = None
 
