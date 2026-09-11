@@ -12,7 +12,7 @@ class GeminiProvider:
     Gemini LLM provider wrapper.
     '''
     def __init__(self, config: dict):
-        self.model = config.get("model", "gemini-2.5-flash")
+        self.model = config.get("model_name", "gemini-2.5-flash")
         self.temperature = config.get("temperature", 0.2)
         # Bumped to 4096 so large file writes/generations don't get trucated
         self.max_tokens = config.get("max_tokens", 4096)

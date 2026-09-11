@@ -6,9 +6,20 @@ home:
 
 llm:
   provider: "gemini"
-  model: "gemini-3.6-flash"
+  model_name: "gemini-3.6-flash"
   temperature: 0.2
   max_tokens: 1024
+
+embedding:
+  provider: "gemini"
+  model_name: "gemini-embedding-001"
+
+qdrant:
+  collection_name: "about_college"
+  top_k: 5
+  score_threshold: 0.7
+
+rag:
 
 routers:
   home: true
