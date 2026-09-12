@@ -1,8 +1,8 @@
 """FastAPI router for end-to-end RAG (Retrieval-Augmented Generation) processing."""
 
 from typing import Any, Dict, List
-from fastapi import APIRouter, HTTPException, status
-from pydantic import BaseModel, Field, validate_call
+from fastapi import APIRouter, Header, HTTPException, status
+from pydantic import BaseModel, Field
 
 from src.api import application
 from src.core.logging import setup_logger
@@ -29,6 +29,7 @@ class RAGResponse(BaseModel):
     tenant_id: str
     answer: str
     retrieved_documents: List[RetrivedDocument]
+
 
 def _build_rag_prompt(query: str, documents: List[RetrivedDocument]) -> str:
     """Formats retrieved context documents and user query into a single structured prompt.
@@ -60,13 +61,19 @@ User Question: {query}
 
 Answer:"""
 
+
 @router.post(
     "/generate",
     response_model=RAGResponse,
     status_code=status.HTTP_200_OK,
     summary="Execute RAG query with strict tenant vector context",
 )
-async def generate_rag_response(request: RAGRequest) -> RAGResponse:
+async def generate_rag_response(
+    request: RAGRequest,
+    x_tenant_id: str = Header(
+        ..., alias="X-Tenant-ID", description="Tenant Identifier"
+    ),
+) -> RAGResponse:
     """Orchestrates query embedding, multi-tenant vector retrieval, and LLM text generation."""
     current_tenant = get_current_tenant()
     logger.info(f"Processing RAG request for query: '{request.query[:50]}...'")

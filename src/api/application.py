@@ -73,7 +73,7 @@ def create() -> FastAPI:
     app = FastAPI(title="water bottle", lifespan=lifespan)
 
     # add tenant middleware to global application instance
-    # app.add_middleware(TenantMiddleware)
+    app.add_middleware(TenantMiddleware)
     return app
 
 app = create()

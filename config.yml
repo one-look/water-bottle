@@ -17,7 +17,7 @@ embedding:
 qdrant:
   collection_name: "about_college"
   top_k: 5
-  score_threshold: 0.7
+  score_threshold: 0.6
 
 rag:
 

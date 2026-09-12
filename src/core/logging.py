@@ -1,17 +1,20 @@
 import logging
 import sys
 from src.config.settings import settings
-from src.core.context import tenant_context
+from src.core.multitenancy import get_current_tenant
+
 
 class TenantContextFilter(logging.Filter):
     '''
-
+    Filter to inject active tenant_id into log records.
     '''
+
     def filter(self, record: logging.LogRecord) -> bool:
         if not hasattr(record, "tenant_id"):
-            # pull active tenant from context variable (defaults to "default")
-            record.tenant_id = tenant_context.get()
+            # Pull active tenant from shared multitenancy context variable
+            record.tenant_id = get_current_tenant()
         return True
+
 
 def setup_logger(name: str) -> logging.Logger:
     '''
@@ -19,7 +22,7 @@ def setup_logger(name: str) -> logging.Logger:
 
     Args:
         name (str): Name of the logger
-    
+
     Returns:
         logging.Logger: Logger instance
     '''
@@ -28,11 +31,11 @@ def setup_logger(name: str) -> logging.Logger:
         logger.setLevel(settings.LOG_LEVEL)
 
         handler = logging.StreamHandler(sys.stdout)
-
         handler.addFilter(TenantContextFilter())
-        
+
         formatter = logging.Formatter(
-            '%(asctime)s - [%(name)s] - [%(levelname)s] - [Tenant: %(tenant_id)s] - %(message)s'
+            '%(asctime)s - [%(name)s] - [%(levelname)s] - [Tenant:'
+            ' %(tenant_id)s] - %(message)s'
         )
         handler.setFormatter(formatter)
         logger.addHandler(handler)

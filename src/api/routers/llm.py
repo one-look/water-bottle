@@ -1,11 +1,11 @@
 """FastAPI router endpoint for directly querying the LLM service."""
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Header, HTTPException, status
 from pydantic import BaseModel, Field
 
 from src.api import application
 from src.core.logging import setup_logger
+from src.core.multitenancy import get_current_tenant
 from src.llm.factory import LLMFactory
-from src.core.context import tenant_context
 
 logger = setup_logger(__name__)
 
@@ -17,7 +17,6 @@ class QueryRequest(BaseModel):
     """Request payload schema for LLM generation endpoint."""
 
     prompt: str = Field(..., min_length=1, description="User query or context prompt")
-    tenant_id: str = Field("default", description="Identifier for multi-tenant tracking")
 
 
 class QueryResponse(BaseModel):
@@ -33,11 +32,17 @@ class QueryResponse(BaseModel):
     status_code=status.HTTP_200_OK,
     summary="Generate response using LLM provider",
 )
-async def generate(request: QueryRequest) -> QueryResponse:
+async def generate(
+    request: QueryRequest,
+    x_tenant_id: str = Header(
+        ..., alias="X-Tenant-ID", description="Tenant Identifier"
+    ),
+) -> QueryResponse:
     """Executes generation through the global application LLM provider.
 
     Args:
-        request: Validated QueryRequest containing prompt string and optional tenant_id.
+        request: Validated QueryRequest containing prompt string.
+        x_tenant_id: Tenant ID passed via X-Tenant-ID header.
 
     Returns:
         QueryResponse containing the tenant_id and generated text response.
@@ -46,15 +51,14 @@ async def generate(request: QueryRequest) -> QueryResponse:
         HTTPException: HTTP 503 if LLM service is uninitialized.
         HTTPException: HTTP 500 if an internal generation error occurs.
     """
-    # set context token for downstream loggers (LLMFactory, GeminiProvider, etc.)
-    token = tenant_context.set(request.tenant_id)
-
+    current_tenant = get_current_tenant()
     logger.info("Received generation request")
+
     try:
         app_instance = application.get()
 
         if not app_instance or not hasattr(app_instance, "config"):
-            logger.error("LLM instance is missing or uninitialized on Application state.", extra=extra)
+            logger.error("LLM instance is missing or uninitialized on Application state.")
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                 detail="LLM service is not initialized.",
@@ -66,8 +70,8 @@ async def generate(request: QueryRequest) -> QueryResponse:
         # Generate response from underlying LLM provider
         generated_text = llm_provider.generate(request.prompt)
 
-        logger.info(f"Successfully generated response")
-        return QueryResponse(tenant_id=request.tenant_id, response=generated_text)
+        logger.info("Successfully generated response")
+        return QueryResponse(tenant_id=current_tenant, response=generated_text)
 
     except HTTPException:
         # Re-raise explicit HTTP exceptions (e.g., 503 Service Unavailable)
