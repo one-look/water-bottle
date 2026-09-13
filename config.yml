@@ -1,8 +1,13 @@
 version: "1.0"
-environment: "devlopment"
+environment: "development"
 
 home:
-  message: water bottle is starting...
+  message: "water bottle is starting..."
+
+redis:
+  url: "redis://localhost:6379/0"
+  max_messages: 5
+  ttl_seconds: 86400
 
 llm:
   provider: "gemini"
