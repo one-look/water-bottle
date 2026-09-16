@@ -5,9 +5,17 @@ home:
   message: "water bottle is starting..."
 
 redis:
+  provider: "redis"
   url: "redis://localhost:6379/0"
   max_messages: 5
   ttl_seconds: 86400
+  similarity_threshold: 0.80
+
+cache:
+  provider: "redis"
+  url: "redis://localhost:6379/0"
+  ttl_seconds: 604800                   # 7 days for vector responses
+  similarity_threshold: 0.20
 
 llm:
   provider: "gemini"
