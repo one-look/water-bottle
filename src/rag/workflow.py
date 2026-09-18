@@ -1,4 +1,6 @@
-"""Workflow service orchestrating high-performance RAG pipeline execution."""
+'''
+Workflow service orchestrating high-performance RAG pipeline execution.
+'''
 
 import asyncio
 from typing import Any, Dict, List, Tuple
@@ -18,7 +20,12 @@ def build_rag_prompt(
     documents: List[RetrivedDocument],
     history: List[Dict[str, str]],
 ) -> str:
-    """Formats context documents, conversation history, and query into a structured prompt."""
+    '''
+    Formats context documents, conversation history, and query into a structured prompt.
+
+    
+    '''
+    
     if not history:
         history_str = "No prior conversation history."
     else:

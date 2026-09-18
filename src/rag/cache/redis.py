@@ -13,7 +13,9 @@ logger = setup_logger(__name__)
 
 
 class RedisCacheConfig(BaseModel):
-    """Configuration schema for Redis semantic cache instantiation."""
+    '''
+    Configuration schema for Redis semantic cache instantiation.
+    '''
 
     url: str = Field("redis://localhost:6379/0", min_length=1, description="Redis server URL")
     ttl_seconds: int = Field(604800, ge=1, description="Cache TTL in seconds (default 7 days)")
@@ -22,7 +24,9 @@ class RedisCacheConfig(BaseModel):
 
 
 class SemanticCache:
-    """Handles semantic caching of LLM responses using Redis vector similarity."""
+    '''
+    Handles semantic caching of LLM responses using Redis vector similarity.
+    '''
 
     @validate_call
     def __init__(self, config: RedisCacheConfig) -> None:

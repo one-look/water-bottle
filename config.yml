@@ -1,6 +1,9 @@
 version: "1.0"
 environment: "development"
 
+ratelimit:
+  url: "redis://localhost:6379/0"
+
 home:
   message: "water bottle is starting..."
 

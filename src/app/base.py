@@ -1,6 +1,9 @@
 import os
 import yaml
 
+from src.core.ratelimit import RateLimitConfig
+from src.core.ratelimit import limiter_manager
+
 class Application:
     '''
     application configuration manager.
@@ -42,7 +45,14 @@ class Application:
             config (dict): configuration.
         '''
         self.config = self.read(config or os.environ.get("CONFIG", "config.yml"))
+        self.ratelimit_config = RateLimitConfig(**self.config.get("ratelimit", {}))
 
+    def ratelimiter(self, app: FastAPI) -> None:
+        '''
+
+        '''
+        limiter_manager.init_app(app, self.ratelimit_config)
+        
     def __call__(self, data):
         '''
 

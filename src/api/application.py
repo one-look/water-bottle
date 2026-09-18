@@ -7,6 +7,8 @@ from src.api import routers
 from src.app import Application
 from src.core import TenantMiddleware
 
+from src.core.ratelimit import limiter_manager
+
 load_dotenv()
 
 INSTANCE = None
@@ -54,6 +56,8 @@ async def lifespan(app: FastAPI):
     '''
     global INSTANCE
     INSTANCE = Application()
+
+    INSTANCE.ratelimiter(app)
 
     config = INSTANCE.config
     

@@ -1,12 +1,13 @@
 """FastAPI router for end-to-end RAG processing."""
 
 from typing import Any, Dict, List
-from fastapi import APIRouter, Header, HTTPException, status
+from fastapi import APIRouter, Header, HTTPException, Request, status
 from pydantic import BaseModel, Field
 
 from src.api import application
 from src.core.logging import setup_logger
 from src.core.multitenancy import get_current_tenant
+from src.core.ratelimit import limiter
 from src.rag.retrievers.qdrant import RetrivedDocument
 from src.rag.workflow import RAGWorkflow
 
@@ -31,8 +32,10 @@ class RAGResponse(BaseModel):
     status_code=status.HTTP_200_OK,
     summary="Execute RAG query with strict tenant vector context",
 )
+@limiter.limit("15/minute")
 async def generate_rag_response(
-    request: RAGRequest,
+    request: Request,
+    body: RAGRequest,
     x_tenant_id: str = Header(..., alias="X-Tenant-ID", description="Tenant Identifier"),
     x_session_id: str = Header(..., alias="X-Session-ID", description="Session Identifier"),
 ) -> RAGResponse:
@@ -50,7 +53,7 @@ async def generate_rag_response(
 
         workflow = RAGWorkflow(config=app_instance.config)
         answer, retrieved_docs = await workflow.execute(
-            query=request.query,
+            query=body.query,
             tenant_id=current_tenant,
             session_id=x_session_id,
         )
