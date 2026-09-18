@@ -21,7 +21,7 @@ class RateLimitManager:
     def __init__(self) -> None:
         self._limiter = Limiter(
             key_func=get_remote_address,
-            default_limits=["60/minutes"],
+            default_limits=["60/minute"],
         )
 
     def init_app(self, app: FastAPI, config: RateLimitConfig) -> Limiter:
