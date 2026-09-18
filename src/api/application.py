@@ -1,6 +1,7 @@
 import inspect
 from fastapi import FastAPI, APIRouter
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 from src.api import routers
@@ -78,6 +79,13 @@ def create() -> FastAPI:
 
     # add tenant middleware to global application instance
     app.add_middleware(TenantMiddleware)
+    app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Restrict this to your website domain in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
     return app
 
 app = create()

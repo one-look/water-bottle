@@ -12,7 +12,7 @@ redis:
   url: "redis://localhost:6379/0"
   max_messages: 5
   ttl_seconds: 86400
-  similarity_threshold: 0.80
+  similarity_threshold: 0.90
 
 cache:
   provider: "redis"
