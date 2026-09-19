@@ -4,6 +4,7 @@ from typing import List
 from google import genai
 from google.genai.errors import APIError, ClientError
 from pydantic import BaseModel, Field, validate_call
+from tenacity import retry, wait_exponential, stop_after_attempt, retry_if_exception_type
 
 from src.core.logging import setup_logger
 
@@ -31,6 +32,12 @@ class GeminiQueryEmbedder:
         self.client = genai.Client(api_key=config.api_key)
         self.model_name = config.model_name
 
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10),
+        retry=retry_if_exception_type((APIError, ClientError)),
+        reraise=True
+    )
     def embed_query(self, text: str) -> List[float]:
         """Generates a dense vector embedding for a single query string.
 
@@ -51,24 +58,15 @@ class GeminiQueryEmbedder:
 
         logger.info(f"Generating query vector embedding via model '{self.model_name}'")
 
-        try:
-            response = self.client.models.embed_content(
-                model=self.model_name,
-                contents=clean_text,
-            )
+        response = self.client.models.embed_content(
+            model=self.model_name,
+            contents=clean_text,
+        )
 
-            if not response.embeddings or not response.embeddings[0].values:
-                logger.error("API response returned empty embeddings array.")
-                raise RuntimeError("Empty embedding returned from Gemini API.")
+        if not response.embeddings or not response.embeddings[0].values:
+            logger.error("API response returned empty embeddings array.")
+            raise RuntimeError("Empty embedding returned from Gemini API.")
 
-            vector = response.embeddings[0].values
-            logger.info(f"Successfully generated embedding vector of dimension {len(vector)}")
-            return vector
-
-        except (APIError, ClientError) as e:
-            logger.error(f"Gemini API error during embedding generation: {str(e)}", exc_info=True)
-            raise RuntimeError(f"Gemini API embedding failure: {str(e)}") from e
-
-        except Exception as e:
-            logger.error(f"Unexpected error generating query embedding: {str(e)}", exc_info=True)
-            raise RuntimeError(f"Failed to generate query vector: {str(e)}") from e
+        vector = response.embeddings[0].values
+        logger.info(f"Successfully generated embedding vector of dimension {len(vector)}")
+        return vector
