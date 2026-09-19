@@ -107,8 +107,8 @@ class RAGWorkflow:
             return cached_answer, []
 
         # Step 3: Vector retrieval off event loop
-        retrieved_docs = await asyncio.to_thread(
-            self.retriever.retrieve, query_vector=query_vector, tenant_id=tenant_id
+        retrieved_docs = await self.retriever.retrieve(
+            query_vector=query_vector, tenant_id=tenant_id
         )
 
         # Step 4: Build prompt & Generate LLM response

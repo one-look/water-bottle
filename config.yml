@@ -18,7 +18,7 @@ cache:
   provider: "redis"
   url: "redis://localhost:6379/0"
   ttl_seconds: 604800                   # 7 days for vector responses
-  similarity_threshold: 0.20
+  similarity_threshold: 0.90
 
 llm:
   provider: "gemini"
