@@ -71,6 +71,10 @@ async def lifespan(app: FastAPI):
     
     yield
 
+    if INSTANCE:
+        await INSTANCE.close()
+        print("connections closed. application is shutting down...")
+
 def create() -> FastAPI:
     '''
     Create fastapi application.

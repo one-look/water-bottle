@@ -1,8 +1,12 @@
 import os
 import yaml
 
-from src.core.ratelimit import RateLimitConfig
-from src.core.ratelimit import limiter_manager
+from fastapi import FastAPI
+from qdrant_client import AsyncQdrantClient
+
+from src.core.ratelimit import RateLimitConfig, limiter_manager
+from src.core.redis import redis_manager, RedisConfig
+from src.config.settings import settings
 
 class Application:
     '''
@@ -44,8 +48,22 @@ class Application:
         Args:
             config (dict): configuration.
         '''
+        self.settings = settings
+
         self.config = self.read(config or os.environ.get("CONFIG", "config.yml"))
         self.ratelimit_config = RateLimitConfig(**self.config.get("ratelimit", {}))
+
+        # initialize redis connection pool
+        redis_manager.init_client(RedisConfig(url=settings.REDIS_URL))
+
+        self.qdrant_client = AsyncQdrantClient(url=settings.QDRANT_URL)
+
+    async def close(self):
+        '''
+        close all global connections.
+        '''
+        await redis_manager.close()
+        await self.qdrant_client.close()
 
     def ratelimiter(self, app: FastAPI) -> None:
         '''

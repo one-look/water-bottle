@@ -2,11 +2,11 @@
 
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field, validate_call
-from qdrant_client import QdrantClient
+from qdrant_client import AsyncQdrantClient
 from qdrant_client.http import models as qmodels
 from qdrant_client.http.exceptions import UnexpectedResponse
 
-from src.config.settings import settings
+from src.api import application
 from src.core.logging import setup_logger
 
 logger = setup_logger(__name__)
@@ -14,8 +14,6 @@ logger = setup_logger(__name__)
 class QdrantRetrieverConfig(BaseModel):
     """Configuration schema for Qdrant retriever initialization."""
 
-    url: str = Field(..., min_length=1, description="Qdrant server endpoint URL")
-    api_key: Optional[str] = Field(None, description="Optional API key for Qdrant Cloud")
     collection_name: str = Field(..., min_length=1, description="Target collection name")
     top_k: int = Field(5, ge=1, le=100, description="Number of top document chunks to retrieve")
     score_threshold: float = Field(0.0, ge=0.0, le=1.0, description="Minimum similarity score cutoff")
@@ -23,7 +21,7 @@ class QdrantRetrieverConfig(BaseModel):
 class RetrivedDocument(BaseModel):
     """Schema for a retrieved text chunk payload."""
 
-    document_id: str
+    document_id: str 
     text: str
     score: float
     metadata: Dict[str, Any] = Field(default_factory=dict)
@@ -40,13 +38,13 @@ class QdrantRetriever:
         Args:
             config: validated QdrantRetrieverConfig object.
         '''
-        logger.info(f"Initializing Qdrant client for collection '{config.collection_name}' at {config.url}")
-        self.client = QdrantClient(url=config.url, api_key=config.api_key)
+        logger.info(f"Initializing Qdrant client for collection '{config.collection_name}'")
+        self.client: AsyncQdrantClient = application.get().qdrant_client
         self.collection_name = config.collection_name
         self.top_k = config.top_k
         self.score_threshold = config.score_threshold
 
-    def retrieve(self, query_vector: List[float], tenant_id: str) -> List[RetrivedDocument]:
+    async def retrieve(self, query_vector: List[float], tenant_id: str) -> List[RetrivedDocument]:
         '''
         Queries Qdrant for matching vectors belonging strictly to the specified tenant.
 
@@ -79,7 +77,7 @@ class QdrantRetriever:
         )
 
         try:
-            results = self.client.query_points(
+            results = await self.client.query_points(
                 collection_name=self.collection_name,
                 query=query_vector,
                 query_filter=tenant_filter,
