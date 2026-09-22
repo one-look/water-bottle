@@ -17,7 +17,7 @@ class RedisCacheConfig(BaseModel):
     Configuration schema for Redis semantic cache instantiation.
     '''
 
-    url: str = Field("redis://localhost:6379/0", min_length=1, description="Redis server URL")
+    url: str = Field("redis://172.17.0.1:6379/0", min_length=1, description="Redis server URL")
     ttl_seconds: int = Field(604800, ge=1, description="Cache TTL in seconds (default 7 days)")
     similarity_threshold: float = Field(0.92, ge=0.0, le=1.0, description="Minimum cosine similarity for cache hit")
     vector_dim: int = Field(3072, ge=1, description="Embedding vector dimension")

@@ -34,7 +34,7 @@ async def run_diagnostics():
         # Qdrant Client setup
         qdrant_cfg = config.get("qdrant", {})
         collection_name = qdrant_cfg.get("collection_name", "about_college")
-        client = QdrantClient(url="http://localhost:6333")
+        client = QdrantClient(url="http://172.17.0.1:6333")
 
         print("\n--- 2. TEST 1: UNFILTERED VECTOR SEARCH (NO TENANT FILTER) ---")
         try:

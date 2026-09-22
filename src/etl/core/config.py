@@ -21,7 +21,7 @@ class EmbedderConfig(BaseModel):
 
 
 class QdrantConfig(BaseModel):
-    host: str = "localhost"
+    host: str = "172.17.0.1"
     port: int = 6333
     grpc_port: int = 6334
     prefer_grpc: bool = True

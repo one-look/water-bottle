@@ -31,7 +31,7 @@ class RetrieverFactory:
                 logger.warning("'qdrant' section missing in configuration dictionary.")
 
             # Inject Qdrant URL from global environment settings
-            qdrant_config["url"] = getattr(settings, "QDRANT_URL", "http://localhost:6333")
+            qdrant_config["url"] = getattr(settings, "QDRANT_URL", "http://172.17.0.1:6333")
 
             validated_config = QdrantRetrieverConfig(**qdrant_config)
             retriever_instance = QdrantRetriever(config=validated_config)

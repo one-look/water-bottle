@@ -16,7 +16,7 @@ class RedisMemoryConfig(BaseModel):
     Configuration schema for Redis conversation memory instantiation.
     '''
 
-    url: str = Field("redis://localhost:6379/0", min_length=1, description="Redis server URL")
+    url: str = Field("redis://172.17.0.1:6379/0", min_length=1, description="Redis server URL")
     max_messages: int = Field(5, ge=1, description="Sliding window size")
     ttl_seconds: int = Field(86400, ge=1, description="Session TTL in seconds")
 
