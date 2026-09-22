@@ -14,4 +14,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD sh -c "/app/.venv/bin/uvicorn src.api.application:app --host 0.0.0.0 --port ${PORT:-8000} --workers 4"
+CMD sh -c "/app/.venv/bin/uvicorn src.api.application:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1"
