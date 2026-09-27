@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str
 
     QDRANT_URL: str
+    QDRANT_API_KEY: str
     REDIS_URL: str
     
     model_config = SettingsConfigDict(

@@ -14,7 +14,7 @@ redis:
   similarity_threshold: 0.90
 
 cache:
-  provider: "redis"
+  provider: "upstash"
   ttl_seconds: 604800                   # 7 days for vector responses
   similarity_threshold: 0.90
 

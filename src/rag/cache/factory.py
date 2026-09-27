@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from src.config.settings import settings
 from src.core.logging import setup_logger
-from src.rag.cache.redis import RedisCacheConfig, SemanticCache
+from src.rag.cache import RedisCacheConfig, SemanticCache, UpstashCacheConfig, UpstashSemanticCache
 
 logger = setup_logger(__name__)
 
@@ -13,14 +13,14 @@ class CacheFactory:
     """Factory class responsible solely for instantiating semantic cache objects."""
 
     @staticmethod
-    def create(config: Dict[str, Any]) -> SemanticCache:
+    def create(config: Dict[str, Any]) -> Any:
         """Instantiates and returns a semantic cache instance based on configuration.
 
         Args:
             config: The application configuration dictionary containing a 'cache' or 'redis' section.
 
         Returns:
-            SemanticCache: An instantiated semantic cache instance.
+            An instantiated semantic cache instance (SemanticCache or UpstashSemanticCache).
         """
         try:
             cache_config = dict(config.get("cache") or config.get("redis") or {})
@@ -39,6 +39,12 @@ class CacheFactory:
                 validated_config = RedisCacheConfig(**cache_config)
                 cache_instance = SemanticCache(config=validated_config)
                 logger.info("Successfully instantiated SemanticCache.")
+                return cache_instance
+
+            if provider_name == "upstash":
+                validated_config = UpstashCacheConfig(**cache_config)
+                cache_instance = UpstashSemanticCache(config=validated_config)
+                logger.info("Successfully instantiated UpstashSemanticCache.")
                 return cache_instance
 
             error_msg = f"Unsupported cache provider requested: '{provider_name}'"
