@@ -2,6 +2,7 @@
 
 from typing import Any, Dict
 
+from src.config.settings import settings
 from src.core.logging import setup_logger
 from src.rag.cache.redis import RedisCacheConfig, SemanticCache
 
@@ -22,12 +23,14 @@ class CacheFactory:
             SemanticCache: An instantiated semantic cache instance.
         """
         try:
-            cache_config = config.get("cache", {}) or config.get("redis", {})
+            cache_config = dict(config.get("cache") or config.get("redis") or {})
             if not cache_config:
                 logger.warning(
                     "'cache' or 'redis' key not found or empty in configuration. "
                     "Falling back to default Redis settings."
                 )
+
+            cache_config["url"] = settings.REDIS_URL
 
             provider_name = cache_config.get("provider", "redis").lower()
             logger.info(f"Initializing semantic cache provider: '{provider_name}'")

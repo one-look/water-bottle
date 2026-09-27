@@ -51,12 +51,18 @@ class Application:
         self.settings = settings
 
         self.config = self.read(config or os.environ.get("CONFIG", "config.yml"))
-        self.ratelimit_config = RateLimitConfig(**self.config.get("ratelimit", {}))
+
+        ratelimit_payload = dict(self.config.get("ratelimit") or {})
+        ratelimit_payload["url"] = settings.REDIS_URL
+        self.ratelimit_config = RateLimitConfig(**ratelimit_payload)
 
         # initialize redis connection pool
         redis_manager.init_client(RedisConfig(url=settings.REDIS_URL))
 
-        self.qdrant_client = AsyncQdrantClient(url=settings.QDRANT_URL)
+        self.qdrant_client = AsyncQdrantClient(
+            url=settings.QDRANT_URL,
+            api_key=getattr(settings, "QDRANT_API_KEY", None)
+            )
 
     async def close(self):
         '''

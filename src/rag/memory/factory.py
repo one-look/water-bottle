@@ -2,6 +2,7 @@
 
 from typing import Any, Dict
 
+from src.config.settings import settings
 from src.core.logging import setup_logger
 from src.rag.memory.redis import RedisConversationMemory, RedisMemoryConfig
 
@@ -25,12 +26,14 @@ class MemoryFactory:
             RedisConversationMemory: An instantiated memory store instance.
         '''
         try:
-            memory_config = config.get("redis", {})
+            memory_config = dict(config.get("redis") or {})
             if not memory_config:
                 logger.warning(
                     "'redis' key not found or empty in configuration. "
                     "Falling back to default Redis settings."
                 )
+
+            memory_config["url"] = settings.REDIS_URL
 
             provider_name = memory_config.get("provider", "redis").lower()
             logger.info(f"Initializing conversation memory provider: '{provider_name}'")

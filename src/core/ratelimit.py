@@ -6,6 +6,7 @@ from slowapi.util import get_remote_address
 from typing import Optional
 from pydantic import BaseModel, Field
 
+from src.config.settings import settings
 from src.core.logging import setup_logger
 
 logger = setup_logger(__name__)
@@ -13,7 +14,10 @@ logger = setup_logger(__name__)
 
 class RateLimitConfig(BaseModel):
     enabled: bool = Field(True, description="Whether rate limiting is enabled.")
-    url: str = Field(..., description="Redis storage URL for rate limiting.")
+    url: str = Field(
+        default_factory=lambda: settings.REDIS_URL,
+        description="Redis storage URL for rate limiting (from settings.REDIS_URL).",
+    )
     default_limits: list[str] = Field(default_factory=lambda: ["60/minute"])
 
 

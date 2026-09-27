@@ -2,9 +2,10 @@
 
 import json
 from typing import Dict, List
-from pydantic import BaseModel, Field, validate_call
+from pydantic import BaseModel, ConfigDict, Field, validate_call
 import redis.asyncio as redis
 
+from src.config.settings import settings
 from src.core.logging import setup_logger
 from src.core.redis import RedisConfig, redis_manager
 
@@ -16,7 +17,13 @@ class RedisMemoryConfig(BaseModel):
     Configuration schema for Redis conversation memory instantiation.
     '''
 
-    url: str = Field("redis://172.17.0.1:6379/0", min_length=1, description="Redis server URL")
+    model_config = ConfigDict(extra="ignore")
+
+    url: str = Field(
+        default_factory=lambda: settings.REDIS_URL,
+        min_length=1,
+        description="Redis server URL (from settings.REDIS_URL)",
+    )
     max_messages: int = Field(5, ge=1, description="Sliding window size")
     ttl_seconds: int = Field(86400, ge=1, description="Session TTL in seconds")
 

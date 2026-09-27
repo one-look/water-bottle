@@ -3,9 +3,10 @@
 import hashlib
 import struct
 from typing import Any, Optional
-from pydantic import BaseModel, Field, validate_call
+from pydantic import BaseModel, ConfigDict, Field, validate_call
 import redis.asyncio as redis
 
+from src.config.settings import settings
 from src.core.logging import setup_logger
 from src.core.redis import RedisConfig, redis_manager
 
@@ -17,7 +18,13 @@ class RedisCacheConfig(BaseModel):
     Configuration schema for Redis semantic cache instantiation.
     '''
 
-    url: str = Field("redis://172.17.0.1:6379/0", min_length=1, description="Redis server URL")
+    model_config = ConfigDict(extra="ignore")
+
+    url: str = Field(
+        default_factory=lambda: settings.REDIS_URL,
+        min_length=1,
+        description="Redis server URL (from settings.REDIS_URL)",
+    )
     ttl_seconds: int = Field(604800, ge=1, description="Cache TTL in seconds (default 7 days)")
     similarity_threshold: float = Field(0.92, ge=0.0, le=1.0, description="Minimum cosine similarity for cache hit")
     vector_dim: int = Field(3072, ge=1, description="Embedding vector dimension")
