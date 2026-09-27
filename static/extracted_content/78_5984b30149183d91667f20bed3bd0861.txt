@@ -1,0 +1,52 @@
+Source URL: https://nmc.ac.in/Events 2025/index.php
+Tenant ID: nmc
+--------------------------------------------------
+
+| S.No | Date | Department | Event Title | View Report | 
+|---|---|---|---|---|
+| 1 | 19-FEB-2026 | Rotaract Club | Free Medical Eye check-up Camp | View Report | 
+| 2 | 14-MAR-2026 | Physics | NEON NEXUS 2K26 | View Report | 
+| 3 | 26-MAR-2026 | Career Guidance and Placement Cell | Stakeholders Meet – College Connect Program | View Report | 
+| 4 | 22-MAR-2026 | All Department | 22வது பட்டமளிப்பு விழா | View Report | 
+| 5 | 18-MAR-2026 | All Department | SELF SUPPORTED STREAM COLLEGE DAY - 2026 | View Report | 
+| 6 | 14-MAR-2026 | Data Science | Data Vision Day 2K26 | View Report | 
+| 7 | 28-FEB-2026 | Management Studies | A Career Guidance Program on the theme “The Nitty- Gritty of Career Readiness” | View Report | 
+| 8 | 11-MAR-2026 | All Department | மகளிர் தின விழா | View Report | 
+| 9 | 2-MAR-2026 | Tamil | உணவுத் திருவிழா | View Report | 
+| 10 | 24-FEB-2026 | Tamil | புத்தகத் திருவிழா | View Report | 
+| 11 | 20-FEB-2026 | Management Studies | One Day Seminar on “Personal Branding through Goal Setting” | View Report | 
+| 12 | 23-FEB-2026 | Data Science | Seminar “Crack the Hack: Strategic Guidelines for Hackathon Success | View Report | 
+| 13 | 25-FEB-2026 | Management Studies | MBA - Career Guidance Program 25.02.2026 | View Report | 
+| 14 | 25-FEB-2026 | Career Guidance and Placement Cell | Placement Drive for UG degree students on 25.02.2026 | View Report | 
+| 15 | 10-FEB-2026 | Career Guidance and Placement Cell | “How to Face Interviews Successfully?” for PG final-year students. | View Report | 
+| 16 | 29-JAN-2026 | Management Studies | Market Carnival – Sell-O-Fest 2k26 | View Report | 
+| 17 | 28-JAN-2026 | Tamil | அரசுப் பணித் தேர்வுகளும் பணித்தேர்வுத் தமிழும் ஒரு நாள் பயிலரங்கம் | View Report | 
+| 18 | 9-JAN-2026 | All Department | SELF FINANCED STREAM PONGAL DAY CELEBRATION - JAN 2026 | View Report | 
+| 19 | 8-JAN-2026 | Computer Applications | Industrial Visit Report- Umagine TN 2026 | View Report | 
+| 20 | 7-JAN-2026 | Botany | The Field Visit to Industrial Wood Research Division, Mukkombu | View Report | 
+| 21 | 7-JAN-2026 | All Department | உலகம் உங்கள் கையில் இலவச மடிக்கணினி வழங்கும் விழா | View Report | 
+| 22 | 8-JAN-2026 | Computer Science | Industrial Visit to Umagine TN 2026 and Mahabalipuram. | View Report | 
+| 23 | 7-JAN-2026 | English | Field Visit to The Hindu Daily Office, Trichy | View Report | 
+| 24 | 3-JAN-2026 | Data Science | Industrial Visit to IIT MADRAS OPEN HOUSE 2026 | View Report | 
+| 25 | 15-DEC-2025 | Career Guidance and Placement Cell | SKILL TRAINING PROGRAMME | View Report | 
+| 26 | 8-DEC-2025 | Career Guidance and Placement Cell | SKILL TRAINING PROGRAMME | View Report | 
+| 27 | 5-JAN-2026 | Commerce | INVESTMENT AWARENESS PROGRAMME ON COMMODITY EXCHANGES | View Report | 
+| 28 | 3-JAN-2026 | Computer Science | Industrial Visit : IIT Madras Open House 2026 | View Report | 
+| 29 | 3-JAN-2026 | English | One‑day Workshop on “Soft Skills vs Hard Skills – Why Communication Matters More in Hiring" | View Report | 
+| 30 | 17-DEC-2025 | All Department | Annual Sports Day - 2025 | View Report | 
+| 31 | 1-DEC-2025 | All Department | A Two-Day Workshop on Outcome-Based Education: Strategies and Techniques for Effective Attainment | View Report | 
+| 32 | 15-AUG-2025 | NCC | 79th Independence Day - Celebration | View Report | 
+| 33 | 28-Aug-2025 | Computer Science | MongoDB Skilling Excellence Award 2025 | View Report | 
+| 34 | 2-Sep-2025 | Botany | Mushroom Cultivation Techniques Outreach Program: | View Report | 
+| 35 | 4-Sep-2025 | Physics | Outreach and Awareness Programme on Lunar Eclipse | View Report | 
+| 36 | 11-Sep-2025 | Nutrition and Dietetics | Nutrition Month Celebration and Awareness Program | View Report | 
+| 37 | 9-Sep-2025 | Women Welfare Cell | Motivational Guest Lecture ? ?You Are the Champion? | View Report | 
+| 38 | 4-Sep-2025 | Englsih | Club Activities ? 9th Meeting. | View Report | 
+| 39 | 13-Sep-2025 | CAREER GUIDANCE AND PLACEMENT CELL | ?Skills in Demand for Successful IT Jobs? | View Report | 
+| 40 | 22-Sep-2025 | Commerce | STOCK MARKETS AND FINANCIAL AWARENESS | View Report | 
+| 41 | 26-Sep-2025 | Data Science | ThinkQuest 2K25 | View Report | 
+| 42 | 22-Sep-2025 | English | Inter-Collegiate English Handwriting Competition | View Report | 
+Nehru Memorial College (Autonomous)
+College Road, Puthanampatti, Trichy Dt.,
+Email : nmcfrontoffice@gmail.com
++91 98429 56720

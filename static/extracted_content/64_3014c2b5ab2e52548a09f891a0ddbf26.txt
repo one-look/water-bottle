@@ -1,0 +1,24 @@
+Source URL: https://nmc.ac.in/nehru-extecsion-magazine.php
+Tenant ID: nmc
+--------------------------------------------------
+
+| S.No | Name | Designation(s) | Responsibility | 
+|---|---|---|---|
+| 1 | Dr.A.Venkatesan | Principal | Convener | 
+| 2 | Dr. Tamilmani K.T. | Vice Principal | Co-Convener | 
+| 3 | Dr.K. Srinivasan | Assistant Professor of Physics | Co-Ordinator | 
+| 4 | Dr.S.Rajendran | HoD& Associate Professor of Tamil | Member | 
+| 5 | Dr.K.Geetha | Assistant Professor of Tamil | Member | 
+| 6 | Dr.G.Thilagavathi | Assistant Professor of Physics | Member | 
+| 7 | Mrs. R.Lakshmi | Assistant Professor of English | Member | 
+| 8 | Mr.P.Ramesh | Assistant Professor of Physics | Member | 
+| 9 | Mr.C. Yogaraj | Assistant Professor of Computer Science | Member | 
+| 10 | Dr.M.Meenakshisundaram | Coordinator Self finance Programmes | Member | 
+| 11 | Dr.V.Kaleeswari | Head, Criterion – VI Governance, Leadership and Management | Member | 
+| 12 | Dr.K.Saravanan | IQAC Coordinator | Member | 
+| 13 | Dr.R.Kabilan | Assistant IQAC Coordinator | Member | 
+| 14 | Mr.S.Jayakumar | Assistant, (Aided Office) | Member | 
+Nehru Memorial College (Autonomous)
+College Road, Puthanampatti, Trichy Dt.,
+Email : nmcfrontoffice@gmail.com
++91 98429 56720

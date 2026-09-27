@@ -5,7 +5,7 @@ from src.etl.domain.entities import Chunk, Document
 
 class BaseExtractor(ABC):
     @abstractmethod
-    def extract(self, source_key: str, tenant_id: str) -> Document:
+    def extract(self, source_key: str, tenant_id: str) -> List[Document]:
         """Extract a single document from source for a specific tenant."""
         pass
 

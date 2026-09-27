@@ -1,0 +1,45 @@
+Source URL: https://nmc.ac.in/nmcmca/mca-coursestructure.php
+Tenant ID: nmc
+--------------------------------------------------
+
+| Semester - I | 
+           | CC1-Python Programming | 
+            | CC2-Data Base Design | 
+            | CC3-Operating System | 
+            | CC4- Digital Design and Architecture | 
+            | CCL01- Python Programming Lab | 
+            | CCL02- RDBMS  Lab | 
+            | CC5- Mathematics  for Computer Applications | 
+            | Soft Skill | 
+         | Semester-II | 
+          
+          | CC6-Distributed Programming using J2EE | 
+          | CC7- Data Structures and Algorithms | 
+          | CC8-Software Engineering | 
+          | CC9-Cryptography and Network Security | 
+          | CCL03-J2EE Lab | 
+          | CCL04-Data Structures  Lab(using C) | 
+          | EC1a- Data Mining and Data Warehousing | 
+          | EC1b- Scripting Languages | 
+          | EC1b- Embedded Systems | 
+          | Debugging | 
+             | Semester - III | 
+            | CC10-Mobile App Development | 
+            | CC11- AI & Machine Learning | 
+            | CC12-Internet of Things | 
+            | CC13- Compiler Design | 
+            | CCL05 - Mobile App Lab | 
+            | CCL06- Machine Learning Lab | 
+            | EC2a- Cloud Computing | 
+            | EC2b-Digital Image Processing | 
+            | EC2c-Block Chain Technology | 
+            | Programming Skill Development | 
+            | Internship** | 
+            | Mini Project** | 
+            | Semester -IV | 
+            | EC3*- Online Courses | 
+            | EC3a-Big Data Analytics | 
+            | EC3b-Distibuted Programming  using .Net | 
+            | EC3c-Social Media Analysis | 
+            | EC3d-Web Technology | 
+            | Project |

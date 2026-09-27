@@ -1,3 +1,8 @@
+'''
+Warning:
+    extractors module structure changed. needs to update this pipeline
+'''
+
 import os
 from dotenv import load_dotenv
 

@@ -1,0 +1,76 @@
+Source URL: https://nmc.ac.in/nmcmca/mca-facilities.php
+Tenant ID: nmc
+--------------------------------------------------
+
+Infrastructural Facilities:
+Computer Laboratories:
+1) Pearl lab
+Dell Optiplex-380, core2 Duo processor, 2GB RAM, 320 GB HDD, Logitech 2.1 Speaker, Logitech Wireless Keyboard and Mouse No. of Nodes : 50
+2) Vectra lab
+Lenova Think Center, I3 Processor, 4 GB RAM, 500 GB HDD, Logitech 2.1 Speaker, Logitech Wireless Keyboard and Mouse No. of Nodes : 60
+3) Emperor Lab
+HP-System, Pentium processor, 2 GB RAM, 80 GB HDD, Logitech 2.1 Speaker, Logitech Wireless Keyboard and Mouse No. of Nodes : 60
+4) Alpha Lab
+Dell Optiplex-790, i3 processor, 4 GB RAM, 500 GB HDD, Logitech 2.1 Speaker, Logitech Wireless Keyboard and Mouse No. of Nodes : 60
+**The computer labs were fully equipped with an LCD projector (EPSON EB-X05) and screen.
+**All labs are Wi-fi enabled and connected with LAN.
+Server Configuration
+1) Linux Server-1 (×3300 M4)
+OS : Cent OS Linux 7
+Memory: 8GB
+Processor: Intel Xeon ® CPU E5-24070@2.20GHz
+Graphics : llvmpipe (LLVM 6.0, 256 bits)
+Hard disk: 320GB
+2)Windows Server
+Model: IBM xSeries 226
+Processor:Intel® xeon® CPU @ 3.00GHz
+Memory: 4GB
+Hard disk: 375GB
+3)ERP Server
+Model: Lenovo Think System ST550
+  Processor:Intel® xeon® silver 4110 CPU @ 2.10GHz
+  Memory: 16GB
+  Hard disk: 1200GB
+  
+  The number of classrooms & labs with ICT facilities for CS: 07 
+  
+Licensed Software and Operating System
+Operating Systems
+| S. No | Particulars | 
+|---|---|
+| 1 | Windows 7 | 
+| 2 | Windows 8 | 
+| 3 | Windows 8.1 | 
+| 4 | Windows Server Enterprises 2012 | 
+| 5 | Windows 10 | 
+Licensed Software
+| S.No | Particulars | 
+|---|---|
+| 1 | Microsoft IntuneOPen | 
+| 2 | Windows server standard CORE | 
+| 3 | Microsoft Visual Studio Pro | 
+| 4 | Microsoft SQL Server Standard Edition | 
+| 5 | Windows Education Upgrade and software Assurance | 
+| 6 | Microsoft Office 365 Proplus | 
+| 7 | Microsoft Office | 
+| 8 | Antivirus – K7 Enterprise Security Antivirus | 
+| 9 | WiFi – Unifi ( Ubiquti Unifi Controller) | 
+| 10 | Firewall XStream –Sophos XG230 | 
+| 11 | Google Suite | 
+| 12 | Tally ERP 9 | 
+| 13 | ERP | 
+| 14 | Connectutor (LMS Software) | 
+Open Source Software's
+| S.No | Particulars | 
+|---|---|
+| 1 | Wamp | 
+| 2 | Java | 
+| 3 | Python | 
+| 4 | R | 
+| 5 | Scilab | 
+| 6 | C and C++ | 
+| 7 | GNU Microprocessor - Simulator S/W | 
+| 8 | GIMP | 
+| 9 | Putty | 
+| 10 | Android Studio | 
+| 11 | Weka Tool |

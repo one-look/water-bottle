@@ -1,0 +1,9 @@
+Source URL: https://nmc.ac.in/nmcmca/mca-pso.php
+Tenant ID: nmc
+--------------------------------------------------
+
+Programme Specific Outcomes (PSO):
+- PSO 1: Apply the scientific knowledge acquired to develop smart applications.
+- PSO 2: Ability to design and develop software with appropriate documentation.
+- PSO 3: Apply current tools and techniques to design and develop innovative applications.
+- PSO 4: Understand the concepts in the specified domain and ability to apply it in real life problem solving.

@@ -1,6 +1,7 @@
 import os
 import yaml
 from pydantic import BaseModel, Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AWSConfig(BaseModel):
@@ -20,15 +21,20 @@ class EmbedderConfig(BaseModel):
     max_retries: int = Field(default=5, ge=1)
 
 
-class QdrantConfig(BaseModel):
-    host: str = "172.17.0.1"
-    port: int = 6333
-    grpc_port: int = 6334
-    prefer_grpc: bool = True
-    collection_name: str = "about_college"
-    vector_size: int = 3072
-    distance: str = "Cosine"
-    tenant_payload_key: str = "tenant_id"
+class QdrantConfig(BaseSettings):
+    """Qdrant configuration that automatically reads Cloud credentials from .env using Pydantic Settings."""
+    url: str = Field(..., validation_alias="QDRANT_URL")
+    api_key: str = Field(..., validation_alias="QDRANT_API_KEY")
+    collection_name: str
+    vector_size: int
+    distance: str
+    tenant_payload_key: str
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
 
 
 class AppConfig(BaseModel):

@@ -1,0 +1,34 @@
+Source URL: https://nmc.ac.in/nehru-extecsion-curriculumcell.php
+Tenant ID: nmc
+--------------------------------------------------
+
+| S.No | Name | Designation(s) | Responsibility | 
+|---|---|---|---|
+| 1 | Dr.A.Venkatesan | Principal | Convener | 
+| 2 | Dr. Tamilmani K.T. | Vice Principal | Co-Convener | 
+| 3 | Dr.V.Saavithri | Dean - Academic Affairs | Director | 
+| 4 | Dr.M.MaryAnbumathy | Controller of Examination | Member | 
+| 5 | Dr.P.Neelanarayanan | Director - Research and Consultancy | Member | 
+| 6 | Dr.C.Sasikumar | Dean - Training and Placement Cell | Member | 
+| 7 | Dr.S.SahayaLatha Rani | Dean - Extension Activities | Member | 
+| 8 | Dr.S. Rajendran | HoD, Department of Tamil | Member | 
+| 9 | Dr.A.Sekar | HoD, Department of Chemistry | Member | 
+| 10 | Dr.K.Mani | HoD, Department of Computer Science | Member | 
+| 11 | Dr.A.Rajendran | HoD, Department of Physics | Member | 
+| 12 | Dr.T.Porselvi | HoD, Department of Economics | Member | 
+| 13 | Dr.T.Gayathri | HoD, Department of Commerce | Member | 
+| 14 | Dr.M.Meenakshisundaram | HoD, Department of Botany | Member | 
+| 15 | Mr.A.Udayakumar | HoD, Department of English (SF) | Member | 
+| 16 | Dr.R. Mathivanan | Director of Commerce | Member | 
+| 17 | Dr.D.Jayachitra | Director of Computer Application | Member | 
+| 18 | Mr.N. Narendrakumar | HoD, Department of HMCS | Member | 
+| 19 | Dr.C.Prabakaran | HOD, Department of Tamil (SF) | Member | 
+| 20 | Dr. J.Mohanraj | HOD, Department of Management Studies (SF) | Member | 
+| 21 | Ms. N. Kalpana | HoD, Department of Data Science | Member | 
+| 22 | Dr.V.Kaleeswari | Head, Criterion – VI Governance, Leadership and Management | Member | 
+| 23 | Dr.K.Saravanan | IQAC Coordinator | Member | 
+| 24 | Dr.R.Kabilan | Assistant IQAC Coordinator | Member | 
+Nehru Memorial College (Autonomous)
+College Road, Puthanampatti, Trichy Dt.,
+Email : nmcfrontoffice@gmail.com
++91 98429 56720

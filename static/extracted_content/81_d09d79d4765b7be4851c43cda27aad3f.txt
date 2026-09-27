@@ -1,0 +1,27 @@
+Source URL: https://nmc.ac.in/nehru-academics-depart-maths-academicsprog.php
+Tenant ID: nmc
+--------------------------------------------------
+
+Degree : B.Sc
+Programme : Mathematics
+Year of Starting : 1969-1970
+Aided / SF : Aided
+Degree : B.Sc.
+Programme : Mathematics
+Year of Starting : 2003-2004
+Aided / SF : SF
+Post Graduate Programme
+Degree : M.Sc
+Programme : Mathematics
+Year of Starting : 2003-2004
+Aided / SF : SF
+M.Phil Programme
+Degree : M.Phil
+Programme : Mathematics
+Year of Starting : 2007-2008
+Aided / SF : SF
+Ph.D Programme
+Degree : Ph.D.
+Programme : Mathematics
+Year of Starting : 2011-2012
+Aided / SF : SF

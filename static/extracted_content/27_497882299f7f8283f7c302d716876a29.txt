@@ -1,0 +1,34 @@
+Source URL: https://nmc.ac.in/nehru-academics-depart-artificial.php
+Tenant ID: nmc
+--------------------------------------------------
+
+The B.Sc.in Artificial Intelligence and Machine Learning programme has been introduced from Academic Year 2025-26 with an aim to make the students employable and impart industry oriented training. Artificial Intelligence and machine Learning (AI&ML) is a new, emerging field which consists of a set of tools and techniques used to extract useful information from data. AI&ML is a fast growing discipline and is full of rigorous practical analysis. The demand for undergraduates in AI and ML has industry required skills and demand in the Global market over the last few years. Artificial Intelligence and Machine Learning is also in line demand with computer science. Machine learning is an established research discipline. However, recent advances have increased the impact on many areas of society, science, medicine, and everyday life.AI with ML is in demand in the robotics applications, space technology, industry4.0 and many more. AI and ML delivers modern computational systems that demonstrate capabilities of perception, reasoning, learning and action that are typical of human intelligence.
+The main objectives of the course are:
+- To think analytically, creatively and critically in developing robust, extensible and highly maintainable technological solutions to simple and complex problems.
+- To formulate analyse and solve engineering problems with strong foundation in Mathematical, Scientific, Engineering fundamentals and modern computing practices through advanced curriculum.
+- To Analyze the requirements, realize the technical specification and design the Engineering solutions by applying artificial intelligence and machine learning theory and principles.
+- Demonstrate technical skills competency in AI and Machine Learning and promote collaborative learning and team work spirit through multi-disciplinary projects and diverse professional activities.
+- To adhere to the highest standards of ethics, including relevant industry and organizational codes of conduct.
+- Equip the graduates with strong knowledge, competence and soft skills that allows them to contribute ethically to the needs of society and accomplish sustainable progress in the emerging computing technologies through life-long learning.
+Eligibility: Any student who has passed 10+2 or equivalent courses in Science and Mathematics.
+- Cutting-edge Curriculum: Nehru Memorial College offers a B. Sc in Artificial Intelligence and Machine Learning program with a curriculum at the forefront of industry trends. The program is designed to equip students with the latest skills and knowledge required in the rapidly evolving fields of AI and ML.
+- Experienced Faculty: The college boasts a team of experienced faculty members who are not only well-versed in the theoretical aspects of AI/ML but also bring practical industry experience. This ensures that students receive comprehensive and insightful guidance throughout their academic journey.
+- State-of-the-Art Facilities: Nehru Memorial College provides state-of-the-art infrastructure, including well-equipped AI/ML labs and resources. Students have access to cutting-edge tools and technologies used in the industry, fostering hands-on learning and experimentation.
+- Internship and Placement Support: The college has strong ties with industry partners, facilitating internship programs and ensuring robust placement support. Students benefit from real-world experience and have enhanced opportunities for securing rewarding positions in top organizations upon graduation.
+- Research Opportunities: Nehru Memorial College encourages a culture of research and innovation. Students have the opportunity to engage in research projects, keeping them abreast of the latest developments and contributing to the advancement of AI/ML knowledge.
+- Industry Collaboration: The college actively collaborates with industry leaders, organizing guest lectures, workshops, and seminars that expose students to practical challenges and solutions in the field. This collaboration enhances the program's relevance and ensures alignment with industry expectations.
+- Holistic Development: Beyond technical skills, Nehru Memorial College focuses on the holistic development of students. Various extracurricular activities, cultural events, and clubs contribute to a well-rounded educational experience.
+- Networking Opportunities: The college provides networking opportunities with alumni and professionals in the AI/ML field. This facilitates valuable connections for students, offering insights into potential career paths and fostering a sense of community within the industry.
+- Global Outlook: Kristu Jayanti College emphasizes a global perspective in the AI/ML program, preparing students to tackle challenges on an international scale. This approach ensures that graduates are not only technically proficient but also capable of navigating the complexities of a globalized industry.
+The students will be ready for the jobs available in different fields like:
+- Data Analyst
+- Artificial Intelligence Scientist
+- Machine Learning Engineer
+- Business Intelligence Researcher
+- Automation Engineer
+- Robotics Engineer
+- Research Scientist, etc.
+Nehru Memorial College (Autonomous)
+College Road, Puthanampatti, Trichy Dt.,
+Email : nmcfrontoffice@gmail.com
++91 98429 56720

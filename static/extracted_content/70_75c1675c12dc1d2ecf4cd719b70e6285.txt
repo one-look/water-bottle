@@ -1,0 +1,36 @@
+Source URL: https://nmc.ac.in/nehru-extecsion-library.php
+Tenant ID: nmc
+--------------------------------------------------
+
+| S.No | Name | Designation(s) | Responsibility | 
+|---|---|---|---|
+| 1 | Dr.A.Venkatesan | Principal | Convener | 
+| 2 | Dr. Tamilmani K.T. | Vice-Principal | Co-Convener | 
+| 3 | Dr.K.Karunakaran | Associate Professor of Economics | Member Secretary | 
+| 4 | Dr.S.Rajendran | HoD of Tamil | Member | 
+| 5 | Dr.K.Mani | HoD of Computer Science | Member | 
+| 6 | Dr.C.Sasikumar | HoD, Department of Botany | Member | 
+| 7 | Dr.V.Saavithiri | HoD of Mathematics | Member | 
+| 8 | Dr.A.Rajendran | HoD of Physics | Member | 
+| 9 | DrA.Sekar | HoD of Chemistry | Member | 
+| 10 | Dr.P.Neelanarayanan | HoD of Zoology | Member | 
+| 11 | Dr.T.Gayathri | HoD of Commerce | Member | 
+| 12 | Dr.T.Porselvi | HoD of Economics | Member | 
+| 13 | Dr.M.Meenakshisundaram | HoD of Botany (SF) | Member | 
+| 14 | Dr.V.Priya | HoD of Computer Science (SF) | Member | 
+| 15 | Dr.D.Jayachitra | Director of Computer Applications (SF) | Member | 
+| 16 | Dr.N.Kalpana | HoD of Data Science (SF) | Member | 
+| 17 | Dr.C.Prabakaran | HoD of Tamil (SF) | Member | 
+| 18 | Mr.A.Udayakumar | HoD of English (SF) | Member | 
+| 19 | Dr.N.Ramesh | HoD of Zoology (SF) | Member | 
+| 20 | Dr.R.Mathivanan | Director of Commerce (SF) | Member | 
+| 21 | Dr. J.Mohanraj | HoD of Management Studies (SF) | Member | 
+| 22 | Thiru.N.Narendrakumar | HoD of Hotel Management & Catering Technology (SF) | Member | 
+| 23 | Thiru. K. Ramanathan | Junior Assistant | Member | 
+| 24 | Dr.V.Kaleeswari | Head, Criterion – VI Governance, Leadership and Management | Member | 
+| 25 | Dr.K.Saravanan | IQAC Co-Ordinator | Member | 
+| 26 | Dr.R.Kabilan | Assistant IQAC Coordinator | Member | 
+Nehru Memorial College (Autonomous)
+College Road, Puthanampatti, Trichy Dt.,
+Email : nmcfrontoffice@gmail.com
++91 98429 56720

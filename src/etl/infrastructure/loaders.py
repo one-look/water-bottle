@@ -24,10 +24,8 @@ class QdrantVectorLoader(BaseLoader):
         self.config = config
         try:
             self.client = QdrantClient(
-                host=config.host,
-                port=config.port,
-                grpc_port=config.grpc_port,
-                prefer_grpc=config.prefer_grpc,
+                url=config.url,
+                api_key=config.api_key,
             )
             self._ensure_collection()
         except Exception as e:

@@ -1,0 +1,11 @@
+Source URL: https://nmc.ac.in/nmcmca/mca-peo.php
+Tenant ID: nmc
+--------------------------------------------------
+
+Programme Educational Objectives(PEO):
+- 
+  The Post Graduates of MCA Programme will be able to 
+- PEO1: Design, model and develop smart applications by utilizing strong technical and domain knowledge acquired from the programme for the improvement of society.
+- PEO2: Apply tools, technologies and critical thinking to develop applications for solving industry oriented problems
+- PEO3: Function as a team member and develop projects in a multi-disciplinary environment by emulating leadership skills
+- PEO4: Work productively as computer professional by adopting to environment with lifelong learning and adhering to ethical standards

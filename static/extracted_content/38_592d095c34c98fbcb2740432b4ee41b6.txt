@@ -1,0 +1,22 @@
+Source URL: https://nmc.ac.in/nehru-research-advisory committee.php
+Tenant ID: nmc
+--------------------------------------------------
+
+| S.No | Name of the members | Designation | 
+|---|---|---|
+| 1 | Thiru.Pon.Balasubramanian, President of College Committee | Chairman | 
+| 2 | Thiru.Pon.Ravichandran, Secretary of College Committee | Convenor | 
+| 3 | Dr.A.Venkatesan, Principal, Departmental Research Advisory for Computer Science | Co – Convenor | 
+| 4 | Dr.S.Kumararaman, Vice Principal, Departmental Research Advisory for Physics | Member | 
+| 5 | Dr.K.T.Tamilmani,Vice Principal, Departmental Research Advisory for English | Member | 
+| 6 | Dr.C.Sasikumar, Dean of Research, Departmental Research Advisory for Botany | Member | 
+| 7 | Dr. Dr.S.Rajendiran, Departmental Research Advisory for Tamil | Member | 
+| 8 | Dr.V. Saavithri, Departmental Research Advisory for Mathematics | Member | 
+| 9 | Dr. A. Sekar, Departmental Research Advisory for Chemistry | Member | 
+| 10 | Dr. M. Mary Anbumathi, Departmental Research Advisory for Commerce | Member | 
+| 11 | Dr.T.Porselvi, Departmental Research Advisory for Economics | Member | 
+| 12 | Dr. P.Neelanarayanan, Departmental Research Advisory for Zoology | Member | 
+Nehru Memorial College (Autonomous)
+College Road, Puthanampatti, Trichy Dt.,
+Email : nmcfrontoffice@gmail.com
++91 98429 56720

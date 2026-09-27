@@ -1,0 +1,18 @@
+Source URL: https://nmc.ac.in/nehru-academics-depart-artificial-vision.php
+Tenant ID: nmc
+--------------------------------------------------
+
+HomeDepartmentArtificial Intelligence and Machine Learning
+Artificial Intelligence and Machine Learning
+Vision and Mission
+Vision:
+Vision: “To be a premier department that shapes future leaders in Artificial Intelligence and Machine Learning, creating innovative solutions to complex problems while promoting ethical practices, lifelong learning, and holistic development for global impact.”
+Mission:
+Analytical and Creative Problem Solving: To nurture students' ability to think analytically, creatively, and critically in developing robust, scalable, and maintainable technological solutions for both simple and complex challenges in AI and ML.
+Foundation in Core Disciplines: To provide a strong foundation in Mathematical, Scientific, and Engineering principles, enabling students to analyze, design, and solve engineering problems through advanced AI and ML methods in line with modern computing practices.
+Technical Proficiency in AI/ML: To impart deep technical competence in AI and ML theories and principles, enabling students to analyze requirements, develop specifications, and design engineering solutions using state-of-the-art technologies.
+Collaborative Learning and Teamwork: To foster a collaborative learning environment and team spirit through multidisciplinary projects and professional activities, preparing students to work effectively in diverse, real-world settings.
+Ethical Responsibility: To cultivate a deep sense of ethics and integrity in students, ensuring they adhere to industry standards and organizational codes of conduct while developing AI and ML solutions that are socially responsible.
+Holistic Development and Lifelong Learning: To equip students with strong technical knowledge, soft skills, and a commitment to continuous learning, empowering them to contribute ethically and sustainably to the emerging field of AI/ML.
+Industry-Relevant Education: To align the curriculum with cutting-edge industry trends, ensuring that students are well-prepared for careers in AI and ML, with ample opportunities for internships, research, and placement support in collaboration with leading industry partners.
+Global Perspective: To foster a global outlook in students, preparing them to tackle AI and ML challenges on an international scale and contribute to technological progress that transcends geographical boundaries.

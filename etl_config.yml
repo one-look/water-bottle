@@ -3,6 +3,11 @@ aws:
   region_name: "ap-south-2"
   tenant_id: "nmc"
 
+extraction:
+  provider: "web"
+  max_pages: 150
+  source_key: "https://nmc.ac.in/"
+
 transformer:
   chunk_size: 512
   chunk_overlap: 50
@@ -13,11 +18,7 @@ embedder:
   max_retries: 10
 
 qdrant:
-  host: "localhost"
-  port: 6333
-  grpc_port: 6334
-  prefer_grpc: true
-  collection_name: "about_college"
+  collection_name: "nmc"
   vector_size: 3072
   distance: "Cosine"
-  tenant_payload_key: "tenant_id"
+  tenant_payload_key: "nmc"

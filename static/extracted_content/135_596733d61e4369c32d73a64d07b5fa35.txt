@@ -1,0 +1,23 @@
+Source URL: https://nmc.ac.in/nmcmca/mca-po.php
+Tenant ID: nmc
+--------------------------------------------------
+
+Programme Outcomes (PO):
+- 
+At the end of the MCA programme, the students will be able to 
+- PO1:  Scientific Knowledge 
+Apply the knowledge in mathematics, statistics and computer science to solve real life problems.
+- PO2:  Problem Analysis 
+Ability to analyze and design applications by solving problems in the field of computer science.
+- PO3:  Design and Development of Solution 
+Design applications for any specific needs from societal and environmental aspects.
+- PO4:  Conduct investigations of complex problems 
+Investigate and apply technical skills to solve complex problems.
+- PO5:  Modern tool usage 
+Choose, Create, Adapt and Apply appropriate techniques, resources, and modern computing tools to obtain solutions.
+- PO6:  Communication 
+Communicate effectively and present technical information both verbally and written.
+- PO7:  Individual and team work 
+Function competently as an individual and as a leader in a team project.
+- PO8:  Link with society & Ethics 
+Work in professional environment by adhering to professional ethics and involve in perennial learning in the context of social, economic and cultural aspects.

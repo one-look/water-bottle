@@ -1,0 +1,25 @@
+Source URL: https://nmc.ac.in/nehru-research-cif.php
+Tenant ID: nmc
+--------------------------------------------------
+
+Our College has set up a Central Instrumentation Facility (CIF) in a floor to accommodatesophisticated state-of-the-art analytical equipment purchased by utilizing the grants obtained from DST-FIST and other schemes. The facility now houses sophisticated equipment such as Solid UV-Vis Spectrophotometer, ATR - FT-IR Spectrophotometer, Gas Chromatography Mass Spectrometry (GCMS). The facility is available to students, research scholars and faculty of our college and other Colleges and Universities to analyze their samples and get reports at affordable cost. It fudnctions on 24x7 basis for the sake of all stakeholders.
+Besides, it is created with the notion to impart quality higher education and pursue advanced research in the campus. We also conduct hands on training for the aspirants who are interested in learning the working principle of equipment available in our facility and to analyze their samples directly.
+| S.No. | Name of the Instrument | Make | Model | Software | 
+|---|---|---|---|---|
+|  | Gas Chromatography with Mass Spectroscopy (GC-MS) | PERKIN ELMER | CLARUS 690 SQ8MS | KIT CLARUS SQ8 V6.1.2 | 
+|  | Fourier Transform Infra Red Spectroscopy | THERMO SCIENTIFIC | NICOLET i5 | OMNIC | 
+|  | UV- Visible Spectrophotometer | PERKIN ELMER | LAMBDA 35 |  | 
+The samples should be submitted in the prescribed format indicating the information requested for as well as special requirements, if any. The users can obtain the result/data either in electronic format (soft copy) or in hardcopy from the office of the CIF or through email with a special request.
+For internal samples (within the College) Students/Research Scholars /Faculty members have to submit application form along with the samples. It must be forwarded by the respective Head of the Department. The payment has to be made in the form of cash/fund transfer/demand draft (DD)drawn in favour of:
+Name of the account: The Nehru Memorial College Committee
+| S.No | USERS | GCMS | FTIR | UV - VIS | 
+|---|---|---|---|---|
+|  | Internal members | Rs. 500/- per sample | Rs. 50/- per sample | Rs. 30/- per sample | 
+|  | Others (Outsiders) | Rs. 1,500/- per sample | Rs. 100/- per sample | Rs. 50/- per sample | 
+|  | Industries | Rs. 2,000/- per sample | Rs. 150/- per sample | Rs. 100/- per sample | 
+An e-learning and networking facility has been set up in the block to enable online education and knowledge transfer. Creation of this infrastructure strengthened the research capabilities and has resulted in an increase in the number of publications and paper presentations in symposia/seminars/conferences by our students, research scholars and faculty members. There were 170 research articles published by our college faculty and research scholars from various departments in Scopus indexed, Web of Science, UGC Care listed and Peer reviewed journals.An exclusive seminar hall is also available in the block in order to conduct seminars, Doctoral committee meeting, pre-doctoral and doctoral viva-voce examinations for research scholars.
+The available infrastructure in the research building is user friendly. Keeping the mobility needs of the research scholars and faculty in mind, ramps and elevators have been installed to facilitate hassle free movement within the research building. The block also has separate Men and Women washrooms for staff and research scholars in each floor.The facilities embodied in the research block have enriched the experience of students, research scholars and faculty of our college and other colleges. The networking facility available in the block is immensely useful to the researchers to equip themselves for various academic and research related activities and overall professional development in their field.
+Nehru Memorial College (Autonomous)
+College Road, Puthanampatti, Trichy Dt.,
+Email : nmcfrontoffice@gmail.com
++91 98429 56720

@@ -1,0 +1,36 @@
+Source URL: https://nmc.ac.in/nehru-academics-programmes1.php
+Tenant ID: nmc
+--------------------------------------------------
+
+| Aided Stream Courses |  |  | 
+|---|---|---|
+| S.No | Degree | Programme | 
+|  | B.A | Economics | 
+|  | B.Com | Commerce | 
+|  | B.Sc | Computer Science Chemistry Mathematics Physics Zoology | 
+| Self-Financed Stream Courses |  |  | 
+| S.No | Degree | Programme | 
+|  | B.A | Tamil English | 
+|  | B.Com | Commerce Commerce with Computer Applications | 
+|  | B.Sc | Computer Science Botany Chemistry Data Science * Artificial Intelligence and Machine Learning (Subject to Bharathidasan University Approval) Mathematics Physics Zoology Hotel Management and Catering Science | 
+|  | B.C.A | Computer Applications (AICTE Approved Programme) | 
+|  | B.B.A | Business Administration (AICTE Approved Programme) | 
+| Aided Stream Courses |  |  | 
+|---|---|---|
+| S.No | Degree | Programme | 
+|  | M.Sc | Physics | 
+| Self-Financed Stream Courses |  |  | 
+| S.No | Degree | Programme | 
+|  | M.A | Tamil English | 
+|  | M.Com | Commerce | 
+|  | M.Sc | Computer Science Botany Chemistry Data Science Mathematics Physics Zoology Bio Technology Hotel Management and Catering Science | 
+|  | M.C.A | Computer Applications (AICTE Approved Programme) | 
+|  | M.B.A | Business Administration (AICTE Approved Programme) | 
+| Ph.D Programmes |  |  | 
+|---|---|---|
+| S.No | Degree | Programme | 
+|  | Ph.d | Economics English Tamil Botany Bio-technology Computer Science Chemistry Commerce Mathematics Physics Zoology | 
+Nehru Memorial College (Autonomous)
+College Road, Puthanampatti, Trichy Dt.,
+Email : nmcfrontoffice@gmail.com
++91 98429 56720

@@ -1,0 +1,11 @@
+Source URL: https://nmc.ac.in/nmcmca/mca-vision&mission.php
+Tenant ID: nmc
+--------------------------------------------------
+
+Vision
+- Sculpting highly competent software professionals, researchers, innovators and entrepreneurs to cater the global needs of the society
+Mission
+- To offer high quality, value based higher education in Computer Applications
+- To inculcate creative and innovative ideas among the mindset of the students
+- To facilitate better communication skills and enhancing the personality of the students to meet the ever changing needs of the society
+- To bridge the gap between the industry and institution by introducing latest technology in the field of computer science

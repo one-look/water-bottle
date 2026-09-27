@@ -1,0 +1,25 @@
+Source URL: https://nmc.ac.in/nehru-extecsion-grievancecell.php
+Tenant ID: nmc
+--------------------------------------------------
+
+| S.No | Name | Designation(s) | Responsibility | 
+|---|---|---|---|
+| 1 | Dr.A.Venkatesan | Principal | Convener | 
+| 2 | Dr. Tamilmani K.T. | Vice Principal | Co-Convener | 
+| 3 | Dr.S.Rajendran | Head, Associate Professor of Tamil | Coordinator | 
+| 4 | Dr.K.Karunakaran | Associate Professor of Economics | Member | 
+| 5 | Dr.G.Thilagavathi | Assistant Professor of Physics | Member | 
+| 6 | Dr.R.Mathivanan | Director of Commerce | Member | 
+| 7 | Dr.B.Ramesh | Assistant Professor of Computer science | Member | 
+| 8 | Ms.P.Backialakshmi | Assistant Professor of Mathematics | Member | 
+| 9 | Mr. M. Rajasekaran | Assistant Professor of English | Member | 
+| 10 | Dr.L.Anitha | Assistant Professor of Mathematics & Hostel Warden | Member | 
+| 11 | Dr.M.Meenakshisundaram | Coordinator – Self finance Programmes | Member | 
+| 12 | Dr.V.Kaleeswari | Head, Criterion – VI Governance, Leadership and Management | Member | 
+| 13 | Dr.A.Arumugam | Assistant Professor of Chemistry | Member | 
+| 14 | Dr.K.Saravanan | IQAC Co-Ordinator & Hostel Warden | Member | 
+| 15 | Dr.R.Kabilan | Assistant IQAC Coordinator & Hostel Warden | Member | 
+Nehru Memorial College (Autonomous)
+College Road, Puthanampatti, Trichy Dt.,
+Email : nmcfrontoffice@gmail.com
++91 98429 56720

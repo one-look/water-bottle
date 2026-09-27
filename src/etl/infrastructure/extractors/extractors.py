@@ -44,7 +44,7 @@ class S3DocumentExtractor(BaseExtractor):
             else:
                 content = raw_bytes.decode("utf-8", errors="ignore")
 
-            return Document(
+            return [Document(
                 content=content,
                 metadata={
                     "source_key": scoped_key,
@@ -54,7 +54,7 @@ class S3DocumentExtractor(BaseExtractor):
                     ),
                     "content_length": response.get("ContentLength", 0),
                 },
-            )
+            )]
 
         except (BotoCoreError, ClientError) as e:
             logger.error(
