@@ -50,7 +50,7 @@ class UpstashSemanticCache:
                 cached_response = await self.redis_client.hget(cache_key, "response")
                 if cached_response:
                     logger.info(f"Cache HIT for tenant '{tenant_id}'")
-                    return cached_str if isinstance(cached_response, str) else cached_response.decode("utf-8")
+                    return cached_response if isinstance(cached_response, str) else cached_response.decode("utf-8")
 
             logger.info(f"Cache MISS for tenant '{tenant_id}'")
             return None

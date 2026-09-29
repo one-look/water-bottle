@@ -20,7 +20,7 @@ cache:
 
 llm:
   provider: "gemini"
-  model_name: "gemini-3.6-flash"
+  model_name: "gemini-2.5-flash"
   temperature: 0.2
   max_tokens: 1024
 
@@ -29,7 +29,7 @@ embedding:
   model_name: "gemini-embedding-001"
 
 qdrant:
-  collection_name: "about_college"
+  collection_name: "nmc"
   top_k: 5
   score_threshold: 0.6
 
