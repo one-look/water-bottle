@@ -20,7 +20,9 @@ class GeminiProvider:
 
         self.system_instruction = config.get(
             "system_instruction",
-            "YYou are a helpful college assistant. Answer queries factually based on provided information."
+            "You are a helpful college assistant. Answer queries factually based on provided information."
+            "Do not use any markdown formatting like bolding (**) or italics. "
+            "Use plain text only."
         )
 
     def generate(self, prompt: str, system_instruction_override: Optional[str] = None) -> str:
