@@ -36,7 +36,6 @@ class RAGResponse(BaseModel):
 async def generate_rag_response(
     request: Request,
     body: RAGRequest,
-    x_tenant_id: str = Header(..., alias="X-Tenant-ID", description="Tenant Identifier"),
     x_session_id: str = Header(..., alias="X-Session-ID", description="Session Identifier"),
 ) -> RAGResponse:
     """Router endpoint delegating orchestration to RAGWorkflow."""

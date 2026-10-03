@@ -1,5 +1,5 @@
 """FastAPI router endpoint for directly querying the LLM service."""
-from fastapi import APIRouter, Header, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 
 from src.api import application
@@ -32,18 +32,11 @@ class QueryResponse(BaseModel):
     status_code=status.HTTP_200_OK,
     summary="Generate response using LLM provider",
 )
-async def generate(
-    request: QueryRequest,
-    x_tenant_id: str = Header(
-        ..., alias="X-Tenant-ID", description="Tenant Identifier"
-    ),
-) -> QueryResponse:
+async def generate(request: QueryRequest) -> QueryResponse:
     """Executes generation through the global application LLM provider.
 
     Args:
         request: Validated QueryRequest containing prompt string.
-        x_tenant_id: Tenant ID passed via X-Tenant-ID header.
-
     Returns:
         QueryResponse containing the tenant_id and generated text response.
 

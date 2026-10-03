@@ -35,6 +35,19 @@ qdrant:
 
 rag:
 
+auth:
+  audience: "water-bottle"
+  access_token_expire_minutes: 15
+  refresh_token_expire_days: 7
+  clients:
+    - client_id: "water-bottle-client"
+      tenant_id: "nmc"
+      allowed_grant_types:
+        - client_credentials
+        - user_token
+        - refresh_token
+
 routers:
   home: true
+  auth: true
   rag: true

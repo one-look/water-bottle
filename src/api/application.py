@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 from src.api import routers
 from src.app import Application
+from src.auth.bootstrap import init_auth
 from src.core import TenantMiddleware
 
 from src.core.ratelimit import limiter_manager
@@ -59,6 +60,7 @@ async def lifespan(app: FastAPI):
     INSTANCE = Application()
 
     INSTANCE.ratelimiter(app)
+    init_auth(INSTANCE.config)
 
     config = INSTANCE.config
     
