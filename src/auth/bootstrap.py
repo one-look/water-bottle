@@ -1,10 +1,9 @@
-from src.auth.application.config import load_auth_config
-from src.auth.application.secrets import resolve_auth_issuer, resolve_client_secrets
-from src.auth.application.token_service import TokenService
-from src.auth.infrastructure.jwt import JwtAccessTokenIssuer
-from src.auth.infrastructure.refresh_tokens import RedisRefreshTokenStore
+from src.auth.application.google_auth_service import GoogleAuthService
+from src.auth.application.google_principal import GooglePrincipalResolver
+from src.auth.infrastructure.google_oauth_state import GoogleOAuthStateStore
+from src.auth.infrastructure.google_oidc import GoogleIdTokenVerifier
 from src.auth.infrastructure.user_repository import DbFileUserRepository
-from src.auth.state import set_token_service
+from src.auth.state import set_google_auth
 from src.config.settings import settings
 from src.core.logging import setup_logger
 
@@ -13,34 +12,21 @@ logger = setup_logger(__name__)
 
 def init_auth(app_config: dict) -> None:
     '''
-    Initialize OAuth2/OIDC services from YAML policy and environment secrets.
+    Initialize Google OAuth login and ID-token verification (Google JWKS only).
 
     Args:
-        app_config (dict): Full application configuration from config.yml.
+        app_config (dict): Application configuration (unused; auth is env-driven).
 
     Returns:
         None
-
-    Raises:
-        ValueError: If auth configuration or required secrets are invalid.
     '''
-    issuer = resolve_auth_issuer()
-    auth_config = load_auth_config(app_config.get("auth"), issuer=issuer)
-    client_ids = {client.client_id for client in auth_config.clients}
-    client_secrets = resolve_client_secrets(client_ids)
-
-    token_issuer = JwtAccessTokenIssuer(
-        private_key_pem=settings.AUTH_PRIVATE_KEY,
-        public_key_pem=settings.AUTH_PUBLIC_KEY,
-        issuer=auth_config.issuer,
-        audience=auth_config.audience,
+    user_repository = DbFileUserRepository()
+    verifier = GoogleIdTokenVerifier(settings.GOOGLE_OAUTH_CLIENT_ID)
+    resolver = GooglePrincipalResolver(verifier, user_repository)
+    google_auth = GoogleAuthService(
+        state_store=GoogleOAuthStateStore(),
+        id_token_verifier=verifier,
+        user_repository=user_repository,
     )
-    service = TokenService.from_config(
-        config=auth_config,
-        client_secrets=client_secrets,
-        user_repository=DbFileUserRepository(),
-        refresh_store=RedisRefreshTokenStore(),
-        token_issuer=token_issuer,
-    )
-    set_token_service(service, auth_config)
-    logger.info("OAuth2/OIDC auth initialized")
+    set_google_auth(google_auth, resolver)
+    logger.info("Google OAuth authentication initialized")

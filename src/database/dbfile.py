@@ -6,4 +6,6 @@ USERS_DB = {
     "p24dsc102@nmc.ac.in": {"tenant_id": "nmc", "role": "student"},
     "teacherjohn@almighty.edu": {"tenant_id": "almighty", "role": "teacher"},
     "studentnarmatha@almighty.edu": {"tenant_id": "almighty", "role": "student"},
+    "logidhasan25@gmail.com": {"tenant_id": "nmc", "role": "student"},
+
 }

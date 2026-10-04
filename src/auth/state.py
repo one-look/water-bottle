@@ -1,49 +1,49 @@
 from typing import Optional
 
-from src.auth.application.config import AuthConfig
-from src.auth.application.token_service import TokenService
+from src.auth.application.google_auth_service import GoogleAuthService
+from src.auth.application.google_principal import GooglePrincipalResolver
 
-_token_service: Optional[TokenService] = None
-_auth_config: Optional[AuthConfig] = None
+_google_auth: Optional[GoogleAuthService] = None
+_principal_resolver: Optional[GooglePrincipalResolver] = None
 
 
-def set_token_service(service: TokenService, config: AuthConfig) -> None:
+def set_google_auth(service: GoogleAuthService, resolver: GooglePrincipalResolver) -> None:
     '''
-    Register the global token service and auth configuration.
+    Register Google OAuth and Bearer token resolution.
 
     Args:
-        service (TokenService): Initialized token service.
-        config (AuthConfig): Runtime auth configuration.
+        service (GoogleAuthService): Google login service.
+        resolver (GooglePrincipalResolver): ID token to principal resolver.
 
     Returns:
         None
     '''
-    global _token_service, _auth_config
-    _token_service = service
-    _auth_config = config
+    global _google_auth, _principal_resolver
+    _google_auth = service
+    _principal_resolver = resolver
 
 
-def get_token_service() -> TokenService:
+def get_google_auth_service() -> GoogleAuthService:
     '''
     Returns:
-        TokenService: The initialized token service.
+        GoogleAuthService: Initialized Google OAuth service.
 
     Raises:
         RuntimeError: If auth has not been bootstrapped.
     '''
-    if _token_service is None:
-        raise RuntimeError("Auth is not initialized")
-    return _token_service
+    if _google_auth is None:
+        raise RuntimeError("Google auth is not initialized")
+    return _google_auth
 
 
-def get_auth_config() -> AuthConfig:
+def get_principal_resolver() -> GooglePrincipalResolver:
     '''
     Returns:
-        AuthConfig: The runtime auth configuration.
+        GooglePrincipalResolver: Verifier for API Bearer tokens.
 
     Raises:
         RuntimeError: If auth has not been bootstrapped.
     '''
-    if _auth_config is None:
-        raise RuntimeError("Auth is not initialized")
-    return _auth_config
+    if _principal_resolver is None:
+        raise RuntimeError("Google auth is not initialized")
+    return _principal_resolver

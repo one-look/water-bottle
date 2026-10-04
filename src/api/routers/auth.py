@@ -1,10 +1,11 @@
 from typing import Any
+from urllib.parse import quote
 
-from fastapi import APIRouter, Form, HTTPException, Request, status
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, HTTPException, Query, Request, status
+from fastapi.responses import RedirectResponse
 
 from src.auth.exceptions import AuthError, InvalidTokenError
-from src.auth.state import get_auth_config, get_token_service
+from src.auth.state import get_google_auth_service, get_principal_resolver
 from src.core.logging import setup_logger
 
 logger = setup_logger(__name__)
@@ -12,77 +13,82 @@ logger = setup_logger(__name__)
 router = APIRouter(tags=["Auth"])
 
 
-def _token_error(detail: str, status_code: int = status.HTTP_400_BAD_REQUEST) -> JSONResponse:
+@router.get("/auth/google/login", summary="Start Continue with Google")
+async def google_login(
+    redirect_uri: str = Query(
+        ...,
+        min_length=1,
+        description="Frontend URL to return after login (per-tenant Lovable app)",
+    ),
+) -> RedirectResponse:
     '''
-    Build an OAuth2-style error response.
+    Redirect the browser to Google OAuth (authorization code + PKCE).
 
     Args:
-        detail (str): Human-readable error description.
-        status_code (int): HTTP status code.
+        redirect_uri (str): Stored with OAuth state for post-login redirect.
 
     Returns:
-        JSONResponse: OAuth error payload.
+        RedirectResponse: Redirect to Google authorization URL.
     '''
-    return JSONResponse(
-        status_code=status_code,
-        content={"error": "invalid_request", "error_description": detail},
+    url = await get_google_auth_service().start_login(redirect_uri)
+    return RedirectResponse(url=url, status_code=status.HTTP_302_FOUND)
+
+
+@router.get("/auth/google/callback", summary="Google OAuth callback")
+async def google_callback(
+    code: str = Query(...),
+    state: str = Query(...),
+) -> RedirectResponse:
+    '''
+    Complete Google login and redirect to the frontend with id_token in the URL hash.
+
+    Args:
+        code (str): Authorization code from Google.
+        state (str): OAuth state parameter.
+
+    Returns:
+        RedirectResponse: HTTP 302 to redirect_uri with #id_token=...
+
+    Raises:
+        HTTPException: If login fails.
+    '''
+    try:
+        result = await get_google_auth_service().complete_login(code, state)
+    except AuthError as exc:
+        logger.warning(f"Google login failed: {exc}")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exc)) from exc
+
+    target = result["redirect_uri"]
+    token = quote(result["id_token"], safe="")
+    return RedirectResponse(
+        url=f"{target}#id_token={token}",
+        status_code=status.HTTP_302_FOUND,
     )
 
 
-@router.post("/auth/token", summary="OAuth2 token endpoint")
-async def token_endpoint(
-    grant_type: str = Form(...),
-    client_id: str = Form(...),
-    client_secret: str = Form(...),
-    email: str | None = Form(None),
-    refresh_token: str | None = Form(None),
-) -> dict[str, Any]:
+@router.get("/auth/userinfo", summary="UserInfo from Google id_token")
+async def userinfo(request: Request) -> dict[str, Any]:
     '''
-    OAuth2 token endpoint (client_credentials, user_token, refresh_token).
+    Return user claims from a valid Google id_token Bearer.
+
+    Args:
+        request (Request): HTTP request with Authorization header.
 
     Returns:
-        dict[str, Any]: Token response on success.
+        dict[str, Any]: sub, tenant_id, client_id, and optional role.
+
+    Raises:
+        HTTPException: If Bearer token is missing or invalid.
     '''
-    service = get_token_service()
-    try:
-        if grant_type == "client_credentials":
-            pair = await service.issue_client_credentials(client_id, client_secret)
-        elif grant_type == "user_token":
-            if not email:
-                return _token_error("email is required for user_token grant")
-            pair = await service.issue_user_token(client_id, client_secret, email)
-        elif grant_type == "refresh_token":
-            if not refresh_token:
-                return _token_error("refresh_token is required for refresh_token grant")
-            pair = await service.refresh(client_id, client_secret, refresh_token)
-        else:
-            return _token_error(f"Unsupported grant_type: {grant_type}")
-    except AuthError as exc:
-        logger.warning(f"Token request failed: {exc}")
-        return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            content={"error": "invalid_client", "error_description": str(exc)},
-        )
-
-    return {
-        "access_token": pair.access_token,
-        "token_type": pair.token_type,
-        "expires_in": pair.expires_in,
-        "refresh_token": pair.refresh_token,
-    }
-
-
-@router.get("/auth/userinfo", summary="OIDC UserInfo")
-async def userinfo(request: Request) -> dict[str, Any]:
     auth_header = request.headers.get("Authorization", "")
     if not auth_header.lower().startswith("bearer "):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Bearer token required",
+            detail="Bearer Google id_token required",
         )
     token = auth_header.split(" ", 1)[1].strip()
     try:
-        principal = get_token_service().verify_access_token(token)
+        principal = get_principal_resolver().from_id_token(token)
     except (AuthError, InvalidTokenError) as exc:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exc)) from exc
 
@@ -94,32 +100,3 @@ async def userinfo(request: Request) -> dict[str, Any]:
     if principal.role is not None:
         body["role"] = principal.role
     return body
-
-
-@router.get("/.well-known/openid-configuration", include_in_schema=False)
-async def openid_configuration() -> dict[str, Any]:
-    '''
-    OIDC discovery document using the canonical issuer from configuration.
-
-    Returns:
-        dict[str, Any]: OpenID Provider metadata.
-    '''
-    issuer = get_auth_config().issuer.rstrip("/")
-    return {
-        "issuer": issuer,
-        "token_endpoint": f"{issuer}/auth/token",
-        "userinfo_endpoint": f"{issuer}/auth/userinfo",
-        "jwks_uri": f"{issuer}/.well-known/jwks.json",
-        "grant_types_supported": [
-            "client_credentials",
-            "user_token",
-            "refresh_token",
-        ],
-        "token_endpoint_auth_methods_supported": ["client_secret_post"],
-        "id_token_signing_alg_values_supported": ["RS256"],
-    }
-
-
-@router.get("/.well-known/jwks.json", include_in_schema=False)
-async def jwks() -> dict[str, Any]:
-    return get_token_service().jwks_document()

@@ -6,5 +6,5 @@ class AuthError(Exception):
 
 class InvalidTokenError(AuthError):
     '''
-    Raised when a JWT access token fails validation.
+    Raised when a Google OIDC ID token fails validation.
     '''

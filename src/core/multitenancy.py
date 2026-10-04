@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from src.auth.domain.entities import Principal
-from src.auth.exceptions import InvalidTokenError
+from src.auth.exceptions import AuthError, InvalidTokenError
 
 _tenant_ctx: ContextVar[str] = ContextVar("tenant_id", default="default")
 _principal_ctx: ContextVar[Optional[Principal]] = ContextVar("principal", default=None)
@@ -25,26 +25,45 @@ def get_current_tenant() -> str:
 def get_current_principal() -> Optional[Principal]:
     '''
     Get authenticated principal from context, if any.
+
+    Returns:
+        Optional[Principal]: Principal when Bearer auth succeeded, else None.
     '''
     return _principal_ctx.get()
 
 
 def _is_public_path(path: str) -> bool:
+    '''
+    Args:
+        path (str): Request URL path.
+
+    Returns:
+        bool: True if the path does not require Bearer authentication.
+    '''
     return (
         path in {"/", "/health", "/openapi.json", "/gemini.json"}
         or path.startswith("/docs")
         or path.startswith("/redoc")
-        or path == "/auth/token"
-        or path.startswith("/.well-known/")
+        or path.startswith("/auth/google/")
     )
 
 
 class TenantMiddleware(BaseHTTPMiddleware):
     '''
-    Middleware to validate Bearer JWT and populate tenant/principal context.
+    Middleware to validate Google ID tokens and populate tenant/principal context.
     '''
 
     async def dispatch(self, request: Request, call_next):
+        '''
+        Validate Bearer Google id_token on protected routes.
+
+        Args:
+            request (Request): Incoming HTTP request.
+            call_next (callable): Next middleware or route handler.
+
+        Returns:
+            Response: HTTP response from the application.
+        '''
         path = request.url.path
 
         if _is_public_path(path):
@@ -60,16 +79,16 @@ class TenantMiddleware(BaseHTTPMiddleware):
         if not auth_header.lower().startswith("bearer "):
             return JSONResponse(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                content={"detail": "Authorization Bearer token is required"},
+                content={"detail": "Authorization Bearer Google id_token is required"},
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
         raw_token = auth_header.split(" ", 1)[1].strip()
         try:
-            from src.auth.state import get_token_service
+            from src.auth.state import get_principal_resolver
 
-            principal = get_token_service().verify_access_token(raw_token)
-        except (InvalidTokenError, RuntimeError) as exc:
+            principal = get_principal_resolver().from_id_token(raw_token)
+        except (InvalidTokenError, AuthError, RuntimeError) as exc:
             detail = str(exc) if not isinstance(exc, RuntimeError) else "Auth is not initialized"
             status_code = (
                 status.HTTP_503_SERVICE_UNAVAILABLE

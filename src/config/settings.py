@@ -20,19 +20,31 @@ class Settings(BaseSettings):
         min_length=1,
         description="Public HTTPS URL of this service (e.g. Render external URL).",
     )
-    AUTH_ISSUER: str = Field(
+
+    GOOGLE_OAUTH_CLIENT_ID: str = Field(..., min_length=1)
+    GOOGLE_OAUTH_CLIENT_SECRET: str = Field(..., min_length=1)
+    GOOGLE_OAUTH_REDIRECT_URI: str = Field(
         default="",
-        description="Optional OAuth issuer override; defaults to PUBLIC_BASE_URL when empty.",
+        description="Override; default is PUBLIC_BASE_URL/auth/google/callback",
     )
-    AUTH_PRIVATE_KEY: str = Field(..., min_length=1)
-    AUTH_PUBLIC_KEY: str = Field(..., min_length=1)
-    AUTH_WATER_BOTTLE_CLIENT_SECRET: str = Field(..., min_length=1)
 
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore",
     )
+
+    @property
+    def google_oauth_redirect_uri(self) -> str:
+        '''
+        Google OAuth redirect URI registered in Google Cloud Console.
+
+        Returns:
+            str: Callback URL for the authorization code flow.
+        '''
+        if self.GOOGLE_OAUTH_REDIRECT_URI.strip():
+            return self.GOOGLE_OAUTH_REDIRECT_URI.strip()
+        return f"{self.PUBLIC_BASE_URL.rstrip('/')}/auth/google/callback"
 
 
 settings = Settings()

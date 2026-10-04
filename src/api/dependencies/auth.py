@@ -1,9 +1,9 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from src.auth.exceptions import AuthError, InvalidTokenError
 from src.auth.domain.entities import Principal
-from src.auth.state import get_token_service
+from src.auth.exceptions import AuthError, InvalidTokenError
+from src.auth.state import get_principal_resolver
 from src.core.multitenancy import get_current_principal
 
 _bearer = HTTPBearer(auto_error=False)
@@ -13,13 +13,13 @@ async def require_principal(
     credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),
 ) -> Principal:
     '''
-    Require an authenticated principal from middleware or Bearer JWT.
+    Require an authenticated principal from middleware or a valid Google id_token Bearer.
 
     Args:
         credentials (HTTPAuthorizationCredentials | None): Authorization header.
 
     Returns:
-        Principal: Authenticated user or client principal.
+        Principal: Authenticated user principal.
 
     Raises:
         HTTPException: If authentication is missing or invalid.
@@ -34,7 +34,7 @@ async def require_principal(
             headers={"WWW-Authenticate": "Bearer"},
         )
     try:
-        return get_token_service().verify_access_token(credentials.credentials)
+        return get_principal_resolver().from_id_token(credentials.credentials)
     except (InvalidTokenError, AuthError) as exc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
