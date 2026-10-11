@@ -38,6 +38,7 @@ rag:
 database:
   pool_size: 5
   max_overflow: 10
+  user_table: dim_user
 
 auth:
 

@@ -66,10 +66,9 @@ class Application:
             api_key=getattr(settings, "QDRANT_API_KEY", None)
             )
 
-        if settings.DATABASE_URL.strip():
-            psql_manager.init(
-                build_engine(self.config.get("database"), settings.DATABASE_URL),
-            )
+        psql_manager.init(
+            build_engine(self.config.get("database"), settings.DATABASE_URL),
+        )
 
     async def close(self):
         '''

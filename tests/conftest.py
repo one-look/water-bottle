@@ -6,6 +6,7 @@ fallbacks = {
     "PUBLIC_BASE_URL": "http://test.example.com",
     "GOOGLE_OAUTH_CLIENT_ID": "test-google-client-id",
     "GOOGLE_OAUTH_CLIENT_SECRET": "test-google-client-secret",
+    "DATABASE_URL": "postgresql://localhost:5432/test",
 }
 for key, value in fallbacks.items():
     if not os.environ.get(key):
