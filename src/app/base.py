@@ -4,9 +4,11 @@ import yaml
 from fastapi import FastAPI
 from qdrant_client import AsyncQdrantClient
 
+from src.connectors.sql import build_engine
 from src.core.ratelimit import RateLimitConfig, limiter_manager
 from src.core.redis import redis_manager, RedisConfig
 from src.config.settings import settings
+from src.database.psql import psql_manager
 
 class Application:
     '''
@@ -64,12 +66,18 @@ class Application:
             api_key=getattr(settings, "QDRANT_API_KEY", None)
             )
 
+        if settings.DATABASE_URL.strip():
+            psql_manager.init(
+                build_engine(self.config.get("database"), settings.DATABASE_URL),
+            )
+
     async def close(self):
         '''
         close all global connections.
         '''
         await redis_manager.close()
         await self.qdrant_client.close()
+        psql_manager.close()
 
     def ratelimiter(self, app: FastAPI) -> None:
         '''

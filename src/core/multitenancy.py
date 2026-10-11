@@ -8,7 +8,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from src.auth.domain.entities import Principal
 from src.auth.exceptions import AuthError, InvalidTokenError
 
-_tenant_ctx: ContextVar[str] = ContextVar("tenant_id", default="default")
+_tenant_ctx: ContextVar[str] = ContextVar("tenant_id", default="nmc")
 _principal_ctx: ContextVar[Optional[Principal]] = ContextVar("principal", default=None)
 
 
@@ -48,6 +48,19 @@ def _is_public_path(path: str) -> bool:
     )
 
 
+def _is_optional_auth_path(path: str) -> bool:
+    '''
+    Routes that allow guest access without Bearer; valid Bearer still sets principal.
+
+    Args:
+        path (str): Request URL path.
+
+    Returns:
+        bool: True if authentication is optional for this path.
+    '''
+    return path == "/rag/generate"
+
+
 class TenantMiddleware(BaseHTTPMiddleware):
     '''
     Middleware to validate Google ID tokens and populate tenant/principal context.
@@ -67,7 +80,7 @@ class TenantMiddleware(BaseHTTPMiddleware):
         path = request.url.path
 
         if _is_public_path(path):
-            tenant_token = _tenant_ctx.set("default")
+            tenant_token = _tenant_ctx.set("nmc")
             principal_token = _principal_ctx.set(None)
             try:
                 return await call_next(request)
@@ -76,7 +89,18 @@ class TenantMiddleware(BaseHTTPMiddleware):
                 _principal_ctx.reset(principal_token)
 
         auth_header = request.headers.get("Authorization", "")
-        if not auth_header.lower().startswith("bearer "):
+        has_bearer = auth_header.lower().startswith("bearer ")
+
+        if _is_optional_auth_path(path) and not has_bearer:
+            tenant_token = _tenant_ctx.set("nmc")
+            principal_token = _principal_ctx.set(None)
+            try:
+                return await call_next(request)
+            finally:
+                _tenant_ctx.reset(tenant_token)
+                _principal_ctx.reset(principal_token)
+
+        if not has_bearer:
             return JSONResponse(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 content={"detail": "Authorization Bearer Google id_token is required"},

@@ -14,6 +14,10 @@ class Settings(BaseSettings):
     QDRANT_URL: str
     QDRANT_API_KEY: str
     REDIS_URL: str
+    DATABASE_URL: str = Field(
+        default="",
+        description="PostgreSQL URL (Neon). Leave empty to disable IP tracking persistence.",
+    )
 
     PUBLIC_BASE_URL: str = Field(
         ...,

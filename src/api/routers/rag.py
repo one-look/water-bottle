@@ -1,13 +1,14 @@
 """FastAPI router for end-to-end RAG processing."""
 
-from typing import Any, Dict, List
+from typing import List
 from fastapi import APIRouter, Header, HTTPException, Request, status
 from pydantic import BaseModel, Field
 
 from src.api import application
 from src.core.logging import setup_logger
-from src.core.multitenancy import get_current_tenant
+from src.core.multitenancy import get_current_principal, get_current_tenant
 from src.core.ratelimit import limiter
+from src.database.psql import track_rag_request
 from src.rag.retrievers.qdrant import RetrivedDocument
 from src.rag.workflow import RAGWorkflow
 
@@ -30,7 +31,7 @@ class RAGResponse(BaseModel):
     "/generate",
     response_model=RAGResponse,
     status_code=status.HTTP_200_OK,
-    summary="Execute RAG query with strict tenant vector context",
+    summary="RAG for guest (no Bearer) or login chat (Google id_token)",
 )
 @limiter.limit("15/minute")
 async def generate_rag_response(
@@ -38,9 +39,11 @@ async def generate_rag_response(
     body: RAGRequest,
     x_session_id: str = Header(..., alias="X-Session-ID", description="Session Identifier"),
 ) -> RAGResponse:
-    """Router endpoint delegating orchestration to RAGWorkflow."""
+    """Guest chat (no Bearer) or login chat (Google id_token Bearer)."""
     current_tenant = get_current_tenant()
-    logger.info(f"Processing RAG request for tenant '{current_tenant}'")
+    principal = get_current_principal()
+    chat_mode = "login" if principal else "guest"
+    logger.info(f"Processing RAG {chat_mode} for tenant '{current_tenant}'")
 
     try:
         app_instance = application.get()
@@ -56,6 +59,17 @@ async def generate_rag_response(
             tenant_id=current_tenant,
             session_id=x_session_id,
         )
+
+        try:
+            track_rag_request(
+                request,
+                session_id=x_session_id,
+                tenant_id=current_tenant,
+                chat_mode=chat_mode,
+                user_sub=principal.sub if principal else None,
+            )
+        except Exception as exc:
+            logger.warning("IP tracking skipped: %s", exc)
 
         return RAGResponse(
             tenant_id=current_tenant,
