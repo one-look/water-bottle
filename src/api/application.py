@@ -68,7 +68,7 @@ async def lifespan(app: FastAPI):
     for name, router in routers.items():
         if name in config and enabled(config, name):
             app.include_router(router)
-    
+
     print("water bottle is starting...")
     
     yield

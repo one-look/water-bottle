@@ -1,4 +1,4 @@
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -36,6 +36,18 @@ class Settings(BaseSettings):
     WHATSAPP_VERIFY_TOKEN: str = Field(..., min_length=1)
     WHATSAPP_PHONE_NUMBER_ID: str = Field(..., min_length=1)
     WHATSAPP_TOKEN: str = Field(..., min_length=1)
+
+    @field_validator(
+        "WHATSAPP_VERIFY_TOKEN",
+        "WHATSAPP_PHONE_NUMBER_ID",
+        "WHATSAPP_TOKEN",
+        mode="before",
+    )
+    @classmethod
+    def _strip_whatsapp_env(cls, value: object) -> object:
+        if isinstance(value, str):
+            return value.strip().strip('"').strip("'")
+        return value
 
     model_config = SettingsConfigDict(
         env_file=".env",

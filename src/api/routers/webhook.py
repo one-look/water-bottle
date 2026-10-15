@@ -53,6 +53,8 @@ async def receive_webhook(request: Request) -> dict[str, str]:
     if not sender or not user_query:
         return {"status": "ok"}
 
+    logger.info("Processing WhatsApp RAG for tenant '%s'", get_current_tenant())
+
     app_instance = application.get()
     if not app_instance or not hasattr(app_instance, "config"):
         logger.error("Application not initialized for WhatsApp RAG")
