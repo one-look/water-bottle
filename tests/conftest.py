@@ -7,6 +7,9 @@ fallbacks = {
     "GOOGLE_OAUTH_CLIENT_ID": "test-google-client-id",
     "GOOGLE_OAUTH_CLIENT_SECRET": "test-google-client-secret",
     "DATABASE_URL": "postgresql://localhost:5432/test",
+    "WHATSAPP_VERIFY_TOKEN": "test-verify-token",
+    "WHATSAPP_PHONE_NUMBER_ID": "000000000000000",
+    "WHATSAPP_TOKEN": "test-whatsapp-token",
 }
 for key, value in fallbacks.items():
     if not os.environ.get(key):

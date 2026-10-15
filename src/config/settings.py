@@ -33,6 +33,10 @@ class Settings(BaseSettings):
         description="Override; default is PUBLIC_BASE_URL/auth/google/callback",
     )
 
+    WHATSAPP_VERIFY_TOKEN: str = Field(..., min_length=1)
+    WHATSAPP_PHONE_NUMBER_ID: str = Field(..., min_length=1)
+    WHATSAPP_TOKEN: str = Field(..., min_length=1)
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

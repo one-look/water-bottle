@@ -42,7 +42,10 @@ database:
 
 auth:
 
+webhook:
+
 routers:
   home: true
   auth: true
   rag: true
+  webhook: true
