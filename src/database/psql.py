@@ -7,7 +7,7 @@ from typing import Optional
 
 import httpx
 from fastapi import Request
-from sqlalchemy import Column, DateTime, Integer, MetaData, String, Table, insert
+from sqlalchemy import Column, DateTime, Float, Integer, MetaData, String, Table, insert
 from sqlalchemy.engine import Engine
 
 from src.core.logging import setup_logger
@@ -29,6 +29,8 @@ ip_location_events = Table(
     Column("city", String(128), nullable=True),
     Column("region", String(128), nullable=True),
     Column("country", String(64), nullable=True),
+    Column("latitude", Float, nullable=True),
+    Column("longitude", Float, nullable=True),
 )
 
 
@@ -84,6 +86,18 @@ def client_ip(request: Request) -> str:
     return ""
 
 
+def _parse_coord(value: Optional[str], minimum: float, maximum: float) -> Optional[float]:
+    if not value or not value.strip():
+        return None
+    try:
+        parsed = float(value.strip())
+    except ValueError:
+        return None
+    if parsed < minimum or parsed > maximum:
+        return None
+    return parsed
+
+
 def _lookup_geo(ip: str) -> tuple[Optional[str], Optional[str], Optional[str]]:
     if not ip or ip.startswith("127.") or ip == "::1":
         return None, None, None
@@ -113,6 +127,8 @@ def insert_ip_location_event(
     city: Optional[str],
     region: Optional[str],
     country: Optional[str],
+    latitude: Optional[float] = None,
+    longitude: Optional[float] = None,
 ) -> None:
     '''
     Insert one IP / geolocation row for a RAG request.
@@ -127,6 +143,8 @@ def insert_ip_location_event(
         "city": city,
         "region": region,
         "country": country,
+        "latitude": latitude,
+        "longitude": longitude,
     }
     with psql_manager.engine.connect() as conn:
         conn.execute(insert(ip_location_events).values(**row))
@@ -147,6 +165,10 @@ def track_rag_request(
     if not psql_manager.is_ready():
         return
     ip = client_ip(request)
+
+    latitude = _parse_coord(request.headers.get("X-Latitude"), -90.0, 90.0)
+    longitude = _parse_coord(request.headers.get("X-Longitude"), -180.0, 180.0)
+
     city, region, country = _lookup_geo(ip)
     insert_ip_location_event(
         session_id=session_id,
@@ -157,4 +179,6 @@ def track_rag_request(
         city=city,
         region=region,
         country=country,
+        latitude=latitude,
+        longitude=longitude,
     )
