@@ -8,6 +8,7 @@ from src.connectors.sql import build_engine
 from src.core.ratelimit import RateLimitConfig, limiter_manager
 from src.core.redis import redis_manager, RedisConfig
 from src.config.settings import settings
+from src.database.attendance import attendance_db
 from src.database.psql import psql_manager
 
 class Application:
@@ -69,6 +70,9 @@ class Application:
         psql_manager.init(
             build_engine(self.config.get("database"), settings.DATABASE_URL),
         )
+        attendance_db.init(
+            build_engine(self.config.get("database"), settings.ATTENDANCE_DATABASE_URL),
+        )
 
     async def close(self):
         '''
@@ -77,6 +81,7 @@ class Application:
         await redis_manager.close()
         await self.qdrant_client.close()
         psql_manager.close()
+        attendance_db.close()
 
     def ratelimiter(self, app: FastAPI) -> None:
         '''

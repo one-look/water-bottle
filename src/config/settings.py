@@ -19,6 +19,11 @@ class Settings(BaseSettings):
         min_length=1,
         description="PostgreSQL URL (Neon) for user identity and IP tracking.",
     )
+    ATTENDANCE_DATABASE_URL: str = Field(
+        ...,
+        min_length=1,
+        description="PostgreSQL URL (Neon) for the attendance database.",
+    )
 
     PUBLIC_BASE_URL: str = Field(
         ...,

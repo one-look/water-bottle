@@ -42,10 +42,13 @@ database:
 
 auth:
 
+attendance:
+
 webhook:
 
 routers:
   home: true
   auth: true
+  attendance: true
   rag: true
   webhook: true
