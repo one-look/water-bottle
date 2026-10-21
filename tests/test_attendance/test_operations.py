@@ -10,7 +10,14 @@ from src.attendance.exceptions import (
     UnknownStudents,
 )
 from src.attendance.operations import AttendanceMark, AttendanceOperations, AttendanceSubmission
-from src.attendance.tables import attendance_records, metadata, students, teachers
+from src.attendance.tables import (
+    attendance_records,
+    departments,
+    metadata,
+    programs,
+    students,
+    teachers,
+)
 from src.auth.domain.entities import Principal
 
 
@@ -118,3 +125,66 @@ def test_submit_rejects_existing_period_without_overwrite(operations):
     assert [dict(row) for row in rows] == [
         {"register_number": "DS001", "status": "present"},
     ]
+
+
+def test_fetch_returns_students_for_program_department_and_year():
+    engine = create_engine("sqlite://")
+    metadata.create_all(engine)
+    with engine.begin() as conn:
+        conn.execute(insert(teachers).values(teacher_id=7, email="teacher@school.edu"))
+        conn.execute(insert(programs).values(program_id=1, program_code="BSC"))
+        conn.execute(insert(departments).values(department_id=1, department_code="DS"))
+        conn.execute(
+            insert(students).values(
+                register_number="DS002",
+                student_name="Second",
+                academic_year=1,
+                program_id=1,
+                department_id=1,
+            )
+        )
+        conn.execute(
+            insert(students).values(
+                register_number="DS001",
+                student_name="First",
+                academic_year=1,
+                program_id=1,
+                department_id=1,
+            )
+        )
+        conn.execute(
+            insert(students).values(
+                register_number="DS003",
+                student_name="Other Year",
+                academic_year=2,
+                program_id=1,
+                department_id=1,
+            )
+        )
+
+    result = AttendanceOperations(engine).fetch(
+        program="bsc",
+        department="ds",
+        academic_year="1st_year",
+        period=2,
+        principal=_principal(),
+    )
+
+    assert result.period == 2
+    assert [(student.register_number, student.student_name) for student in result.students] == [
+        ("DS001", "First"),
+        ("DS002", "Second"),
+    ]
+
+
+def test_fetch_rejects_unknown_year_label():
+    engine = create_engine("sqlite://")
+    metadata.create_all(engine)
+    with pytest.raises(InvalidAttendance):
+        AttendanceOperations(engine).fetch(
+            program="BSC",
+            department="DS",
+            academic_year="first",
+            period=2,
+            principal=_principal(),
+        )

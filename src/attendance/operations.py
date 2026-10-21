@@ -14,7 +14,7 @@ from src.attendance.exceptions import (
     TeacherNotRegistered,
     UnknownStudents,
 )
-from src.attendance.tables import attendance_records, students, teachers
+from src.attendance.tables import attendance_records, departments, programs, students, teachers
 from src.auth.domain.entities import Principal
 from src.core.logging import setup_logger
 from src.database.attendance import attendance_db
@@ -22,6 +22,13 @@ from src.database.attendance import attendance_db
 logger = setup_logger(__name__)
 
 _ALLOWED_STATUS = frozenset({"present", "absent"})
+_YEAR_LABELS = {
+    "1st_year": 1,
+    "2nd_year": 2,
+    "3rd_year": 3,
+    "4th_year": 4,
+    "5th_year": 5,
+}
 
 
 @dataclass(frozen=True)
@@ -32,6 +39,26 @@ class AttendanceMark:
 
     register_number: str
     status: str
+
+
+@dataclass(frozen=True)
+class StudentRecord:
+    '''
+    A student returned for an attendance period.
+    '''
+
+    register_number: str
+    student_name: str
+
+
+@dataclass(frozen=True)
+class StudentList:
+    '''
+    Students matching a program, department, and academic year.
+    '''
+
+    period: int
+    students: tuple[StudentRecord, ...]
 
 
 @dataclass(frozen=True)
@@ -56,6 +83,62 @@ class AttendanceOperations:
             engine: Attendance database engine. Defaults to the shared startup engine.
         '''
         self._engine = engine if engine is not None else attendance_db.engine
+
+    def fetch(
+        self,
+        *,
+        program: str,
+        department: str,
+        academic_year: str,
+        period: int,
+        principal: Principal,
+    ) -> StudentList:
+        '''
+        List students for the selected class period.
+
+        Args:
+            program: Program code, such as BSC.
+            department: Department code, such as DS.
+            academic_year: Year label, such as 1st_year.
+            period: Period number from 1 to 5.
+            principal: Verified teacher.
+
+        Returns:
+            StudentList: Selected period and matching students.
+
+        Raises:
+            InvalidAttendance: Year or period is not valid.
+            TeacherNotRegistered: Email is not in public.teachers.
+        '''
+        year = _academic_year(academic_year)
+        if period < 1 or period > 5:
+            raise InvalidAttendance("period must be between 1 and 5")
+
+        stmt = (
+            select(students.c.register_number, students.c.student_name)
+            .join(programs, programs.c.program_id == students.c.program_id)
+            .join(departments, departments.c.department_id == students.c.department_id)
+            .where(
+                func.upper(programs.c.program_code) == program.strip().upper(),
+                func.upper(departments.c.department_code) == department.strip().upper(),
+                students.c.academic_year == year,
+            )
+            .order_by(students.c.register_number)
+        )
+        with self._engine.connect() as conn:
+            self._teacher_id(conn, principal.sub)
+            rows = conn.execute(stmt).mappings().all()
+
+        return StudentList(
+            period=period,
+            students=tuple(
+                StudentRecord(
+                    register_number=row["register_number"],
+                    student_name=row["student_name"] or "",
+                )
+                for row in rows
+            ),
+        )
 
     def submit(self, payload: AttendanceSubmission, principal: Principal) -> int:
         '''
@@ -196,6 +279,15 @@ class AttendanceOperations:
         )
         if conn.execute(stmt).first() is not None:
             raise DuplicateAttendance("Attendance for this period is already submitted")
+
+
+def _academic_year(value: str) -> int:
+    key = value.strip().lower()
+    if key in _YEAR_LABELS:
+        return _YEAR_LABELS[key]
+    if key.isdigit() and int(key) in _YEAR_LABELS.values():
+        return int(key)
+    raise InvalidAttendance("academic_year must be like 1st_year")
 
 
 def _constraint_kind(exc: IntegrityError) -> str:
