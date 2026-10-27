@@ -18,7 +18,7 @@ embedder:
   max_retries: 10
 
 qdrant:
-  collection_name: "nmc"
+  collection_name: "data_science"
   vector_size: 3072
   distance: "Cosine"
-  tenant_payload_key: "nmc"
+  tenant_payload_key: "tenant_id"

@@ -3,7 +3,7 @@
 import secrets
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request, Response, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, Response, status
 
 from src.api import application
 from src.config.settings import settings
@@ -35,40 +35,66 @@ async def verify_webhook(request: Request) -> Response:
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Verification failed")
 
 
-@router.post("/webhook")
-async def receive_webhook(request: Request) -> dict[str, str]:
-    '''
-    Receive WhatsApp events; run RAG for inbound text and reply on the same thread.
-    '''
-    try:
-        body: dict[str, Any] = await request.json()
-    except Exception as exc:
-        logger.warning("Invalid WhatsApp webhook JSON: %s", exc)
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid JSON body",
-        ) from exc
+# @router.post("/webhook")
+# async def receive_webhook(request: Request) -> dict[str, str]:
+#     '''
+#     Receive WhatsApp events; run RAG for inbound text and reply on the same thread.
+#     '''
+#     try:
+#         body: dict[str, Any] = await request.json()
+#     except Exception as exc:
+#         logger.warning("Invalid WhatsApp webhook JSON: %s", exc)
+#         raise HTTPException(
+#             status_code=status.HTTP_400_BAD_REQUEST,
+#             detail="Invalid JSON body",
+#         ) from exc
 
-    sender, user_query = WhatsAppPayloadParser.parse_incoming_text(body)
-    if not sender or not user_query:
-        return {"status": "ok"}
+#     sender, user_query = WhatsAppPayloadParser.parse_incoming_text(body)
+#     if not sender or not user_query:
+#         return {"status": "ok"}
 
-    logger.info("Processing WhatsApp RAG for tenant '%s'", get_current_tenant())
+#     logger.info("Processing WhatsApp RAG for tenant '%s'", get_current_tenant())
 
+#     app_instance = application.get()
+#     if not app_instance or not hasattr(app_instance, "config"):
+#         logger.error("Application not initialized for WhatsApp RAG")
+#         return {"status": "ok"}
+
+#     tenant_id = get_current_tenant()
+#     session_id = f"whatsapp:{sender}"
+
+#     try:
+#         workflow = RAGWorkflow(config=app_instance.config)
+#         answer, _ = await workflow.execute(
+#             query=user_query,
+#             tenant_id=tenant_id,
+#             session_id=session_id,
+#         )
+#         await send_text_message(recipient_id=sender, text=answer)
+#     except Exception as exc:
+#         logger.error("WhatsApp RAG reply failed: %s", exc, exc_info=True)
+#         try:
+#             await send_text_message(
+#                 recipient_id=sender,
+#                 text="Sorry, I could not process your message. Please try again later.",
+#             )
+#         except Exception as send_exc:
+#             logger.error("WhatsApp error reply failed: %s", send_exc)
+
+#     return {"status": "ok"}
+
+
+async def run_rag_workflow(sender: str, user_query: str, tenant_id: str) -> None:
     app_instance = application.get()
     if not app_instance or not hasattr(app_instance, "config"):
         logger.error("Application not initialized for WhatsApp RAG")
-        return {"status": "ok"}
-
-    tenant_id = get_current_tenant()
-    session_id = f"whatsapp:{sender}"
-
+        return
     try:
         workflow = RAGWorkflow(config=app_instance.config)
         answer, _ = await workflow.execute(
             query=user_query,
             tenant_id=tenant_id,
-            session_id=session_id,
+            session_id=f"whatsapp:{sender}",
         )
         await send_text_message(recipient_id=sender, text=answer)
     except Exception as exc:
@@ -81,4 +107,12 @@ async def receive_webhook(request: Request) -> dict[str, str]:
         except Exception as send_exc:
             logger.error("WhatsApp error reply failed: %s", send_exc)
 
+
+@router.post("/webhook")
+async def receive_webhook(request: Request, background_tasks: BackgroundTasks) -> dict[str, str]:
+    body = await request.json()
+    sender, user_query = WhatsAppPayloadParser.parse_incoming_text(body)
+    if sender and user_query:
+        logger.info("Queued WhatsApp RAG for tenant 'nmc'")
+        background_tasks.add_task(run_rag_workflow, sender, user_query, "nmc")
     return {"status": "ok"}
