@@ -24,7 +24,7 @@ def test_request_rejects_period_outside_range():
     with pytest.raises(ValidationError):
         AttendanceSubmitRequest(
             attendance_date=date(2026, 10, 19),
-            period=6,
+            period=9,
             records=[{"register_number": "DS001", "status": "present"}],
         )
 

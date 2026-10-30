@@ -16,6 +16,7 @@ from src.attendance.exceptions import (
 from src.attendance.operations import (
     AttendanceMark,
     AttendanceOperations,
+    AttendanceReport,
     AttendanceSubmission,
     StudentList,
 )
@@ -164,6 +165,107 @@ async def list_students(
             for student in result.students
         ],
     )
+
+
+class AttendanceReportStudentResponse(BaseModel):
+    '''
+    One student with optional saved status.
+    '''
+
+    register_number: str
+    student_name: str
+    status: Literal["present", "absent"] | None = None
+
+
+class AttendanceReportResponse(BaseModel):
+    '''
+    Saved attendance summary for one class period.
+    '''
+
+    attendance_date: date
+    period: int
+    total: int
+    present: int
+    absent: int
+    present_percent: float
+    absent_percent: float
+    students: list[AttendanceReportStudentResponse]
+
+
+def _report_response(report: AttendanceReport) -> AttendanceReportResponse:
+    total = report.total
+    present_pct = round(report.present / total * 100, 1) if total else 0.0
+    absent_pct = round(report.absent / total * 100, 1) if total else 0.0
+    return AttendanceReportResponse(
+        attendance_date=report.attendance_date,
+        period=report.period,
+        total=total,
+        present=report.present,
+        absent=report.absent,
+        present_percent=present_pct,
+        absent_percent=absent_pct,
+        students=[
+            AttendanceReportStudentResponse(
+                register_number=row.register_number,
+                student_name=row.student_name,
+                status=row.status if row.status in ("present", "absent") else None,
+            )
+            for row in report.students
+        ],
+    )
+
+
+@router.get(
+    "/attendance",
+    response_model=AttendanceReportResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Read saved attendance for one class period",
+)
+async def get_attendance(
+    program: str = Query(..., min_length=1),
+    department: str = Query(..., min_length=1),
+    academic_year: str = Query(..., min_length=1),
+    period: int = Query(..., ge=1, le=8),
+    attendance_date: date = Query(..., alias="date"),
+) -> AttendanceReportResponse:
+    '''
+    Return present/absent counts and per-student statuses from the database.
+
+    Args:
+        program: Program code.
+        department: Department code.
+        academic_year: Year label such as 1st_year.
+        period: Period number from 1 to 8.
+        attendance_date: Date to read (query param ``date``).
+
+    Returns:
+        AttendanceReportResponse: Summary and student rows.
+    '''
+    principal = _require_teacher(get_current_principal())
+    try:
+        report = AttendanceOperations().fetch_period_attendance(
+            program=program,
+            department=department,
+            academic_year=academic_year,
+            period=period,
+            attendance_date=attendance_date,
+            principal=principal,
+        )
+    except TeacherNotRegistered as exc:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(exc)) from exc
+    except InvalidAttendance as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        ) from exc
+    except RuntimeError as exc:
+        logger.error("Attendance lookup failed: %s", exc)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Attendance could not be loaded",
+        ) from exc
+
+    return _report_response(report)
 
 
 @router.post(

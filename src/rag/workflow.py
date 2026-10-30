@@ -52,7 +52,9 @@ Answer politely and helpfully:"""
     ]
     context_str = "\n\n".join(context_blocks)
 
-    return f"""You are a helpful college assistant. Answer the user's question accurately using ONLY the provided context below. If the context does not contain enough information to answer factual questions, state clearly that you do not have enough information from the college records.
+    return f"""You are a helpful college assistant. Answer the user's question accurately using ONLY the provided context below. 
+    If the context does not contain enough information to answer factual questions, 
+    state clearly that you do not have enough information from the college records.
 
 Prior Conversation History:
 ---------------------

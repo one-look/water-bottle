@@ -188,3 +188,58 @@ def test_fetch_rejects_unknown_year_label():
             period=2,
             principal=_principal(),
         )
+
+
+def test_fetch_period_attendance_merges_saved_statuses():
+    engine = create_engine("sqlite://")
+    metadata.create_all(engine)
+    with engine.begin() as conn:
+        conn.execute(insert(teachers).values(teacher_id=7, email="teacher@school.edu"))
+        conn.execute(insert(programs).values(program_id=1, program_code="BSC"))
+        conn.execute(insert(departments).values(department_id=1, department_code="DS"))
+        conn.execute(
+            insert(students).values(
+                register_number="DS001",
+                student_name="First",
+                academic_year=1,
+                program_id=1,
+                department_id=1,
+            )
+        )
+        conn.execute(
+            insert(students).values(
+                register_number="DS002",
+                student_name="Second",
+                academic_year=1,
+                program_id=1,
+                department_id=1,
+            )
+        )
+        conn.execute(
+            insert(attendance_records).values(
+                register_number="DS001",
+                attendance_date=date(2026, 10, 19),
+                period=1,
+                status="present",
+                marked_by=7,
+                tenant_id="nmc",
+            )
+        )
+
+    ops = AttendanceOperations(engine)
+    report = ops.fetch_period_attendance(
+        program="BSC",
+        department="DS",
+        academic_year="1st_year",
+        period=1,
+        attendance_date=date(2026, 10, 19),
+        principal=_principal(),
+    )
+
+    assert report.total == 2
+    assert report.present == 1
+    assert report.absent == 0
+    assert [(row.register_number, row.status) for row in report.students] == [
+        ("DS001", "present"),
+        ("DS002", None),
+    ]

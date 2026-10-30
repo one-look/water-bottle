@@ -21,6 +21,7 @@ from src.database.attendance import attendance_db
 
 logger = setup_logger(__name__)
 
+_MAX_PERIOD = 8
 _ALLOWED_STATUS = frozenset({"present", "absent"})
 _YEAR_LABELS = {
     "1st_year": 1,
@@ -62,6 +63,31 @@ class StudentList:
 
 
 @dataclass(frozen=True)
+class AttendanceReportRow:
+    '''
+    One student with optional saved status for a date and period.
+    '''
+
+    register_number: str
+    student_name: str
+    status: str | None
+
+
+@dataclass(frozen=True)
+class AttendanceReport:
+    '''
+    Class roster merged with attendance rows for one date and period.
+    '''
+
+    attendance_date: date
+    period: int
+    total: int
+    present: int
+    absent: int
+    students: tuple[AttendanceReportRow, ...]
+
+
+@dataclass(frozen=True)
 class AttendanceSubmission:
     '''
     Validated attendance payload. Identity fields are not part of this payload.
@@ -100,7 +126,7 @@ class AttendanceOperations:
             program: Program code, such as BSC.
             department: Department code, such as DS.
             academic_year: Year label, such as 1st_year.
-            period: Period number from 1 to 5.
+            period: Period number from 1 to 8.
             principal: Verified teacher.
 
         Returns:
@@ -111,8 +137,7 @@ class AttendanceOperations:
             TeacherNotRegistered: Email is not in public.teachers.
         '''
         year = _academic_year(academic_year)
-        if period < 1 or period > 5:
-            raise InvalidAttendance("period must be between 1 and 5")
+        _validate_period(period)
 
         stmt = (
             select(students.c.register_number, students.c.student_name)
@@ -138,6 +163,94 @@ class AttendanceOperations:
                 )
                 for row in rows
             ),
+        )
+
+    def fetch_period_attendance(
+        self,
+        *,
+        program: str,
+        department: str,
+        academic_year: str,
+        period: int,
+        attendance_date: date,
+        principal: Principal,
+    ) -> AttendanceReport:
+        '''
+        Return the class roster with saved statuses for one date and period.
+
+        Args:
+            program: Program code, such as BSC.
+            department: Department code, such as DS.
+            academic_year: Year label, such as 1st_year.
+            period: Period number from 1 to 8.
+            attendance_date: Date to read attendance for.
+            principal: Verified teacher.
+
+        Returns:
+            AttendanceReport: Counts and per-student statuses (null if not recorded).
+        '''
+        if not isinstance(attendance_date, date):
+            raise InvalidAttendance("attendance_date must be a date")
+        roster = self.fetch(
+            program=program,
+            department=department,
+            academic_year=academic_year,
+            period=period,
+            principal=principal,
+        )
+        numbers = [student.register_number for student in roster.students]
+        if not numbers:
+            return AttendanceReport(
+                attendance_date=attendance_date,
+                period=period,
+                total=0,
+                present=0,
+                absent=0,
+                students=(),
+            )
+
+        stmt = select(
+            attendance_records.c.register_number,
+            attendance_records.c.status,
+        ).where(
+            attendance_records.c.attendance_date == attendance_date,
+            attendance_records.c.period == period,
+            attendance_records.c.tenant_id == principal.tenant_id,
+            attendance_records.c.register_number.in_(numbers),
+        )
+        with self._engine.connect() as conn:
+            saved = {
+                row["register_number"]: row["status"]
+                for row in conn.execute(stmt).mappings().all()
+            }
+
+        present = 0
+        absent = 0
+        rows: list[AttendanceReportRow] = []
+        for student in roster.students:
+            raw = saved.get(student.register_number)
+            status = raw.strip().lower() if isinstance(raw, str) else None
+            if status == "present":
+                present += 1
+            elif status == "absent":
+                absent += 1
+            else:
+                status = None
+            rows.append(
+                AttendanceReportRow(
+                    register_number=student.register_number,
+                    student_name=student.student_name,
+                    status=status,
+                )
+            )
+
+        return AttendanceReport(
+            attendance_date=attendance_date,
+            period=period,
+            total=len(rows),
+            present=present,
+            absent=absent,
+            students=tuple(rows),
         )
 
     def submit(self, payload: AttendanceSubmission, principal: Principal) -> int:
@@ -222,8 +335,7 @@ class AttendanceOperations:
     def _validated_records(self, payload: AttendanceSubmission) -> tuple[AttendanceMark, ...]:
         if not isinstance(payload.attendance_date, date):
             raise InvalidAttendance("attendance_date must be a date")
-        if payload.period < 1 or payload.period > 5:
-            raise InvalidAttendance("period must be between 1 and 5")
+        _validate_period(payload.period)
         if not payload.records:
             raise InvalidAttendance("records must not be empty")
 
@@ -279,6 +391,11 @@ class AttendanceOperations:
         )
         if conn.execute(stmt).first() is not None:
             raise DuplicateAttendance("Attendance for this period is already submitted")
+
+
+def _validate_period(period: int) -> None:
+    if period < 1 or period > _MAX_PERIOD:
+        raise InvalidAttendance(f"period must be between 1 and {_MAX_PERIOD}")
 
 
 def _academic_year(value: str) -> int:
