@@ -60,7 +60,16 @@ class SentenceSplitterTransformer(BaseTransformer):
             )
 
             for idx, node in enumerate(raw_nodes):
-                chunk_seed = f"{tenant_id}:{source_key}:{idx}"
+                # check for multi-section JSON identifiers (like title or section key)
+                section_identifier = document.metadata.get("title") or document.metadata.get("section_key")
+
+                if section_identifier:
+                    # JSON payload structure: tenant + source + section + chunk index
+                    chunk_seed = f"{tenant_id}:{source_key}:{section_identifier}:{idx}"
+                else:
+                    # Classic .txt file structure: tenant + source + chunk index
+                    chunk_seed = f"{tenant_id}:{source_key}:{idx}"
+
                 deterministic_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, chunk_seed))
 
                 chunk_meta = {
