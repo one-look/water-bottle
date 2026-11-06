@@ -29,7 +29,7 @@ embedding:
   model_name: "gemini-embedding-001"
 
 qdrant:
-  collection_name: "nmc"
+  collection_name: "data_science"
   top_k: 5
   score_threshold: 0.6
 

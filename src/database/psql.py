@@ -169,6 +169,14 @@ def track_rag_request(
     latitude = _parse_coord(request.headers.get("X-Latitude"), -90.0, 90.0)
     longitude = _parse_coord(request.headers.get("X-Longitude"), -180.0, 180.0)
 
+    logger.info(
+        "track_rag_request geo headers: X-Latitude=%s, X-Longitude=%s -> parsed lat=%s, lon=%s",
+        request.headers.get("X-Latitude"),
+        request.headers.get("X-Longitude"),
+        latitude,
+        longitude,
+    )
+
     city, region, country = _lookup_geo(ip)
     insert_ip_location_event(
         session_id=session_id,
