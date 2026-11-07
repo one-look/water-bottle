@@ -38,6 +38,21 @@ class UpstashSemanticCache:
         query_hash = hashlib.sha256(clean_query.encode("utf-8")).hexdigest()
         return f"cache:{tenant_id}:{query_hash}"
 
+    async def get_exact(self, tenant_id: str, user_query: str) -> Optional[str]:
+        """Performs a fast exact match cache lookup on user query string without requiring embeddings."""
+        try:
+            if not user_query or not user_query.strip():
+                return None
+            cache_key = self._cache_key(tenant_id, user_query)
+            cached_response = await self.redis_client.hget(cache_key, "response")
+            if cached_response:
+                logger.info(f"Cache HIT (exact) for tenant '{tenant_id}'")
+                return cached_response if isinstance(cached_response, str) else cached_response.decode("utf-8")
+            return None
+        except Exception as e:
+            logger.warning(f"Exact cache lookup error: {str(e)}. Proceeding as MISS.")
+            return None
+
     async def get(
         self,
         query_vector: list[float],

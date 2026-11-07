@@ -88,13 +88,13 @@
 #     asyncio.run(run_diagnostics())
 
 
-from qdrant_client import QdrantClient, models
-
-client = QdrantClient(url="YOUR_QDRANT_URL", api_key="YOUR_API_KEY")
-
-client.create_payload_index(
-    collection_name="nmc",
-    field_name="tenant_id",
-    field_schema=models.PayloadSchemaType.KEYWORD,
-)
-print("Tenant index created successfully!")
+# from qdrant_client import QdrantClient, models
+# 
+# client = QdrantClient(url="YOUR_QDRANT_URL", api_key="YOUR_API_KEY")
+# 
+# client.create_payload_index(
+#     collection_name="nmc",
+#     field_name="tenant_id",
+#     field_schema=models.PayloadSchemaType.KEYWORD,
+# )
+# print("Tenant index created successfully!")

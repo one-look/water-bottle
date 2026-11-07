@@ -33,11 +33,11 @@ class QdrantVectorLoader(BaseLoader):
             raise LoadError(f"Qdrant client initialization error: {str(e)}") from e
 
     def _ensure_collection(self) -> None:
-        """Verifies target collection exists or creates it with a tenant keyword index."""
+        """Verifies target collection exists or creates it with dense + sparse vector configs and tenant keyword index."""
         try:
             exists = self.client.collection_exists(self.config.collection_name)
             if not exists:
-                logger.info(f"Creating Qdrant collection: '{self.config.collection_name}'")
+                logger.info(f"Creating Qdrant collection: '{self.config.collection_name}' with dense + sparse named vectors")
                 distance_map = {
                     "Cosine": Distance.COSINE,
                     "Euclid": Distance.EUCLID,
@@ -46,10 +46,15 @@ class QdrantVectorLoader(BaseLoader):
 
                 self.client.create_collection(
                     collection_name=self.config.collection_name,
-                    vectors_config=VectorParams(
-                        size=self.config.vector_size,
-                        distance=distance_map.get(self.config.distance, Distance.COSINE),
-                    ),
+                    vectors_config={
+                        "dense": VectorParams(
+                            size=self.config.vector_size,
+                            distance=distance_map.get(self.config.distance, Distance.COSINE),
+                        )
+                    },
+                    sparse_vectors_config={
+                        "sparse": models.SparseVectorParams()
+                    },
                 )
 
                 self.client.create_payload_index(
@@ -85,10 +90,18 @@ class QdrantVectorLoader(BaseLoader):
                 **chunk.metadata,
             }
 
+            # Build named vectors dictionary for hybrid search
+            vector_dict: dict = {"dense": chunk.embedding}
+            if chunk.sparse_indices and chunk.sparse_values:
+                vector_dict["sparse"] = models.SparseVector(
+                    indices=chunk.sparse_indices,
+                    values=chunk.sparse_values,
+                )
+
             points.append(
                 PointStruct(
                     id=chunk.chunk_id,
-                    vector=chunk.embedding,
+                    vector=vector_dict,
                     payload=payload,
                 )
             )

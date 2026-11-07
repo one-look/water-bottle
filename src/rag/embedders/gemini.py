@@ -1,7 +1,8 @@
 """Gemini-backed implementation for runtime query vector embedding generation."""
 
-from typing import List
+from typing import List, Optional
 from google import genai
+from google.genai import types
 from google.genai.errors import APIError, ClientError
 from pydantic import BaseModel, Field, validate_call
 from tenacity import retry, wait_exponential, stop_after_attempt, retry_if_exception_type
@@ -16,6 +17,7 @@ class EmbedderQueryConfig(BaseModel):
 
     api_key: str = Field(..., min_length=1, description="Google GenAI API key")
     model_name: str = Field("text-embedding-001", min_length=1, description="Embedding model identifier")
+    task_type: str = Field("RETRIEVAL_QUERY", min_length=1, description="Embedding task type")
 
 
 class GeminiQueryEmbedder:
@@ -31,6 +33,7 @@ class GeminiQueryEmbedder:
         logger.info(f"Initializing Gemini client with embedding model '{config.model_name}'")
         self.client = genai.Client(api_key=config.api_key)
         self.model_name = config.model_name
+        self.task_type = config.task_type
 
     @retry(
         stop=stop_after_attempt(3),
@@ -58,9 +61,11 @@ class GeminiQueryEmbedder:
 
         logger.info(f"Generating query vector embedding via model '{self.model_name}'")
 
+        embed_config = types.EmbedContentConfig(task_type=self.task_type)
         response = self.client.models.embed_content(
             model=self.model_name,
             contents=clean_text,
+            config=embed_config,
         )
 
         if not response.embeddings or not response.embeddings[0].values:

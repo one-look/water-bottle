@@ -12,4 +12,6 @@ class Chunk(BaseModel):
     tenant_id: str
     text: str
     embedding: Optional[List[float]] = None
+    sparse_indices: Optional[List[int]] = None
+    sparse_values: Optional[List[float]] = None
     metadata: Dict[str, Any] = Field(default_factory=dict)

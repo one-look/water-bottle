@@ -17,6 +17,8 @@ class TransformerConfig(BaseModel):
 
 class EmbedderConfig(BaseModel):
     model_name: str = Field(default="gemini-embedding-001")
+    task_type: str = Field(default="RETRIEVAL_DOCUMENT")
+    sparse_model_name: str = Field(default="Qdrant/bm25")
     batch_size: int = Field(default=16, gt=0)
     max_retries: int = Field(default=5, ge=1)
 

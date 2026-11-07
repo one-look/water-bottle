@@ -27,11 +27,14 @@ llm:
 embedding:
   provider: "gemini"
   model_name: "gemini-embedding-001"
+  task_type: "RETRIEVAL_QUERY"
 
 qdrant:
   collection_name: "data_science"
   top_k: 5
   score_threshold: 0.6
+  hybrid: true
+  sparse_model_name: "Qdrant/bm25"
 
 rag:
 
