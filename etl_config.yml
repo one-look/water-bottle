@@ -9,8 +9,10 @@ extraction:
   source_key: "https://nmc.ac.in/"
 
 transformer:
-  chunk_size: 512
-  chunk_overlap: 50
+  chunk_size: 250
+  chunk_overlap: 30
+  parent_chunk_size: 1000
+  parent_chunk_overlap: 100
 
 embedder:
   model_name: "gemini-embedding-001"

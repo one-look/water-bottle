@@ -35,6 +35,7 @@ qdrant:
   score_threshold: 0.6
   hybrid: true
   sparse_model_name: "Qdrant/bm25"
+  use_parent_chunks: true
 
 rag:
 

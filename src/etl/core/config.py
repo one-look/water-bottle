@@ -11,8 +11,10 @@ class AWSConfig(BaseModel):
 
 
 class TransformerConfig(BaseModel):
-    chunk_size: int = Field(default=512, gt=0)
-    chunk_overlap: int = Field(default=50, ge=0)
+    chunk_size: int = Field(default=250, gt=0, description="Child chunk size in tokens for fine-grained retrieval")
+    chunk_overlap: int = Field(default=30, ge=0, description="Child chunk overlap")
+    parent_chunk_size: int = Field(default=1000, gt=0, description="Parent chunk size in tokens for rich context")
+    parent_chunk_overlap: int = Field(default=100, ge=0, description="Parent chunk overlap")
 
 
 class EmbedderConfig(BaseModel):

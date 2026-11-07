@@ -22,6 +22,10 @@ class QdrantRetrieverConfig(BaseModel):
         default="Qdrant/bm25",
         description="FastEmbed sparse BM25 model name, configurable via YAML",
     )
+    use_parent_chunks: bool = Field(
+        default=True,
+        description="When enabled, returns the deduplicated parent context blocks for generation instead of child chunks",
+    )
 
 class RetrivedDocument(BaseModel):
     """Schema for a retrieved text chunk payload."""
@@ -36,7 +40,7 @@ class QdrantRetriever:
     Service class for executing vector similarity and hybrid searches in Qdrant with tenant isolation.
     '''
     @validate_call(config=dict(arbitrary_types_allowed=True))
-    def __init__(self, config: QdrantRetrieverConfig, client: Optional[AsyncQdrantClient] = None):
+    def __init__(self, config: QdrantRetrieverConfig, client: Optional[Any] = None):
         '''
         Initializes the qdrant client connection and search settings.
 
@@ -59,6 +63,7 @@ class QdrantRetriever:
         self.top_k = config.top_k
         self.score_threshold = config.score_threshold
         self.hybrid = config.hybrid
+        self.use_parent_chunks = config.use_parent_chunks
         self.sparse_embedder: Optional[SparseTextEmbedding] = None
         if self.hybrid and config.sparse_model_name:
             try:
@@ -146,19 +151,39 @@ class QdrantRetriever:
                 )
 
             retrieved_docs: List[RetrivedDocument] = []
+            seen_parent_ids = set()
+
             for point in results.points:
                 payload = point.payload or {}
-                text = payload.get("text", "")
                 doc_id = payload.get("document_id", str(point.id))
+                parent_id = payload.get("parent_id")
+                parent_text = payload.get("parent_text")
 
-                retrieved_docs.append(
-                    RetrivedDocument(
-                        document_id=doc_id,
-                        text=text,
-                        score=point.score,
-                        metadata={k: v for k, v in payload.items() if k not in ("text", "tenant_id")},
+                # If parent-child chunking is active and parent_text is present, use parent context
+                if self.use_parent_chunks and parent_text:
+                    if parent_id:
+                        if parent_id in seen_parent_ids:
+                            continue  # Deduplicate multiple children sharing the same parent
+                        seen_parent_ids.add(parent_id)
+
+                    retrieved_docs.append(
+                        RetrivedDocument(
+                            document_id=parent_id or doc_id,
+                            text=parent_text,
+                            score=point.score,
+                            metadata={k: v for k, v in payload.items() if k not in ("text", "tenant_id", "parent_text")},
+                        )
                     )
-                )
+                else:
+                    text = payload.get("text", "")
+                    retrieved_docs.append(
+                        RetrivedDocument(
+                            document_id=doc_id,
+                            text=text,
+                            score=point.score,
+                            metadata={k: v for k, v in payload.items() if k not in ("text", "tenant_id")},
+                        )
+                    )
 
             logger.info(f"Retrieved {len(retrieved_docs)} matching documents for tenant '{clean_tenant_id}'")
             return retrieved_docs
