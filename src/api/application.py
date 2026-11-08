@@ -83,15 +83,15 @@ def create() -> FastAPI:
     '''
     app = FastAPI(title="water bottle", lifespan=lifespan)
 
-    # add tenant middleware to global application instance
-    app.add_middleware(TenantMiddleware)
+    # Add CORS middleware outer, then tenant middleware
     app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Restrict this to your website domain in production
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+        CORSMiddleware,
+        allow_origins=["*"],  # Restrict this to your website domain in production
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    app.add_middleware(TenantMiddleware)
     return app
 
 app = create()

@@ -80,7 +80,8 @@ class TenantMiddleware(BaseHTTPMiddleware):
         '''
         path = request.url.path
 
-        if _is_public_path(path):
+        # Always bypass auth validation for CORS preflight OPTIONS requests or public paths
+        if request.method == "OPTIONS" or _is_public_path(path):
             tenant_token = _tenant_ctx.set("nmc")
             principal_token = _principal_ctx.set(None)
             try:

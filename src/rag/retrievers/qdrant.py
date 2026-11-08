@@ -1,5 +1,6 @@
 """Qdrant vector retrieval service with tenant isolation and hybrid search (Dense + BM25 RRF)."""
 
+from functools import lru_cache
 from typing import Any, Dict, List, Optional
 from fastembed import SparseTextEmbedding
 from pydantic import BaseModel, Field, validate_call
@@ -10,6 +11,13 @@ from qdrant_client.http.exceptions import UnexpectedResponse
 from src.core.logging import setup_logger
 
 logger = setup_logger(__name__)
+
+
+@lru_cache(maxsize=4)
+def get_sparse_embedder(model_name: str) -> SparseTextEmbedding:
+    """Cached singleton instance of FastEmbed SparseTextEmbedding to prevent repeated model downloads/checks."""
+    logger.info(f"Loading FastEmbed sparse BM25 model singleton: '{model_name}'")
+    return SparseTextEmbedding(model_name=model_name)
 
 class QdrantRetrieverConfig(BaseModel):
     """Configuration schema for Qdrant retriever initialization."""
@@ -67,7 +75,7 @@ class QdrantRetriever:
         self.sparse_embedder: Optional[SparseTextEmbedding] = None
         if self.hybrid and config.sparse_model_name:
             try:
-                self.sparse_embedder = SparseTextEmbedding(model_name=config.sparse_model_name)
+                self.sparse_embedder = get_sparse_embedder(config.sparse_model_name)
             except Exception as e:
                 logger.warning(f"Could not load FastEmbed BM25 model '{config.sparse_model_name}': {e}. Falling back to dense-only.")
                 self.sparse_embedder = None

@@ -1,3 +1,4 @@
+from functools import lru_cache
 import time
 from typing import Any, Iterator, List, Optional, cast
 from fastembed import SparseTextEmbedding
@@ -15,13 +16,19 @@ from src.etl.domain.interfaces import BaseEmbedder
 logger = setup_logger(__name__)
 
 
+@lru_cache(maxsize=4)
+def get_sparse_embedder(model_name: str) -> SparseTextEmbedding:
+    """Cached singleton instance of FastEmbed SparseTextEmbedding."""
+    logger.info(f"Loading FastEmbed BM25 sparse model singleton: '{model_name}'")
+    return SparseTextEmbedding(model_name=model_name)
+
+
 class SparseBM25Embedder:
     """Generates sparse vector representations using FastEmbed BM25."""
 
     def __init__(self, model_name: str = "Qdrant/bm25") -> None:
         self.model_name = model_name
-        logger.info(f"Initializing FastEmbed BM25 sparse model: '{model_name}'")
-        self.model = SparseTextEmbedding(model_name=model_name)
+        self.model = get_sparse_embedder(model_name)
 
     def embed_chunks(self, chunks: List[Chunk]) -> List[Chunk]:
         """Populates sparse_indices and sparse_values for each chunk."""
