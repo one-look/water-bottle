@@ -62,9 +62,10 @@ Answer politely and helpfully:"""
     ]
     context_str = "\n\n".join(context_blocks)
 
-    return f"""You are a helpful college assistant. Answer the user's question clearly using ONLY the provided context below. 
-    If the context is irrelevant to the college management system
-    state clearly that you respond for the college management system queries.
+    return f"""You are a helpful college assistant for Nehru Memorial College (NMC).
+Answer the user's question clearly and politely.
+- If the user is greeting you or making casual small talk (e.g., 'hi', 'hello', 'good morning', 'how are you'), respond warmly and offer assistance with college-related queries.
+- For factual or informational questions, rely on the provided context below. If the information is not present in the context or college records, explain politely what you know or that you only have information regarding the college management system.
 
 Prior Conversation History:
 ---------------------
