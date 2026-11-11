@@ -7,7 +7,7 @@ from typing import Optional
 
 import httpx
 from fastapi import Request
-from sqlalchemy import Column, DateTime, Float, Integer, MetaData, String, Table, insert
+from sqlalchemy import Column, DateTime, Float, Integer, MetaData, String, Table, insert, select
 from sqlalchemy.engine import Engine
 
 from src.core.logging import setup_logger
@@ -149,6 +149,34 @@ def insert_ip_location_event(
     with psql_manager.engine.connect() as conn:
         conn.execute(insert(ip_location_events).values(**row))
         conn.commit()
+
+
+def list_ip_location_events(tenant_id: str, *, limit: int = 500) -> list[dict]:
+    '''
+    Return recent IP location rows for one tenant (newest first).
+
+    Args:
+        tenant_id: Tenant to filter on.
+        limit: Maximum rows (1–2000).
+
+    Returns:
+        Row dicts from ip_location_events.
+    '''
+    if not psql_manager.is_ready():
+        raise RuntimeError("PostgreSQL is not initialized.")
+    clean_tenant = tenant_id.strip()
+    if not clean_tenant:
+        raise ValueError("tenant_id is required")
+    bound_limit = max(1, min(limit, 2000))
+    stmt = (
+        select(ip_location_events)
+        .where(ip_location_events.c.tenant_id == clean_tenant)
+        .order_by(ip_location_events.c.created_at.desc())
+        .limit(bound_limit)
+    )
+    with psql_manager.engine.connect() as conn:
+        rows = conn.execute(stmt).mappings().all()
+    return [dict(row) for row in rows]
 
 
 def track_rag_request(

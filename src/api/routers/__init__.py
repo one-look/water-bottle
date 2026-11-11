@@ -1,3 +1,4 @@
+from . import analytics
 from . import attendance
 from . import auth
 from . import home

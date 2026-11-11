@@ -173,6 +173,7 @@ class RAGWorkflow:
             query_vector=query_vector,
             tenant_id=tenant_id,
             query_text=search_query,
+            session_id=session_id,
         )
 
         # Step 6: Build prompt & Generate LLM response

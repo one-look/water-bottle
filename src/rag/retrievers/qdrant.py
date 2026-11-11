@@ -80,11 +80,59 @@ class QdrantRetriever:
                 logger.warning(f"Could not load FastEmbed BM25 model '{config.sparse_model_name}': {e}. Falling back to dense-only.")
                 self.sparse_embedder = None
 
+    @staticmethod
+    def _tenant_access_filter(tenant_id: str, session_id: Optional[str]) -> qmodels.Filter:
+        '''Tenant isolation plus session-scoped upload visibility.'''
+        must: list[qmodels.Condition] = [
+            qmodels.FieldCondition(
+                key="tenant_id",
+                match=qmodels.MatchValue(value=tenant_id),
+            )
+        ]
+        if session_id and session_id.strip():
+            sid = session_id.strip()
+            must.append(
+                qmodels.Filter(
+                    should=[
+                        qmodels.FieldCondition(
+                            key="scope",
+                            match=qmodels.MatchValue(value="tenant"),
+                        ),
+                        qmodels.IsNullCondition(is_null=qmodels.PayloadField(key="scope")),
+                        qmodels.Filter(
+                            must=[
+                                qmodels.FieldCondition(
+                                    key="scope",
+                                    match=qmodels.MatchValue(value="session"),
+                                ),
+                                qmodels.FieldCondition(
+                                    key="session_id",
+                                    match=qmodels.MatchValue(value=sid),
+                                ),
+                            ]
+                        ),
+                    ]
+                )
+            )
+        else:
+            must.append(
+                qmodels.Filter(
+                    must_not=[
+                        qmodels.FieldCondition(
+                            key="scope",
+                            match=qmodels.MatchValue(value="session"),
+                        )
+                    ]
+                )
+            )
+        return qmodels.Filter(must=must)
+
     async def retrieve(
         self,
         query_vector: List[float],
         tenant_id: str,
         query_text: Optional[str] = None,
+        session_id: Optional[str] = None,
     ) -> List[RetrivedDocument]:
         '''
         Queries Qdrant for matching vectors belonging strictly to the specified tenant.
@@ -109,15 +157,7 @@ class QdrantRetriever:
 
         logger.info(f"Executing Qdrant search for tenant '{clean_tenant_id}' (top_k={self.top_k}, hybrid={self.hybrid and bool(query_text and self.sparse_embedder)})")
 
-        # construct payload filter for strict tenant isolation
-        tenant_filter = qmodels.Filter(
-            must=[
-                qmodels.FieldCondition(
-                    key="tenant_id",
-                    match=qmodels.MatchValue(value=clean_tenant_id),
-                )
-            ]
-        )
+        tenant_filter = self._tenant_access_filter(clean_tenant_id, session_id)
 
         try:
             if self.hybrid and query_text and self.sparse_embedder:

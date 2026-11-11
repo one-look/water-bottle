@@ -48,11 +48,14 @@ auth:
 
 attendance:
 
+analytics:
+
 webhook:
 
 routers:
   home: true
   auth: true
   attendance: true
+  analytics: true
   rag: true
   webhook: true
